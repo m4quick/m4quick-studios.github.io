@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="M4Quick Studios - Digital resources, templates, and training for IT professionals">
-    <title>M4Quick Studios | Digital IT Resources & Training</title>
+    <meta name="description" content="M4Quick Studios - IT automation tools, Azure/M365 guides, and career resources for IT professionals">
+    <title>M4Quick Studios | IT Tools & Resources</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -32,7 +32,7 @@
         header p {
             font-size: 1.3em;
             opacity: 0.95;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
         .section {
@@ -50,66 +50,76 @@
         }
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
         .product-card {
             background: #fff;
             border: 2px solid #e0e0e0;
-            padding: 30px;
+            padding: 35px;
             border-radius: 10px;
             transition: all 0.3s;
-            position: relative;
+            display: flex;
+            flex-direction: column;
         }
         .product-card:hover {
             border-color: #667eea;
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(102,126,234,0.15);
         }
-        .product-card.coming-soon {
-            opacity: 0.7;
-        }
-        .product-card.coming-soon::after {
-            content: "COMING SOON";
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #667eea;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.75em;
-            font-weight: bold;
+        .product-card.featured {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0ff 100%);
         }
         .product-card h3 {
             color: #667eea;
-            margin-bottom: 12px;
-            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-size: 1.4em;
         }
-        .price {
-            font-size: 1.8em;
-            color: #333;
-            font-weight: bold;
+        .product-description {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+        .product-features {
+            list-style: none;
             margin: 15px 0;
         }
-        .price span {
-            font-size: 0.5em;
+        .product-features li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .product-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .price {
+            font-size: 2em;
+            color: #333;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        .price-note {
+            font-size: 0.85em;
             color: #666;
-            font-weight: normal;
+            margin-bottom: 15px;
         }
         .btn {
             display: inline-block;
             background: #667eea;
             color: white;
-            padding: 12px 30px;
+            padding: 15px 30px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 15px;
+            text-align: center;
             border: none;
             cursor: pointer;
             width: 100%;
-            text-align: center;
+            margin-top: auto;
         }
         .btn:hover {
             background: #5a6fd6;
@@ -122,6 +132,14 @@
         .btn-secondary:hover {
             background: #667eea;
             color: white;
+        }
+        .consulting-note {
+            background: #f0f8ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-size: 0.95em;
         }
         .about {
             text-align: center;
@@ -157,15 +175,6 @@
             color: white;
             margin-bottom: 15px;
         }
-        .newsletter input[type="email"] {
-            padding: 15px 20px;
-            border: none;
-            border-radius: 25px;
-            width: 100%;
-            max-width: 300px;
-            margin: 10px;
-            font-size: 1em;
-        }
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -176,17 +185,19 @@
             color: #667eea;
             text-decoration: none;
         }
-        .guarantee {
-            background: #f0f8f0;
-            border-left: 4px solid #4caf50;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 5px;
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            margin-bottom: 10px;
         }
         @media (max-width: 600px) {
             header h1 { font-size: 2em; }
             .section { padding: 30px 20px; }
-            .product-card { padding: 20px; }
+            .product-card { padding: 25px; }
         }
     </style>
 </head>
@@ -194,60 +205,68 @@
     <header>
         <div class="container">
             <h1>M4Quick Studios</h1>
-            <p>Digital resources, templates, and training courses built from 20+ years of enterprise IT experience</p>
+            <p>Practical IT tools and guides from 20+ years of enterprise experience — organized by what you actually need</p>
         </div>
     </header>
 
     <div class="container">
         <div class="section">
-            <h2>Digital Products</h2>
+            <h2>Products & Resources</h2>
             
             <div class="products">
-                <div class="product-card coming-soon">
-                    <h3>🛡️ Zero Trust Implementation Guide</h3>
-                    <p>Step-by-step playbook for implementing Zero Trust architecture. Includes templates, checklists, and real-world examples from CISA-certified practitioner.</p>
-                    <div class="price">$97 <span>USD</span></div>
-                    
-                    <div class="guarantee">
-                        <strong>30-Day Money-Back Guarantee</strong>
+                <div class="product-card featured">
+                    <span class="badge">MOST POPULAR</span>
+                    <h3>☁️ Azure & Microsoft 365 Toolkit</h3>
+                    <div class="product-description">
+                        <p>Organized by deployment type — not random scripts. Get exactly what you need for your environment.</p>
+                        <ul class="product-features">
+                            <li>Cloud-only tenant setup scripts</li>
+                            <li>Hybrid identity configuration guides</li>
+                            <li>Conditional Access policy templates</li>
+                            <li>Security baseline checklists</li>
+                            <li>Intune device enrollment automation</li>
+                            <li>"What this script does" documentation</li>
+                        </ul>
                     </div>
-                    
+                    <div class="price">$67</div>
+                    <div class="price-note">One-time purchase • Instant download</div>
+                    <button class="btn btn-secondary" disabled>Coming Soon</button>
+                    <div class="consulting-note">
+                        <strong>Need help implementing?</strong> Consulting available for Azure AD, M365, Defender, and Intune deployments.
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <h3>🤖 AI-Powered System Monitor</h3>
+                    <div class="product-description">
+                        <p>Smart monitoring that doesn't just alert — it analyzes and guides you through fixes.</p>
+                        <ul class="product-features">
+                            <li>Disk/CPU/Memory monitoring</li>
+                            <li>AI analysis of system issues</li>
+                            <li>Guided remediation steps</li>
+                            <li>Automated email reports</li>
+                            <li>Setup guide for your environment</li>
+                        </ul>
+                    </div>
+                    <div class="price">$47</div>
+                    <div class="price-note">Python script + setup guide</div>
                     <button class="btn btn-secondary" disabled>Coming Soon</button>
                 </div>
 
-                <div class="product-card coming-soon">
-                    <h3>☁️ Cloud Migration Template Pack</h3>
-                    <p>Ready-to-use templates for Azure AD, AWS, and hybrid cloud migrations. Includes project plans, runbooks, and security checklists.</p>
-                    <div class="price">$67 <span>USD</span></div>
-                    
-                    <div class="guarantee">
-                        <strong>30-Day Money-Back Guarantee</strong>
+                <div class="product-card">
+                    <h3>💼 Technical Interview Success Guide</h3>
+                    <div class="product-description">
+                        <p>Real interview scenarios from someone who's been on both sides of the table.</p>
+                        <ul class="product-features">
+                            <li>25 scenario questions with model answers</li>
+                            <li>"Explain simply" frameworks</li>
+                            <li>Salary negotiation scripts</li>
+                            <li>Portfolio presentation template</li>
+                            <li>Mock interview practice guide</li>
+                        </ul>
                     </div>
-                    
-                    <button class="btn btn-secondary" disabled>Coming Soon</button>
-                </div>
-
-                <div class="product-card coming-soon">
-                    <h3>🔐 Identity Management Setup Kit</h3>
-                    <p>Complete configuration guides for Azure AD, EntraID, and ADFS. Step-by-step setup instructions, PowerShell scripts, and troubleshooting guides.</p>
-                    <div class="price">$47 <span>USD</span></div>
-                    
-                    <div class="guarantee">
-                        <strong>30-Day Money-Back Guarantee</strong>
-                    </div>
-                    
-                    <button class="btn btn-secondary" disabled>Coming Soon</button>
-                </div>
-
-                <div class="product-card coming-soon">
-                    <h3>📊 Kubernetes for Enterprise</h3>
-                    <p>Production-ready Kubernetes deployment guides for EKS and AKS. Includes security hardening, monitoring setup, and CI/CD integration.</p>
-                    <div class="price">$77 <span>USD</span></div>
-                    
-                    <div class="guarantee">
-                        <strong>30-Day Money-Back Guarantee</strong>
-                    </div>
-                    
+                    <div class="price">$37</div>
+                    <div class="price-note">PDF + templates</div>
                     <button class="btn btn-secondary" disabled>Coming Soon</button>
                 </div>
             </div>
@@ -255,19 +274,13 @@
 
         <div class="section">
             <div class="about">
-                <h2>Learn From Real Experience</h2>
-                
-                <p>Every product is built from hands-on experience implementing solutions for Fortune 500 companies and large-scale enterprise environments.</p>
-                
-                <p>No theory. No fluff. Just practical, actionable resources you can use immediately.</p>
-                
+                <h2>Built From Real Experience</h2>
+                <p>Every product is based on actual implementations at Fortune 500 companies and large enterprises. No theory — just practical tools that work.</p>
                 <div class="credentials">
                     <span class="credential">Microsoft Certified Master</span>
-                    <span class="credential">CISA Zero Trust Certified</span>
                     <span class="credential">20+ Years Enterprise IT</span>
-                    <span class="credential">Azure & AWS Architecture</span>
-                    <span class="credential">Kubernetes (EKS, AKS)</span>
-                    <span class="credential">ITIL Certified</span>
+                    <span class="credential">Azure & M365 Expert</span>
+                    <span class="credential">Former Microsoft PFE</span>
                 </div>
             </div>
         </div>
@@ -276,22 +289,18 @@
     <div class="newsletter">
         <div class="container">
             <h2>Get Notified When Products Launch</h2>
-            <p>Join the list for early access and launch discounts.</p>
-            
-            <!-- Simple email form - can integrate with ConvertKit/Mailchimp later -->
+            <p>Join for early access and launch discounts.</p>
             <form style="margin-top: 20px;">
-                <input type="email" placeholder="Enter your email" required>
+                <input type="email" placeholder="Enter your email" style="padding: 15px 20px; border: none; border-radius: 25px; width: 100%; max-width: 300px; font-size: 1em;" required>
                 <br>
                 <button type="submit" class="btn" style="width: auto; margin-top: 15px;">Notify Me</button>
             </form>
-            
-            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">No spam. Unsubscribe anytime.</p>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <p>© 2026 M4Quick Studios. Digital IT Resources.</p>
+            <p>© 2026 M4Quick Studios</p>
             <p>Questions? <a href="mailto:mmirzaie@msn.com">mmirzaie@msn.com</a></p>
         </div>
     </footer>
