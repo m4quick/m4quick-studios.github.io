@@ -180,11 +180,22 @@
         .credentials { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px 0; }
         .credential { background: #fff; border: 1px solid #e6e3ee; padding: 8px 16px; border-radius: 100px; font-size: 0.85em; color: #4a4458; }
 
-        /* ---------- contact ---------- */
-        .contact-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 16px; padding: 26px; text-align: left; }
-        .contact-card h4 { margin-bottom: 8px; }
-        .contact-card p { color: #6a6478; font-size: 0.9em; margin-bottom: 16px; }
-        .contact-card .btn { width: auto; display: inline-block; }
+        /* ---------- contact / intake form ---------- */
+        .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+        .intake-form { max-width: 760px; }
+        .intake-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .intake-form label, .intake-message { display: flex; flex-direction: column; gap: 6px; font-size: 0.88em; font-weight: 600; color: #4a4458; }
+        .intake-message { margin-bottom: 24px; }
+        .intake-form input, .intake-form select, .intake-form textarea {
+            font-family: inherit; font-size: 0.95em; padding: 12px 14px; border-radius: 10px;
+            border: 1px solid #d8d4e4; background: #fff; color: #14141a;
+        }
+        .intake-form input:focus, .intake-form select:focus, .intake-form textarea:focus { outline: 2px solid #6a34d6; outline-offset: 1px; }
+        .intake-form textarea { resize: vertical; }
+        .intake-success {
+            background: #f4f1fb; border: 1px solid #6a34d6; color: #2a1e4a;
+            border-radius: 12px; padding: 20px 24px; max-width: 760px; margin-bottom: 24px;
+        }
 
         /* ---------- newsletter / footer ---------- */
         .newsletter {
@@ -625,24 +636,56 @@
         <section class="block" id="contact">
             <div class="eyebrow">Let's Talk</div>
             <h2 class="block-title">Tell me what you need.</h2>
-            <p class="block-desc">Pick a track and send a note — I'll follow up to schedule a discovery/scoping call.</p>
-            <div class="engagement-models">
-                <div class="contact-card">
-                    <h4>🛡️ Cybersecurity Consulting</h4>
-                    <p>Zero Trust, SIEM, identity governance, or policy/compliance gaps.</p>
-                    <a class="btn btn-dark" href="mailto:mmirzaie@msn.com?subject=Cybersecurity%20Consulting%20Inquiry&body=Company%20size%3A%0APrimary%20concern%20(Zero%20Trust%2FSIEM%2FIdentity%2FPolicies)%3A%0ADesired%20timeline%3A">Email About Consulting</a>
-                </div>
-                <div class="contact-card" style="background:#0a0e14; border-color:#1c2530;">
-                    <h4 style="color:#fff;">🖥️ Penetration Testing</h4>
-                    <p style="color:#8b98a8;">Internal/AD, cloud &amp; identity, phishing, or external testing.</p>
-                    <a class="btn btn-mint" href="mailto:mmirzaie@msn.com?subject=Penetration%20Testing%20Inquiry&body=Target%20environment%3A%0ATrack(s)%20of%20interest%20(internal%2Fcloud%2Fphishing%2Fexternal)%3A%0ADesired%20timeline%3A">Email About Pentesting</a>
-                </div>
-                <div class="contact-card">
-                    <h4>🏗️ Architecture Documentation</h4>
-                    <p>Current-state, modernization, identity, or infrastructure documentation packages.</p>
-                    <a class="btn btn-dark" href="mailto:mmirzaie@msn.com?subject=Architecture%20Documentation%20Inquiry&body=Systems%20in%20scope%3A%0APrimary%20goal%20(clarity%2Faudit%2Fmodernization%2Fvendor)%3A%0ADesired%20timeline%3A">Email About Documentation</a>
-                </div>
+            <p class="block-desc" id="intake-lead">Pick a track and send a note — I'll follow up to schedule a discovery/scoping call.</p>
+            <div id="intake-success" class="intake-success" hidden>
+                <strong>Thanks — that's in my inbox.</strong> I'll follow up within 1 business day.
             </div>
+            <form id="intake-form" class="intake-form" action="https://m4quickstudios.com/api/intake" method="POST">
+                <input type="text" name="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
+                <div class="intake-grid">
+                    <label>Name
+                        <input type="text" name="name" required maxlength="200">
+                    </label>
+                    <label>Email
+                        <input type="email" name="email" required maxlength="200">
+                    </label>
+                    <label>Company
+                        <input type="text" name="company" maxlength="200">
+                    </label>
+                    <label>Org size
+                        <select name="org_size">
+                            <option value="">Select...</option>
+                            <option>1–50</option>
+                            <option>51–200</option>
+                            <option>201–1000</option>
+                            <option>1000+</option>
+                        </select>
+                    </label>
+                    <label>What do you need help with?
+                        <select name="track" required>
+                            <option value="">Select...</option>
+                            <option>Cybersecurity Consulting</option>
+                            <option>Penetration Testing</option>
+                            <option>Architecture Documentation</option>
+                            <option>Azure &amp; M365 Toolkit / AI System Monitor</option>
+                            <option>Other</option>
+                        </select>
+                    </label>
+                    <label>Desired timeline
+                        <select name="timeline">
+                            <option value="">Select...</option>
+                            <option>ASAP</option>
+                            <option>1–3 months</option>
+                            <option>3–6 months</option>
+                            <option>Just exploring</option>
+                        </select>
+                    </label>
+                </div>
+                <label class="intake-message">Tell me a bit about what you're dealing with
+                    <textarea name="message" rows="4" required maxlength="3000"></textarea>
+                </label>
+                <button type="submit" class="btn btn-dark">Send</button>
+            </form>
         </section>
     </div>
 
@@ -650,13 +693,37 @@
         <div class="container">
             <h2>Get Notified When Products Launch</h2>
             <p>Join for early access and launch discounts.</p>
-            <form style="margin-top: 20px;">
-                <input type="email" placeholder="Enter your email" required>
+            <div id="newsletter-success" class="intake-success" hidden style="background:rgba(163,255,60,0.12); border-color:#a3ff3c; color:#fff;">
+                <strong>You're on the list.</strong>
+            </div>
+            <form id="newsletter-form" style="margin-top: 20px;" action="https://m4quickstudios.com/api/subscribe" method="POST">
+                <input type="text" name="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
+                <input type="email" name="email" placeholder="Enter your email" required>
                 <br>
                 <button type="submit" class="btn btn-primary" style="width: auto; margin-top: 15px;">Notify Me</button>
             </form>
         </div>
     </div>
+
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var submitted = params.get('submitted');
+            if (submitted === 'intake') {
+                document.getElementById('intake-form').hidden = true;
+                document.getElementById('intake-lead').hidden = true;
+                document.getElementById('intake-success').hidden = false;
+            } else if (submitted === 'newsletter') {
+                document.getElementById('newsletter-form').hidden = true;
+                document.getElementById('newsletter-success').hidden = false;
+            }
+            if (submitted) {
+                params.delete('submitted');
+                var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+                window.history.replaceState({}, '', clean);
+            }
+        })();
+    </script>
 
     <footer>
         <div class="container">

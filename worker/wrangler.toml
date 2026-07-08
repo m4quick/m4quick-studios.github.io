@@ -1,0 +1,7 @@
+name = "m4quick-intake"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# No routes here on purpose — bind the route via the Cloudflare dashboard
+# (Workers & Pages > m4quick-intake > Settings > Triggers > Routes) so this
+# stays a simple `wrangler deploy` without touching zone config from the CLI.
