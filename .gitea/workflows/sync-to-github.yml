@@ -1,0 +1,22 @@
+name: Sync to GitHub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitHub
+        run: |
+          git remote add github "https://x-access-token:${GH_SYNC_TOKEN}@github.com/m4quick/m4quick-studios.github.io.git"
+          git push github HEAD:main
+        env:
+          GH_SYNC_TOKEN: ${{ secrets.GH_SYNC_TOKEN }}
