@@ -1,13 +1,13 @@
-const MAILGUN_DOMAIN = 'm4quickstudios.com';
+const MAILGUN_DOMAIN = 'sandbox04420bfd931745d389bcbc6316ef6609.mailgun.org';
 const TO_EMAIL = 'm4quick@gmail.com';
 const FROM_EMAIL = `M4Quick Studios <postmaster@${MAILGUN_DOMAIN}>`;
 
-async function sendMail(env, subject, text) {
+async function sendMail(env, subject, bodyText) {
   const form = new FormData();
   form.append('from', FROM_EMAIL);
   form.append('to', TO_EMAIL);
   form.append('subject', subject);
-  form.append('text', text);
+  form.append('text', bodyText);
 
   const resp = await fetch(`https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/messages`, {
     method: 'POST',
@@ -16,7 +16,8 @@ async function sendMail(env, subject, text) {
     },
     body: form,
   });
-  return resp.ok;
+  const respText = await resp.text();
+  return { ok: resp.ok, status: resp.status, text: respText };
 }
 
 function field(data, name, max) {
@@ -55,9 +56,9 @@ async function handleIntake(request, env, url) {
     message,
   ].join('\n');
 
-  const ok = await sendMail(env, `New intake: ${track} — ${name}`, body);
-  if (!ok) {
-    return new Response('Failed to send — try again or email m4quick@gmail.com directly', { status: 502 });
+  const result = await sendMail(env, `New intake: ${track} — ${name}`, body);
+  if (!result.ok) {
+    return new Response(`Failed to send. Mailgun status ${result.status}: ${result.text}`, { status: 502 });
   }
 
   return Response.redirect(`${url.origin}/?submitted=intake#contact`, 303);
@@ -75,9 +76,9 @@ async function handleSubscribe(request, env, url) {
     return new Response('Invalid email', { status: 400 });
   }
 
-  const ok = await sendMail(env, 'New newsletter signup', `Email: ${email}`);
-  if (!ok) {
-    return new Response('Failed to send', { status: 502 });
+  const result = await sendMail(env, 'New newsletter signup', `Email: ${email}`);
+  if (!result.ok) {
+    return new Response(`Failed to send. Mailgun status ${result.status}: ${result.text}`, { status: 502 });
   }
 
   return Response.redirect(`${url.origin}/?submitted=newsletter#newsletter`, 303);
