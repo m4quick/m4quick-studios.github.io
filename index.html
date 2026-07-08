@@ -3,287 +3,619 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="M4Quick Studios - IT automation tools, Azure/M365 guides, and career resources for IT professionals">
-    <title>M4Quick Studios | IT Tools & Resources</title>
+    <meta name="description" content="M4Quick Studios - AI-augmented cybersecurity consulting, penetration testing, architecture documentation, and IT automation tools from 20+ years of enterprise experience.">
+    <title>M4Quick Studios | Security Consulting, Pentesting & IT Tools</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
+            color: #14141a;
+            background: #f4f3f7;
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-        }
-        header h1 {
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
-        header p {
-            font-size: 1.3em;
-            opacity: 0.95;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .section {
-            background: white;
-            margin: 30px 0;
-            padding: 50px 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-        }
-        .section h2 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 2em;
-            text-align: center;
-        }
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .product-card {
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            padding: 35px;
-            border-radius: 10px;
-            transition: all 0.3s;
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+        a { color: inherit; }
+
+        /* ---------- nav ---------- */
+        nav.site-nav {
             display: flex;
-            flex-direction: column;
-        }
-        .product-card:hover {
-            border-color: #667eea;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102,126,234,0.15);
-        }
-        .product-card.featured {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #fafafa 0%, #f0f0ff 100%);
-        }
-        .product-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-        }
-        .product-description {
-            flex-grow: 1;
-            margin-bottom: 20px;
-        }
-        .product-features {
-            list-style: none;
-            margin: 15px 0;
-        }
-        .product-features li {
-            padding: 5px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-        .product-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #4caf50;
-            font-weight: bold;
-        }
-        .price {
-            font-size: 2em;
-            color: #333;
-            font-weight: bold;
-            margin: 20px 0 10px 0;
-        }
-        .price-note {
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        .btn {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-top: auto;
-        }
-        .btn:hover {
-            background: #5a6fd6;
-        }
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-        .btn-secondary:hover {
-            background: #667eea;
-            color: white;
-        }
-        .consulting-note {
-            background: #f0f8ff;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 5px;
-            font-size: 0.95em;
-        }
-        .about {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .about p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            color: #555;
-        }
-        .credentials {
-            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 26px 28px;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin: 30px 0;
+            gap: 14px;
         }
-        .credential {
-            background: #f0f0f0;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            color: #555;
+        nav.site-nav .logo { font-weight: 800; font-size: 1.2em; text-decoration: none; }
+        nav.site-nav .navlinks { display: flex; gap: 6px; flex-wrap: wrap; font-size: 0.88em; }
+        nav.site-nav .navlinks a { text-decoration: none; padding: 8px 16px; border-radius: 100px; }
+        nav.site-nav .navlinks a:hover { background: #e8e6f0; }
+        nav.site-nav .navlinks a.cta { background: #14141a; color: #fff; }
+        nav.site-nav .navlinks a.cta:hover { background: #2a2438; }
+
+        /* ---------- hero ---------- */
+        header.hero {
+            background: #1d1533;
+            color: #fff;
+            margin: 0 20px;
+            border-radius: 28px;
+            padding: 90px 60px;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 40px;
+            align-items: center;
         }
+        .eyebrow-pill {
+            display: inline-block;
+            background: #a3ff3c;
+            color: #14141a;
+            font-size: 0.78em;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+        header.hero h1 { font-size: 2.7em; font-weight: 800; line-height: 1.12; letter-spacing: -1px; }
+        header.hero p.lead { margin-top: 20px; font-size: 1.1em; color: #c9c3dd; max-width: 480px; }
+        .cta-group { margin-top: 34px; display: flex; gap: 14px; flex-wrap: wrap; }
+        .btn { padding: 15px 28px; border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 0.95em; border: none; cursor: pointer; display: inline-block; text-align: center; }
+        .btn-primary { background: #a3ff3c; color: #14141a; }
+        .btn-primary:hover { background: #8ee62f; }
+        .btn-ghost { border: 1px solid #4a4266; color: #fff; background: transparent; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+        .btn-dark { background: #14141a; color: #fff; }
+        .btn-dark:hover { background: #2a2438; }
+        .btn-dark[disabled], .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+        .stat-card { background: #2a2145; border-radius: 20px; padding: 28px; }
+        .stat-card .n { font-size: 2.2em; font-weight: 800; color: #a3ff3c; }
+        .stat-card .l { color: #c9c3dd; font-size: 0.88em; margin-top: 4px; }
+        .stat-card + .stat-card { margin-top: 16px; }
+
+        /* ---------- light section shared ---------- */
+        section.block { padding: 80px 40px; }
+        .eyebrow { font-size: 0.8em; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #6a34d6; margin-bottom: 10px; }
+        section.block h2.block-title { font-size: 2.1em; font-weight: 800; letter-spacing: -0.5px; max-width: 640px; margin-bottom: 14px; }
+        section.block p.block-desc { color: #6a6478; max-width: 600px; margin-bottom: 44px; font-size: 1.02em; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .card { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(20,20,26,0.06); display: flex; flex-direction: column; }
+        .card .dot { width: 38px; height: 38px; border-radius: 10px; background: #a3ff3c; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; flex-shrink: 0; }
+        .card h3 { font-size: 1.15em; margin-bottom: 10px; }
+        .card p { color: #6a6478; font-size: 0.92em; line-height: 1.6; }
+        .card-features { list-style: none; margin: 14px 0; }
+        .card-features li { padding: 4px 0 4px 20px; position: relative; font-size: 0.9em; color: #6a6478; }
+        .card-features li:before { content: "✓"; position: absolute; left: 0; color: #6a34d6; font-weight: bold; }
+        .card .price { font-size: 1.7em; font-weight: 800; margin: 14px 0 2px 0; }
+        .card .price-note { font-size: 0.82em; color: #8a8494; margin-bottom: 14px; }
+        .card .ai-note { background: #f4f1fb; border-left: 3px solid #6a34d6; padding: 12px 14px; margin: 14px 0; border-radius: 6px; font-size: 0.85em; color: #4a4458; }
+        .card .btn { margin-top: auto; width: 100%; }
+
+        .engagement-models { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 8px; }
+        .engagement-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 16px; padding: 26px; }
+        .engagement-card .scope-label { font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.5px; color: #6a34d6; font-weight: 700; margin-bottom: 8px; }
+        .engagement-card h4 { margin-bottom: 10px; font-size: 1.05em; }
+        .engagement-card p { font-size: 0.9em; color: #6a6478; margin-bottom: 6px; }
+
+        .process-list { counter-reset: step; list-style: none; max-width: 720px; margin-top: 8px; }
+        .process-list li { counter-increment: step; position: relative; padding: 14px 0 14px 55px; border-bottom: 1px solid #e6e3ee; }
+        .process-list li:last-child { border-bottom: none; }
+        .process-list li:before {
+            content: counter(step);
+            position: absolute; left: 0; top: 12px;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #14141a; color: #fff; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .process-list strong { display: block; }
+        .process-list span.desc { color: #6a6478; font-size: 0.92em; }
+
+        .section-cta { margin-top: 40px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+        .section-cta p { color: #6a6478; font-size: 0.92em; margin-right: 6px; }
+
+        h3.subhead { margin: 54px 0 5px 0; font-size: 1.4em; font-weight: 800; }
+
+        /* ---------- pentest (dark ops) ---------- */
+        .pentest-section {
+            background: #0a0e14;
+            color: #dfe7ee;
+            margin: 40px 20px 0 20px;
+            border-radius: 28px;
+            padding: 80px 60px;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 36px 36px;
+        }
+        .pentest-section .kicker-mono { font-family: 'SFMono-Regular', Consolas, monospace; color: #5eead4; font-size: 0.85em; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+        .pentest-section .kicker-mono:before { content: "> "; }
+        .pentest-section h2 { color: #fff; font-size: 2.1em; margin-bottom: 14px; max-width: 660px; font-weight: 800; letter-spacing: -0.5px; }
+        .pentest-section > p.lead { color: #8b98a8; max-width: 600px; margin-bottom: 44px; font-size: 1.02em; }
+        .pentest-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .pentest-card { background: #10151d; border: 1px solid #1c2530; border-radius: 12px; padding: 26px; display: flex; flex-direction: column; }
+        .pentest-card:hover { border-color: #5eead4; }
+        .pentest-card .tag { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.72em; color: #5eead4; margin-bottom: 12px; letter-spacing: 1px; }
+        .pentest-card h3 { font-size: 1.08em; margin-bottom: 8px; color: #fff; }
+        .pentest-card p { color: #8b98a8; font-size: 0.88em; line-height: 1.6; }
+        .pentest-card .card-features li { color: #8b98a8; }
+        .pentest-card .card-features li:before { color: #5eead4; }
+        .pentest-card .ai-note { background: #10202080; border-left: 3px solid #5eead4; color: #a8b3bf; }
+
+        .pentest-engagement { background: #10151d; border: 1px solid #1c2530; border-radius: 16px; padding: 24px; }
+        .pentest-engagement .scope-label { font-family: 'SFMono-Regular', Consolas, monospace; color: #5eead4; font-size: 0.72em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .pentest-engagement h4 { color: #fff; margin-bottom: 8px; font-size: 1.02em; }
+        .pentest-engagement p { color: #8b98a8; font-size: 0.88em; margin-bottom: 6px; }
+
+        .pentest-process { counter-reset: pstep; list-style: none; max-width: 720px; margin-top: 8px; }
+        .pentest-process li { counter-increment: pstep; position: relative; padding: 14px 0 14px 55px; border-bottom: 1px solid #1c2530; }
+        .pentest-process li:last-child { border-bottom: none; }
+        .pentest-process li:before {
+            content: counter(pstep);
+            position: absolute; left: 0; top: 12px;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #5eead4; color: #0a0e14; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+        }
+        .pentest-process strong { display: block; color: #fff; }
+        .pentest-process span.desc { color: #8b98a8; font-size: 0.92em; }
+
+        .rules-note {
+            margin-top: 30px;
+            background: #10151d;
+            border: 1px dashed #2a3542;
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 0.82em;
+            color: #8b98a8;
+        }
+        .rules-note strong { color: #5eead4; }
+
+        .btn-mint { background: #5eead4; color: #0a0e14; }
+        .btn-mint:hover { background: #45ddc4; }
+        .btn-dark-ghost { border: 1px solid #2a3542; color: #dfe7ee; background: transparent; }
+        .btn-dark-ghost:hover { background: rgba(255,255,255,0.05); }
+
+        /* ---------- about ---------- */
+        .about-block { text-align: center; max-width: 720px; margin: 0 auto; }
+        .about-block p { font-size: 1.05em; color: #6a6478; margin-bottom: 24px; }
+        .credentials { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 10px 0; }
+        .credential { background: #fff; border: 1px solid #e6e3ee; padding: 8px 16px; border-radius: 100px; font-size: 0.85em; color: #4a4458; }
+
+        /* ---------- contact ---------- */
+        .contact-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 16px; padding: 26px; text-align: left; }
+        .contact-card h4 { margin-bottom: 8px; }
+        .contact-card p { color: #6a6478; font-size: 0.9em; margin-bottom: 16px; }
+        .contact-card .btn { width: auto; display: inline-block; }
+
+        /* ---------- newsletter / footer ---------- */
         .newsletter {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #1d1533;
             color: white;
             text-align: center;
             padding: 60px 20px;
+            margin: 60px 20px 0 20px;
+            border-radius: 28px;
         }
-        .newsletter h2 {
-            color: white;
-            margin-bottom: 15px;
+        .newsletter h2 { color: white; margin-bottom: 12px; font-size: 1.7em; }
+        .newsletter p { color: #c9c3dd; }
+        .newsletter input[type="email"] {
+            padding: 15px 20px; border: none; border-radius: 100px; width: 100%; max-width: 320px; font-size: 1em; margin-top: 20px;
         }
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            background: #f0f0f0;
-        }
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-        .badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.75em;
-            margin-bottom: 10px;
-        }
-        @media (max-width: 600px) {
-            header h1 { font-size: 2em; }
-            .section { padding: 30px 20px; }
-            .product-card { padding: 25px; }
+        footer { text-align: center; padding: 40px 20px; color: #8a8494; }
+        footer a { color: #6a34d6; text-decoration: none; }
+
+        @media (max-width: 800px) {
+            header.hero { grid-template-columns: 1fr; padding: 60px 30px; }
+            header.hero h1 { font-size: 2.1em; }
+            section.block { padding: 55px 22px; }
+            .pentest-section { padding: 55px 26px; margin: 40px 10px 0 10px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>M4Quick Studios</h1>
-            <p>Practical IT tools and guides from 20+ years of enterprise experience — organized by what you actually need</p>
+    <nav class="site-nav">
+        <a class="logo" href="#">M4Quick Studios</a>
+        <div class="navlinks">
+            <a href="#products">Products</a>
+            <a href="#cybersecurity-consulting">Consulting</a>
+            <a href="#pentest">Pentest</a>
+            <a href="#architecture-docs">Docs</a>
+            <a href="#about">About</a>
+            <a href="#contact" class="cta">Contact</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div>
+            <div class="eyebrow-pill">AI-augmented · Enterprise-grade</div>
+            <h1>Security clarity, real testing, and documentation — without the enterprise price tag.</h1>
+            <p class="lead">Zero Trust, identity, cloud, and offensive security — twenty years of hands-on enterprise experience, delivered at AI speed.</p>
+            <div class="cta-group">
+                <a class="btn btn-primary" href="#contact">Book a discovery call</a>
+                <a class="btn btn-ghost" href="#products">See what I offer</a>
+            </div>
+        </div>
+        <div>
+            <div class="stat-card"><div class="n">20+</div><div class="l">Years enterprise IT &amp; security</div></div>
+            <div class="stat-card"><div class="n">1–2wk</div><div class="l">Turnaround on a Quick Assessment</div></div>
         </div>
     </header>
 
     <div class="container">
-        <div class="section">
-            <h2>Products & Resources</h2>
-            
-            <div class="products">
-                <div class="product-card featured">
-                    <span class="badge">MOST POPULAR</span>
-                    <h3>☁️ Azure & Microsoft 365 Toolkit</h3>
-                    <div class="product-description">
-                        <p>Organized by deployment type — not random scripts. Get exactly what you need for your environment.</p>
-                        <ul class="product-features">
-                            <li>Cloud-only tenant setup scripts</li>
-                            <li>Hybrid identity configuration guides</li>
-                            <li>Conditional Access policy templates</li>
-                            <li>Security baseline checklists</li>
-                            <li>Intune device enrollment automation</li>
-                            <li>"What this script does" documentation</li>
-                        </ul>
-                    </div>
+        <!-- ===== Products ===== -->
+        <section class="block" id="products">
+            <div class="eyebrow">Products &amp; Resources</div>
+            <h2 class="block-title">Tools you can use today.</h2>
+            <p class="block-desc">Built from actual implementations at Fortune 500 companies and large enterprises. No theory — just practical tools that work.</p>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="dot">☁️</div>
+                    <h3>Azure &amp; Microsoft 365 Toolkit</h3>
+                    <p>Organized by deployment type — not random scripts. Get exactly what you need for your environment.</p>
+                    <ul class="card-features">
+                        <li>Cloud-only tenant setup scripts</li>
+                        <li>Hybrid identity configuration guides</li>
+                        <li>Conditional Access policy templates</li>
+                        <li>Security baseline checklists</li>
+                        <li>Intune device enrollment automation</li>
+                    </ul>
                     <div class="price">$67</div>
                     <div class="price-note">One-time purchase • Instant download</div>
-                    <button class="btn btn-secondary" disabled>Coming Soon</button>
-                    <div class="consulting-note">
-                        <strong>Need help implementing?</strong> Consulting available at $90/hour for Azure AD, M365, Defender, and Intune deployments. <a href="mailto:mmirzaie@msn.com?subject=Consulting Inquiry" style="color: #667eea;">Email for availability</a>.
-                    </div>
+                    <div class="ai-note"><strong>Need help implementing?</strong> Consulting available at $90/hour for Azure AD, M365, Defender, and Intune deployments.</div>
+                    <button class="btn btn-dark" disabled>Coming Soon</button>
                 </div>
-
-                <div class="product-card">
-                    <h3>🤖 AI-Powered System Monitor</h3>
-                    <div class="product-description">
-                        <p>Smart monitoring that doesn't just alert — it analyzes and guides you through fixes.</p>
-                        <ul class="product-features">
-                            <li>Disk/CPU/Memory monitoring</li>
-                            <li>AI analysis of system issues</li>
-                            <li>Guided remediation steps</li>
-                            <li>Automated email reports</li>
-                            <li>Setup guide for your environment</li>
-                        </ul>
-                    </div>
+                <div class="card">
+                    <div class="dot">🤖</div>
+                    <h3>AI-Powered System Monitor</h3>
+                    <p>Smart monitoring that doesn't just alert — it analyzes and guides you through fixes.</p>
+                    <ul class="card-features">
+                        <li>Disk/CPU/Memory monitoring</li>
+                        <li>AI analysis of system issues</li>
+                        <li>Guided remediation steps</li>
+                        <li>Automated email reports</li>
+                        <li>Setup guide for your environment</li>
+                    </ul>
                     <div class="price">$47</div>
                     <div class="price-note">Python script + setup guide</div>
-                    <button class="btn btn-secondary" disabled>Coming Soon</button>
+                    <button class="btn btn-dark" disabled>Coming Soon</button>
                 </div>
+            </div>
+        </section>
 
-                <div class="product-card">
-                    <h3>💼 Technical Interview Success Guide</h3>
-                    <div class="product-description">
-                        <p>Real interview scenarios from someone who's been on both sides of the table.</p>
-                        <ul class="product-features">
-                            <li>25 scenario questions with model answers</li>
-                            <li>"Explain simply" frameworks</li>
-                            <li>Salary negotiation scripts</li>
-                            <li>Portfolio presentation template</li>
-                            <li>Mock interview practice guide</li>
-                        </ul>
-                    </div>
-                    <div class="price">$37</div>
-                    <div class="price-note">PDF + templates</div>
-                    <button class="btn btn-secondary" disabled>Coming Soon</button>
+        <!-- ===== Cybersecurity Consulting (light/advisory) ===== -->
+        <section class="block" id="cybersecurity-consulting">
+            <div class="eyebrow">AI-Augmented Cybersecurity Consulting</div>
+            <h2 class="block-title">Turn complex security problems into clear, actionable outcomes—fast.</h2>
+            <p class="block-desc">Zero Trust, SIEM, identity, and compliance experience — amplified by AI — to deliver rapid, high-quality security assessments, roadmaps, and documentation for organizations that need clarity and direction without hiring a full-time security leader.</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="dot">🛡️</div>
+                    <h3>Zero Trust Readiness &amp; Roadmaps</h3>
+                    <p>Assess current security posture and produce a practical Zero Trust roadmap.</p>
+                    <ul class="card-features">
+                        <li>Current-state assessment summary</li>
+                        <li>ZTA maturity scorecard</li>
+                        <li>3–6 month roadmap</li>
+                        <li>12–18 month strategic plan</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> report drafting, maturity model structuring, diagrams &amp; timelines.</div>
+                    <a class="btn btn-dark" href="#contact">Start a Zero Trust Assessment</a>
                 </div>
+                <div class="card">
+                    <div class="dot">📊</div>
+                    <h3>SIEM &amp; Logging Strategy</h3>
+                    <p>Evaluate SIEM/logging posture and define tuning, integration, and use-case priorities.</p>
+                    <ul class="card-features">
+                        <li>SIEM/logging inventory</li>
+                        <li>Gap analysis</li>
+                        <li>Priority use-case list (alerts, dashboards)</li>
+                        <li>Integration recommendations</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> summarizing logs/use-cases, documentation, standard templates.</div>
+                    <a class="btn btn-dark" href="#contact">Review My SIEM Strategy</a>
+                </div>
+                <div class="card">
+                    <div class="dot">🔑</div>
+                    <h3>Identity &amp; Access Governance Review</h3>
+                    <p>Review identity systems and access governance for risk and modernization needs.</p>
+                    <ul class="card-features">
+                        <li>Identity architecture overview</li>
+                        <li>Risk and gap summary</li>
+                        <li>Recommended improvements</li>
+                        <li>High-level modernization plan</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> architecture descriptions, risk summaries, modernization narratives.</div>
+                    <a class="btn btn-dark" href="#contact">Review My Identity Setup</a>
+                </div>
+                <div class="card">
+                    <div class="dot">📋</div>
+                    <h3>Security Policy &amp; Compliance Gap Assessment</h3>
+                    <p>Rapid review of existing policies and controls against best practices.</p>
+                    <ul class="card-features">
+                        <li>Policy inventory</li>
+                        <li>Gap analysis</li>
+                        <li>Recommended policy updates</li>
+                        <li>Prioritized action list</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> framework comparison, gap reports, drafted policy language.</div>
+                    <a class="btn btn-dark" href="#contact">Assess My Policies</a>
+                </div>
+            </div>
+
+            <h3 class="subhead">Engagement Models</h3>
+            <div class="engagement-models">
+                <div class="engagement-card">
+                    <div class="scope-label">1–2 weeks</div>
+                    <h4>Quick Assessment</h4>
+                    <p><strong>Scope:</strong> One focused area — Zero Trust, SIEM, identity, or policies.</p>
+                    <p><strong>Output:</strong> 10–20 page report + executive summary.</p>
+                    <p><strong>Ideal for:</strong> Small/mid-market companies needing direction.</p>
+                </div>
+                <div class="engagement-card">
+                    <div class="scope-label">1–3 months</div>
+                    <h4>Focused Advisory</h4>
+                    <p><strong>Scope:</strong> Ongoing guidance on implementation and prioritization.</p>
+                    <p><strong>Output:</strong> Regular check-ins, updated roadmaps, decision support.</p>
+                    <p><strong>Ideal for:</strong> Teams with internal engineers but no senior security leader.</p>
+                </div>
+                <div class="engagement-card">
+                    <div class="scope-label">Part-time / retainer</div>
+                    <h4>Fractional Security Architect</h4>
+                    <p><strong>Scope:</strong> Part-time leadership across multiple security domains.</p>
+                    <p><strong>Output:</strong> Strategy, architecture, and oversight.</p>
+                    <p><strong>Ideal for:</strong> Organizations in active modernization.</p>
+                </div>
+            </div>
+
+            <h3 class="subhead">How It Works</h3>
+            <ol class="process-list">
+                <li><strong>Discovery call</strong><span class="desc">30–60 minute conversation to understand your environment and priorities.</span></li>
+                <li><strong>Intake questionnaire</strong><span class="desc">Systems, tools, and pain points, gathered up front.</span></li>
+                <li><strong>AI-assisted analysis</strong><span class="desc">Hands-on expertise combined with AI tooling to move fast without cutting corners.</span></li>
+                <li><strong>Deliverables &amp; review session</strong><span class="desc">Walkthrough of findings, roadmap, and recommendations.</span></li>
+                <li><strong>Optional ongoing advisory</strong><span class="desc">Continued support as you implement.</span></li>
+            </ol>
+
+            <div class="section-cta">
+                <p>Pricing is scoped to engagement — quoted after the discovery call.</p>
+                <a class="btn btn-dark" href="#contact">Book a Discovery Call</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== Pentest / Offensive Security (Dark Ops) ===== -->
+    <section class="pentest-section" id="pentest">
+        <div class="kicker-mono">offensive security / penetration testing</div>
+        <h2>The other side of what I do — think like the attacker before one finds you.</h2>
+        <p class="lead">Practical, scoped penetration testing built on the same identity, cloud, and network expertise behind the consulting side — with AI-accelerated reporting so you get clear, prioritized findings instead of a 200-page PDF nobody reads.</p>
+
+        <div class="pentest-grid">
+            <div class="pentest-card">
+                <span class="tag">INTERNAL / ACTIVE DIRECTORY</span>
+                <h3>Internal &amp; AD Penetration Testing</h3>
+                <p>Simulate an attacker who already has a foothold inside the network — hardening gaps, lateral movement paths, and privilege escalation.</p>
+                <ul class="card-features">
+                    <li>Attack path narrative</li>
+                    <li>Privilege escalation findings</li>
+                    <li>Prioritized remediation list</li>
+                    <li>Executive summary</li>
+                </ul>
+                <div class="ai-note"><strong>AI-assisted:</strong> correlating findings, drafting attack-path narratives and remediation write-ups.</div>
+            </div>
+            <div class="pentest-card">
+                <span class="tag">CLOUD / IDENTITY</span>
+                <h3>Cloud &amp; Identity Security Testing</h3>
+                <p>Test Conditional Access, identity federation, and Azure/M365 tenant configuration for exploitable gaps.</p>
+                <ul class="card-features">
+                    <li>Tenant misconfiguration report</li>
+                    <li>Identity attack surface summary</li>
+                    <li>Hardening recommendations</li>
+                </ul>
+                <div class="ai-note"><strong>AI-assisted:</strong> configuration diffing against best practices, findings drafting.</div>
+            </div>
+            <div class="pentest-card">
+                <span class="tag">HUMAN RISK</span>
+                <h3>Phishing &amp; Social Engineering Simulations</h3>
+                <p>Test human risk with realistic, controlled phishing campaigns — safely, and with clear reporting.</p>
+                <ul class="card-features">
+                    <li>Campaign results &amp; click/report rates</li>
+                    <li>Targeted awareness recommendations</li>
+                </ul>
+                <div class="ai-note"><strong>AI-assisted:</strong> campaign template drafting, results analysis, awareness content.</div>
+            </div>
+            <div class="pentest-card">
+                <span class="tag">EXTERNAL / PERIMETER</span>
+                <h3>External Network &amp; Perimeter Testing</h3>
+                <p>Test what's exposed to the internet — external attack surface, exposed services, and common exploitation paths.</p>
+                <ul class="card-features">
+                    <li>External attack surface map</li>
+                    <li>Findings by severity</li>
+                    <li>Remediation priorities</li>
+                </ul>
+                <div class="ai-note"><strong>AI-assisted:</strong> attack surface correlation, report drafting.</div>
             </div>
         </div>
 
-        <div class="section">
-            <div class="about">
-                <h2>Built From Real Experience</h2>
-                <p>Every product is based on actual implementations at Fortune 500 companies and large enterprises. No theory — just practical tools that work.</p>
+        <h3 class="subhead" style="color:#fff;">Engagement Models</h3>
+        <div class="engagement-models">
+            <div class="pentest-engagement">
+                <div class="scope-label">1–2 weeks</div>
+                <h4>Point-in-Time Assessment</h4>
+                <p><strong>Scope:</strong> One track — internal, cloud, phishing, or external.</p>
+                <p><strong>Output:</strong> Findings report + executive summary.</p>
+            </div>
+            <div class="pentest-engagement">
+                <div class="scope-label">2–4 weeks</div>
+                <h4>Combined Assessment</h4>
+                <p><strong>Scope:</strong> Multiple tracks combined — e.g. external + internal, or cloud + phishing.</p>
+                <p><strong>Output:</strong> Full-picture report across tracks.</p>
+            </div>
+            <div class="pentest-engagement">
+                <div class="scope-label">Quarterly / annual</div>
+                <h4>Ongoing / Periodic Testing</h4>
+                <p><strong>Scope:</strong> Recurring cadence to continuously validate defenses.</p>
+                <p><strong>Output:</strong> Trend tracking across engagements.</p>
+            </div>
+        </div>
+
+        <h3 class="subhead" style="color:#fff;">How It Works</h3>
+        <ol class="pentest-process">
+            <li><strong>Scoping call &amp; rules of engagement</strong><span class="desc">Define objectives, systems in scope, and authorization before anything starts.</span></li>
+            <li><strong>Recon &amp; planning</strong><span class="desc">Map the attack surface ahead of active testing.</span></li>
+            <li><strong>Testing execution</strong><span class="desc">Hands-on testing strictly within the agreed scope and rules of engagement.</span></li>
+            <li><strong>Findings &amp; reporting</strong><span class="desc">AI-assisted drafting, human-verified, prioritized by real-world risk.</span></li>
+            <li><strong>Debrief &amp; optional retest</strong><span class="desc">Walkthrough of findings plus an optional validation retest after fixes.</span></li>
+        </ol>
+
+        <div class="rules-note"><strong>$</strong> All testing performed under a signed authorization and defined rules of engagement. No scope creep, no surprises.</div>
+
+        <div class="section-cta">
+            <p style="color:#8b98a8;">Pricing is scoped after the discovery call — based on target count and track(s) selected.</p>
+            <a class="btn btn-mint" href="#contact">Book a Scoping Call</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- ===== Architecture Documentation ===== -->
+        <section class="block" id="architecture-docs">
+            <div class="eyebrow">AI-Generated Architecture Documentation Packages</div>
+            <h2 class="block-title">Enterprise-grade architecture documentation—without an enterprise-grade budget.</h2>
+            <p class="block-desc">Structured, high-quality architecture documentation — diagrams, flows, and modernization plans — accelerated by AI, for organizations that lack dedicated architects but need clarity and documentation.</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="dot">🗺️</div>
+                    <h3>Current-State Architecture Package</h3>
+                    <p>Document how systems actually work today.</p>
+                    <ul class="card-features">
+                        <li>System inventory</li>
+                        <li>High-level architecture diagram</li>
+                        <li>Data flow overview</li>
+                        <li>Authentication/authorization flow summary</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> descriptions, component organization, diagrams from structured inputs.</div>
+                    <a class="btn btn-dark" href="#contact">Document My Current State</a>
+                </div>
+                <div class="card">
+                    <div class="dot">🚀</div>
+                    <h3>Modernization Roadmap Package</h3>
+                    <p>Define how to move from legacy to modern infrastructure.</p>
+                    <ul class="card-features">
+                        <li>Current-state summary</li>
+                        <li>Target-state vision</li>
+                        <li>Gap analysis</li>
+                        <li>Phased roadmap (waves, milestones)</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> roadmap structuring, narrative generation, visuals.</div>
+                    <a class="btn btn-dark" href="#contact">Plan My Modernization</a>
+                </div>
+                <div class="card">
+                    <div class="dot">🔐</div>
+                    <h3>Identity &amp; Access Architecture Package</h3>
+                    <p>Document identity flows, directories, and access patterns.</p>
+                    <ul class="card-features">
+                        <li>Identity system overview</li>
+                        <li>Authentication flows</li>
+                        <li>Role/permission model summary</li>
+                        <li>Risk and improvement notes</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> flow descriptions, pattern summaries, diagrams.</div>
+                    <a class="btn btn-dark" href="#contact">Document My Identity Architecture</a>
+                </div>
+                <div class="card">
+                    <div class="dot">🏗️</div>
+                    <h3>Infrastructure &amp; Datacenter Architecture Package</h3>
+                    <p>Document datacenter/server cluster layouts and dependencies.</p>
+                    <ul class="card-features">
+                        <li>Physical/logical layout</li>
+                        <li>Network overview</li>
+                        <li>Dependency mapping</li>
+                        <li>DR/BCP summary</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> input organization, diagrams, DR narratives.</div>
+                    <a class="btn btn-dark" href="#contact">Document My Infrastructure</a>
+                </div>
+            </div>
+
+            <h3 class="subhead">Engagement Models</h3>
+            <div class="engagement-models">
+                <div class="engagement-card">
+                    <div class="scope-label">Single package</div>
+                    <h4>Single Package Engagement</h4>
+                    <p><strong>Scope:</strong> One architecture package — e.g. current-state or identity.</p>
+                    <p><strong>Output:</strong> Documentation bundle (PDF + diagrams).</p>
+                    <p><strong>Ideal for:</strong> Teams needing clarity for a project or audit.</p>
+                </div>
+                <div class="engagement-card">
+                    <div class="scope-label">2–3 packages</div>
+                    <h4>Multi-Package Engagement</h4>
+                    <p><strong>Scope:</strong> Multiple packages — e.g. current-state + modernization + identity.</p>
+                    <p><strong>Output:</strong> Cohesive architecture documentation set.</p>
+                    <p><strong>Ideal for:</strong> Organizations preparing for modernization or vendor engagement.</p>
+                </div>
+                <div class="engagement-card">
+                    <div class="scope-label">Retainer</div>
+                    <h4>Ongoing Architecture Documentation Support</h4>
+                    <p><strong>Scope:</strong> Continuous updates as systems evolve.</p>
+                    <p><strong>Output:</strong> Versioned documentation, updated diagrams.</p>
+                    <p><strong>Ideal for:</strong> Growing companies without an in-house architect.</p>
+                </div>
+            </div>
+
+            <h3 class="subhead">How It Works</h3>
+            <ol class="process-list">
+                <li><strong>Intake</strong><span class="desc">Systems list, existing diagrams, and any prior documentation.</span></li>
+                <li><strong>Working session</strong><span class="desc">Questions to clarify flows and fill in gaps.</span></li>
+                <li><strong>AI-assisted drafting</strong><span class="desc">First-pass documentation generated, then refined and corrected by hand.</span></li>
+                <li><strong>Delivery</strong><span class="desc">Final PDF plus editable source files.</span></li>
+                <li><strong>Optional update cycle</strong><span class="desc">Keep documentation current as systems change.</span></li>
+            </ol>
+
+            <div class="section-cta">
+                <p>Pricing depends on scope — quoted after intake.</p>
+                <a class="btn btn-dark" href="#contact">Request a Documentation Package</a>
+            </div>
+        </section>
+
+        <!-- ===== About ===== -->
+        <section class="block" id="about">
+            <div class="about-block">
+                <div class="eyebrow" style="text-align:center;">Built From Real Experience</div>
+                <h2 class="block-title" style="margin:0 auto 20px auto;">Every product and engagement is based on actual enterprise implementations.</h2>
+                <p>No theory — just practical tools and outcomes that work.</p>
                 <div class="credentials">
                     <span class="credential">Microsoft Certified Master</span>
                     <span class="credential">20+ Years Enterprise IT</span>
-                    <span class="credential">Azure & M365 Expert</span>
+                    <span class="credential">Azure &amp; M365 Expert</span>
                     <span class="credential">Former Microsoft PFE</span>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- ===== Contact ===== -->
+        <section class="block" id="contact">
+            <div class="eyebrow">Let's Talk</div>
+            <h2 class="block-title">Tell me what you need.</h2>
+            <p class="block-desc">Pick a track and send a note — I'll follow up to schedule a discovery/scoping call.</p>
+            <div class="engagement-models">
+                <div class="contact-card">
+                    <h4>🛡️ Cybersecurity Consulting</h4>
+                    <p>Zero Trust, SIEM, identity governance, or policy/compliance gaps.</p>
+                    <a class="btn btn-dark" href="mailto:mmirzaie@msn.com?subject=Cybersecurity%20Consulting%20Inquiry&body=Company%20size%3A%0APrimary%20concern%20(Zero%20Trust%2FSIEM%2FIdentity%2FPolicies)%3A%0ADesired%20timeline%3A">Email About Consulting</a>
+                </div>
+                <div class="contact-card" style="background:#0a0e14; border-color:#1c2530;">
+                    <h4 style="color:#fff;">🖥️ Penetration Testing</h4>
+                    <p style="color:#8b98a8;">Internal/AD, cloud &amp; identity, phishing, or external testing.</p>
+                    <a class="btn btn-mint" href="mailto:mmirzaie@msn.com?subject=Penetration%20Testing%20Inquiry&body=Target%20environment%3A%0ATrack(s)%20of%20interest%20(internal%2Fcloud%2Fphishing%2Fexternal)%3A%0ADesired%20timeline%3A">Email About Pentesting</a>
+                </div>
+                <div class="contact-card">
+                    <h4>🏗️ Architecture Documentation</h4>
+                    <p>Current-state, modernization, identity, or infrastructure documentation packages.</p>
+                    <a class="btn btn-dark" href="mailto:mmirzaie@msn.com?subject=Architecture%20Documentation%20Inquiry&body=Systems%20in%20scope%3A%0APrimary%20goal%20(clarity%2Faudit%2Fmodernization%2Fvendor)%3A%0ADesired%20timeline%3A">Email About Documentation</a>
+                </div>
+            </div>
+        </section>
     </div>
 
     <div class="newsletter">
@@ -291,9 +623,9 @@
             <h2>Get Notified When Products Launch</h2>
             <p>Join for early access and launch discounts.</p>
             <form style="margin-top: 20px;">
-                <input type="email" placeholder="Enter your email" style="padding: 15px 20px; border: none; border-radius: 25px; width: 100%; max-width: 300px; font-size: 1em;" required>
+                <input type="email" placeholder="Enter your email" required>
                 <br>
-                <button type="submit" class="btn" style="width: auto; margin-top: 15px;">Notify Me</button>
+                <button type="submit" class="btn btn-primary" style="width: auto; margin-top: 15px;">Notify Me</button>
             </form>
         </div>
     </div>
