@@ -65,7 +65,6 @@
         .btn-ghost:hover { background: rgba(255,255,255,0.08); }
         .btn-dark { background: #14141a; color: #fff; }
         .btn-dark:hover { background: #2a2438; }
-        .btn-dark[disabled], .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
         .stat-card { background: #2a2145; border-radius: 20px; padding: 28px; }
         .stat-card .n { font-size: 2.2em; font-weight: 800; color: #a3ff3c; }
         .stat-card .l { color: #c9c3dd; font-size: 0.88em; margin-top: 4px; }
@@ -262,7 +261,7 @@
                     <div class="price">$67</div>
                     <div class="price-note">One-time purchase • Instant download</div>
                     <div class="ai-note"><strong>Need help implementing?</strong> Consulting available at $90/hour for Azure AD, M365, Defender, and Intune deployments.</div>
-                    <button class="btn btn-dark" disabled>Coming Soon</button>
+                    <a class="btn btn-dark" href="#newsletter">Get Notified at Launch</a>
                 </div>
                 <div class="card">
                     <div class="dot">🤖</div>
@@ -277,7 +276,7 @@
                     </ul>
                     <div class="price">$47</div>
                     <div class="price-note">Python script + setup guide</div>
-                    <button class="btn btn-dark" disabled>Coming Soon</button>
+                    <a class="btn btn-dark" href="#newsletter">Get Notified at Launch</a>
                 </div>
             </div>
         </section>
@@ -459,6 +458,35 @@
             </div>
         </div>
 
+        <h3 class="subhead" style="color:#fff;">Report Options</h3>
+        <p style="color:#8b98a8; max-width:600px; margin-bottom:8px;">Every engagement includes a base report — pick the format(s) that match who's going to read it.</p>
+        <div class="engagement-models">
+            <div class="pentest-engagement">
+                <div class="scope-label">Board-ready</div>
+                <h4>Executive Summary Only</h4>
+                <p>High-level findings and business risk, framed for leadership — no technical detail.</p>
+                <p><strong>Best for:</strong> Board/leadership reporting.</p>
+            </div>
+            <div class="pentest-engagement">
+                <div class="scope-label">Engineering-ready</div>
+                <h4>Full Technical Report</h4>
+                <p>Detailed findings, evidence, reproduction steps, and prioritized remediation guidance.</p>
+                <p><strong>Best for:</strong> The team doing the actual fixing.</p>
+            </div>
+            <div class="pentest-engagement">
+                <div class="scope-label">Audit-ready</div>
+                <h4>Compliance-Mapped Report</h4>
+                <p>Findings mapped to common frameworks on request (e.g. NIST CSF, ISO 27001, PCI-DSS, SOC 2).</p>
+                <p><strong>Best for:</strong> Audit and compliance evidence.</p>
+            </div>
+            <div class="pentest-engagement">
+                <div class="scope-label">Validation</div>
+                <h4>Executive + Retest Report</h4>
+                <p>Exec summary and full technical report, plus a follow-up retest report confirming fixes.</p>
+                <p><strong>Best for:</strong> Proving remediation actually worked.</p>
+            </div>
+        </div>
+
         <h3 class="subhead" style="color:#fff;">How It Works</h3>
         <ol class="pentest-process">
             <li><strong>Scoping call &amp; rules of engagement</strong><span class="desc">Define objectives, systems in scope, and authorization before anything starts.</span></li>
@@ -618,7 +646,7 @@
         </section>
     </div>
 
-    <div class="newsletter">
+    <div class="newsletter" id="newsletter">
         <div class="container">
             <h2>Get Notified When Products Launch</h2>
             <p>Join for early access and launch discounts.</p>
