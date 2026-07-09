@@ -65,6 +65,8 @@
         .btn-ghost:hover { background: rgba(255,255,255,0.08); }
         .btn-dark { background: #14141a; color: #fff; }
         .btn-dark:hover { background: #2a2438; }
+        .btn-outline { background: transparent; color: #14141a; border: 1px solid #d8d4e4; }
+        .btn-outline:hover { border-color: #6a34d6; background: #f4f1fb; }
         .stat-card { background: #2a2145; border-radius: 20px; padding: 28px; }
         .stat-card .n { font-size: 2.2em; font-weight: 800; color: #a3ff3c; }
         .stat-card .l { color: #c9c3dd; font-size: 0.88em; margin-top: 4px; }
@@ -165,6 +167,15 @@
             padding: 12px 16px; margin: -4px 0 12px; font-size: 0.86em; color: #4a4560;
         }
         .zta-multi-continue[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+        .zta-command {
+            display: block; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.82em;
+            background: #14141a; color: #a3ff3c; padding: 10px 14px; border-radius: 8px;
+            margin: 8px 0 0; overflow-x: auto; white-space: pre;
+        }
+        .zta-results .process-list { margin-top: 14px; margin-bottom: 8px; }
+        .zta-spec-heading { font-size: 0.72em; letter-spacing: 0.05em; text-transform: uppercase; color: #6a34d6; font-weight: 700; margin: 30px 0 4px; }
+        .zta-spec-heading:first-of-type { margin-top: 0; }
 
         .zta-results h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 6px; }
         .zta-results > p { color: #6a6478; margin-bottom: 26px; }
@@ -1455,29 +1466,58 @@
                 }
             ];
 
-            var MODEL_BY_HARDWARE = [
-                '7–8B parameters, 4-bit quantized — runs on CPU alone',
-                '7–13B parameters, 4–8 bit quantized',
-                '13–34B parameters, light quantization',
-                '34–70B+ parameters, full precision or light quantization'
+            var MODEL_MATRIX = {
+                general: [
+                    { display: 'Llama 3.1 8B-Instruct (Q4_K_M GGUF)', ollamaTag: 'llama3.1:8b', hfRepo: 'meta-llama/Llama-3.1-8B-Instruct' },
+                    { display: 'Llama 3.1 8B-Instruct (Q8 GGUF) — or Mistral-Small 3 24B at Q4 if VRAM allows', ollamaTag: 'llama3.1:8b-instruct-q8_0', hfRepo: 'meta-llama/Llama-3.1-8B-Instruct' },
+                    { display: 'Llama 3.1 70B-Instruct (Q4_K_M GGUF) — or Mistral-Small 3 24B at full precision', ollamaTag: 'llama3.1:70b', hfRepo: 'meta-llama/Llama-3.1-70B-Instruct' },
+                    { display: 'Llama 3.1 70B-Instruct (full precision) — or Llama 3.1 405B at Q4 across multiple GPUs', ollamaTag: 'llama3.1:70b-instruct-fp16', hfRepo: 'meta-llama/Llama-3.1-70B-Instruct' }
+                ],
+                code: [
+                    { display: 'Qwen2.5-Coder 7B (Q4_K_M GGUF)', ollamaTag: 'qwen2.5-coder:7b', hfRepo: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
+                    { display: 'Qwen2.5-Coder 14B (Q4_K_M GGUF)', ollamaTag: 'qwen2.5-coder:14b', hfRepo: 'Qwen/Qwen2.5-Coder-14B-Instruct' },
+                    { display: 'Qwen2.5-Coder 32B (Q4_K_M GGUF) — or DeepSeek-Coder-V2 16B at full precision', ollamaTag: 'qwen2.5-coder:32b', hfRepo: 'Qwen/Qwen2.5-Coder-32B-Instruct' },
+                    { display: 'DeepSeek-Coder-V2 236B (MoE, Q4) — or Qwen2.5-Coder 32B at full precision', ollamaTag: 'deepseek-coder-v2:236b', hfRepo: 'deepseek-ai/DeepSeek-Coder-V2-Instruct' }
+                ],
+                agent: [
+                    { display: 'Llama 3.1 8B-Instruct (Q4_K_M GGUF) — native tool-calling support', ollamaTag: 'llama3.1:8b', hfRepo: 'meta-llama/Llama-3.1-8B-Instruct' },
+                    { display: 'Qwen2.5-Instruct 14B (Q4_K_M GGUF) — strong function-calling for its size', ollamaTag: 'qwen2.5:14b', hfRepo: 'Qwen/Qwen2.5-14B-Instruct' },
+                    { display: 'Qwen2.5-Instruct 32B (Q4_K_M GGUF) — or Llama 3.1 70B at Q4 for more complex multi-step reasoning', ollamaTag: 'qwen2.5:32b', hfRepo: 'Qwen/Qwen2.5-32B-Instruct' },
+                    { display: 'Llama 3.1 70B-Instruct (full precision) — reliable multi-step tool-calling at this scale', ollamaTag: 'llama3.1:70b-instruct-fp16', hfRepo: 'meta-llama/Llama-3.1-70B-Instruct' }
+                ]
+            };
+            var HARDWARE_SPEC = [
+                'Disk: ~5–10GB for the model. RAM: 16GB+ system RAM recommended for CPU-only inference (workable for light use, slower per response).',
+                'Disk: ~8–20GB for the model (quantized). VRAM: 8–16GB. System RAM: 32GB recommended.',
+                'Disk: ~20–45GB for the model. VRAM: 24–48GB. System RAM: 64GB recommended.',
+                'Disk: 40–150GB+ depending on model size. VRAM: 80GB+ or multiple GPUs. System RAM: 128GB+ recommended.'
             ];
             var SERVING_BY_TEAM = [
-                'Single-instance server is sufficient',
-                'Single server with request queuing recommended',
-                'Load-balanced multi-instance serving recommended',
-                'Multi-node serving infrastructure required'
+                { name: 'Ollama', note: 'single instance is plenty for this team size' },
+                { name: 'Ollama behind Nginx, or vLLM', note: 'vLLM adds an OpenAI-compatible API with request batching if you want it' },
+                { name: 'vLLM', note: 'single well-specced instance with request batching and an OpenAI-compatible API' },
+                { name: 'vLLM (multi-instance, load-balanced)', note: 'one instance per GPU/node behind Nginx or Traefik for this many concurrent users' }
             ];
-            var COMPONENTS_BY_PURPOSE = {
-                chat: 'Conversational base model tuned for team Q&A and drafting',
-                code: 'Code-specialized model family, plus IDE/CI integration',
-                workflows: 'Agent orchestration layer + scoped, step-by-step tool permissions',
-                tooling: 'Custom tool/function-calling connectors for your internal systems'
+            var COMPONENT_DETAILS = {
+                chat: { label: 'Conversational base model only', detail: 'No extra components needed — the model above handles this on its own.' },
+                code: { label: 'Editor / CI integration', detail: 'Point Continue.dev or Cursor at your local endpoint for in-IDE completion, or call the model directly from CI for automated code review.' },
+                workflows: { label: 'Agent orchestration layer', detail: 'LangGraph or CrewAI to define multi-step flows. Grant each step only the tool permissions it actually needs — no blanket filesystem/network access.' },
+                tooling: { label: 'Custom tool/function-calling connectors', detail: 'Define each internal system (ticketing, database, internal API) as a scoped function-calling schema. LangChain’s tool interface or a plain OpenAI-style function schema both work with the model above.' }
             };
+            var RAG_ADDON = { label: 'Local RAG (optional, for document Q&A)', detail: 'Add Qdrant (vector database: docker run -p 6333:6333 qdrant/qdrant) + a local embedding model such as BAAI/bge-large-en-v1.5, indexed via LlamaIndex or LangChain.' };
             var SENSITIVITY_NOTE = [
                 'Standard local deployment practices apply.',
                 'Recommend network segmentation for the AI stack, isolated from general traffic.',
                 'Recommend full air-gap consideration and audit logging from day one.'
             ];
+
+            function pickTrack(a) {
+                if (a.wantsAgent === true && a.purposes) {
+                    if (a.purposes.indexOf('code') !== -1) return 'code';
+                    if (a.purposes.indexOf('workflows') !== -1 || a.purposes.indexOf('tooling') !== -1) return 'agent';
+                }
+                return 'general';
+            }
 
             var current = 0;
             var answers = {};
@@ -1585,45 +1625,130 @@
                 quizEl.hidden = true;
                 resultsEl.hidden = false;
 
-                var model = MODEL_BY_HARDWARE[answers.hardware];
+                var isAgent = answers.wantsAgent === true;
+                var track = pickTrack(answers);
+                var model = MODEL_MATRIX[track][answers.hardware];
+                var hwSpec = HARDWARE_SPEC[answers.hardware];
                 var serving = SERVING_BY_TEAM[answers.teamSize];
-                var components = (answers.wantsAgent === true && answers.purposes && answers.purposes.length)
-                    ? answers.purposes.map(function (p) { return COMPONENTS_BY_PURPOSE[p]; }).join('; ')
-                    : 'Base chat/assistant model — no agent orchestration required. Local RAG (Q&A over your own documents) can be added on request.';
                 var sensNote = SENSITIVITY_NOTE[answers.sensitivity];
                 var availNote = answers.availability === 1
                     ? 'Always-on serving — plan for redundancy/failover.'
                     : 'On-demand serving can reduce hardware costs significantly.';
 
-                var html = '<h3>Your recommended build configuration</h3><p>Based on your answers — a starting point, refined further on a discovery call.</p>';
+                var components = isAgent && answers.purposes && answers.purposes.length
+                    ? answers.purposes.map(function (p) { return COMPONENT_DETAILS[p]; })
+                    : [{ label: 'Base chat/assistant model only', detail: 'No agent orchestration needed — the model above handles this directly.' }, RAG_ADDON];
 
-                html += '<div class="zta-focus"><strong>Model size</strong>' + model + '</div>';
-                html += '<div class="zta-focus"><strong>Components</strong>' + components + '</div>';
-                html += '<div class="zta-focus"><strong>Serving setup</strong>' + serving + '</div>';
+                var usesOllama = serving.name.indexOf('Ollama') === 0;
+                var runCommand = usesOllama
+                    ? 'curl -fsSL https://ollama.com/install.sh | sh\nollama pull ' + model.ollamaTag + '\nollama run ' + model.ollamaTag
+                    : 'pip install vllm\nvllm serve ' + model.hfRepo + ' --host 0.0.0.0 --port 8000';
+
+                var steps = [];
+                steps.push({ title: 'Provision the box', desc: 'Ubuntu 22.04+ (recommended), current GPU drivers if you’re using a GPU, and the disk/RAM/VRAM from the hardware spec above.' });
+                steps.push({ title: 'Install the serving engine and pull the model', desc: 'command below', command: runCommand });
+                if (!isAgent) {
+                    steps.push({ title: 'Add local RAG if you need document Q&A', desc: 'docker run -p 6333:6333 qdrant/qdrant, then index your documents with LlamaIndex or LangChain’s Qdrant integration. Skip this step if you only need a plain chat interface.' });
+                }
+                if (isAgent && answers.purposes && answers.purposes.indexOf('workflows') !== -1) {
+                    steps.push({ title: 'Wire up the orchestration layer', desc: 'Install LangGraph or CrewAI and define each workflow step, granting only the tool permissions that step actually needs.' });
+                }
+                if (isAgent && answers.purposes && answers.purposes.indexOf('tooling') !== -1) {
+                    steps.push({ title: 'Write your tool/function schemas', desc: 'Define each internal system (ticketing, database, internal API) as a scoped function-calling schema and register it with your orchestration layer.' });
+                }
+                if (isAgent && answers.purposes && answers.purposes.indexOf('code') !== -1) {
+                    steps.push({ title: 'Connect your editor or CI', desc: 'Point Continue.dev or Cursor at your local endpoint (http://your-server:8000 or via Ollama’s API) for in-IDE completion, or call it from CI for automated review.' });
+                }
+                steps.push({ title: 'Lock down the network', desc: 'Keep the serving endpoint on your internal network only — do not expose it directly to the internet.' + (answers.sensitivity === 2 ? ' Given the data sensitivity here, also add network segmentation and audit logging before go-live.' : '') });
+                steps.push({ title: 'Test with real prompts before rollout', desc: 'Run it against representative questions or workflows from your own team before opening it up more broadly.' });
+
+                function specText() {
+                    var lines = ['LOCAL AI BUILD CONFIGURATION', ''];
+                    lines.push('Model: ' + model.display);
+                    lines.push('  Ollama tag: ' + model.ollamaTag + '  |  Hugging Face repo: ' + model.hfRepo);
+                    lines.push('Hardware: ' + hwSpec);
+                    lines.push('Serving: ' + serving.name + ' — ' + serving.note);
+                    lines.push('Components:');
+                    components.forEach(function (c) { lines.push('  - ' + c.label + ': ' + c.detail); });
+                    lines.push('Data handling: ' + sensNote);
+                    lines.push('Availability: ' + availNote);
+                    lines.push('');
+                    lines.push('HOW TO BUILD THIS');
+                    steps.forEach(function (s, i) {
+                        lines.push((i + 1) + '. ' + s.title + ' — ' + s.desc);
+                        if (s.command) lines.push('   $ ' + s.command.split('\n').join('\n   $ '));
+                    });
+                    return lines.join('\n');
+                }
+
+                var html = '<h3>Your local AI build configuration</h3><p>Real components, real commands — enough to build this yourself. Want it built, integrated, and secured instead? That’s what the button below is for.</p>';
+
+                html += '<div class="zta-spec-heading">The stack</div>';
+                html += '<div class="zta-focus"><strong>Model</strong>' + model.display + '</div>';
+                html += '<div class="zta-focus"><strong>Hardware</strong>' + hwSpec + '</div>';
+                html += '<div class="zta-focus"><strong>Serving setup</strong>' + serving.name + ' — ' + serving.note + '</div>';
+                components.forEach(function (c) {
+                    html += '<div class="zta-focus"><strong>' + c.label + '</strong>' + c.detail + '</div>';
+                });
                 html += '<div class="zta-focus"><strong>Data handling</strong>' + sensNote + '</div>';
                 html += '<div class="zta-focus"><strong>Availability</strong>' + availNote + '</div>';
 
+                html += '<div class="zta-spec-heading">How you’d build this</div>';
+                html += '<ol class="process-list">';
+                steps.forEach(function (s) {
+                    html += '<li><strong>' + s.title + '</strong><span class="desc">' + s.desc + '</span>' + (s.command ? '<code class="zta-command">' + s.command.replace(/</g, '&lt;') + '</code>' : '') + '</li>';
+                });
+                html += '</ol>';
+
                 html += '<div class="zta-results-cta">' +
-                    '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="laic-get-proposal">Get My Personalized Proposal</a>' +
+                    '<button type="button" class="btn btn-outline" id="laic-copy-spec">Copy Build Spec</button>' +
+                    '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="laic-get-proposal">Want This Built For You? Request Assistance</a>' +
                     '</div>' +
                     '<button class="zta-restart" type="button" id="laic-restart">Start over</button>';
 
                 resultsEl.innerHTML = html;
+
+                document.getElementById('laic-copy-spec').addEventListener('click', function () {
+                    var btn = this;
+                    var original = btn.textContent;
+                    function flash(label) {
+                        btn.textContent = label;
+                        setTimeout(function () { btn.textContent = original; }, 2000);
+                    }
+                    function fallbackCopy(text) {
+                        var ta = document.createElement('textarea');
+                        ta.value = text;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        var ok = false;
+                        try {
+                            ok = document.execCommand('copy');
+                        } catch (e) {
+                            ok = false;
+                        }
+                        flash(ok ? 'Copied!' : 'Copy failed — select manually');
+                        document.body.removeChild(ta);
+                    }
+                    var text = specText();
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(function () {
+                            flash('Copied!');
+                        }, function () {
+                            fallbackCopy(text);
+                        });
+                    } else {
+                        fallbackCopy(text);
+                    }
+                });
 
                 document.getElementById('laic-get-proposal').addEventListener('click', function () {
                     var trackSelect = document.getElementById('intake-track');
                     var messageBox = document.getElementById('intake-message');
                     if (trackSelect) trackSelect.value = 'Local AI Specialist';
                     if (messageBox) {
-                        var lines = ['Local AI Build Configuration results:'];
-                        answerOrder.forEach(function (a) {
-                            lines.push('- ' + a.key + ': ' + a.label);
-                        });
-                        lines.push('');
-                        lines.push('Recommended model: ' + model);
-                        lines.push('Recommended components: ' + components);
-                        lines.push('Serving setup: ' + serving);
-                        messageBox.value = lines.join('\n');
+                        messageBox.value = 'I’d like help building this:\n\n' + specText();
                     }
                 });
 
