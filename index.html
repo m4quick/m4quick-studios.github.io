@@ -176,6 +176,11 @@
         .zta-results .process-list { margin-top: 14px; margin-bottom: 8px; }
         .zta-spec-heading { font-size: 0.72em; letter-spacing: 0.05em; text-transform: uppercase; color: #6a34d6; font-weight: 700; margin: 30px 0 4px; }
         .zta-spec-heading:first-of-type { margin-top: 0; }
+        .zta-spec-subnote { color: #6a6478; font-size: 0.88em; margin-bottom: 10px; }
+        .zta-prompt {
+            background: #14141a; color: #e6e3ee; font-size: 0.86em; line-height: 1.6;
+            padding: 18px 20px; border-radius: 10px; white-space: pre-wrap; margin: 4px 0 0;
+        }
 
         .zta-results h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 6px; }
         .zta-results > p { color: #6a6478; margin-bottom: 26px; }
@@ -1428,6 +1433,33 @@
                     ]
                 },
                 {
+                    key: 'memory',
+                    type: 'single',
+                    question: 'Does this need memory — the ability to recall things later?',
+                    options: [
+                        {
+                            label: 'Retrieval-based — pull facts from documents I provide',
+                            value: 'retrieval',
+                            info: 'Classic RAG: your files get chunked, embedded, and stored in a vector database, and the model retrieves relevant passages at query time. Good for static knowledge (docs, policies, code) that doesn’t change turn-by-turn.'
+                        },
+                        {
+                            label: 'Semantic / persistent — remembers context across sessions on its own',
+                            value: 'semantic',
+                            info: 'A living memory store the agent writes to and reads from automatically — facts about the user, past decisions, ongoing projects. Needs a memory layer (e.g. Mem0 or Zep) plus a prompt pattern that decides what’s worth keeping.'
+                        },
+                        {
+                            label: 'Both',
+                            value: 'both',
+                            info: 'Static document retrieval (RAG) for reference material, plus a persistent memory store for what the agent learns over time. Most agentic/workflow builds end up wanting both eventually.'
+                        },
+                        {
+                            label: 'No — stateless is fine',
+                            value: 'none',
+                            info: 'Each conversation starts fresh with no memory of prior sessions. Simplest to build and secure — the right call if you don’t need continuity.'
+                        }
+                    ]
+                },
+                {
                     key: 'hardware',
                     question: 'What hardware do you have available?',
                     options: [
@@ -1504,7 +1536,32 @@
                 workflows: { label: 'Agent orchestration layer', detail: 'LangGraph or CrewAI to define multi-step flows. Grant each step only the tool permissions it actually needs — no blanket filesystem/network access.' },
                 tooling: { label: 'Custom tool/function-calling connectors', detail: 'Define each internal system (ticketing, database, internal API) as a scoped function-calling schema. LangChain’s tool interface or a plain OpenAI-style function schema both work with the model above.' }
             };
-            var RAG_ADDON = { label: 'Local RAG (optional, for document Q&A)', detail: 'Add Qdrant (vector database: docker run -p 6333:6333 qdrant/qdrant) + a local embedding model such as BAAI/bge-large-en-v1.5, indexed via LlamaIndex or LangChain.' };
+            var MEMORY_DETAILS = {
+                retrieval: {
+                    label: 'Retrieval memory (RAG)',
+                    detail: 'Qdrant (vector database) + a local embedding model (BAAI/bge-large-en-v1.5), indexed via LlamaIndex or LangChain.',
+                    step: { title: 'Stand up retrieval memory', desc: 'Run Qdrant and index your source documents into it.', command: 'docker run -p 6333:6333 qdrant/qdrant' },
+                    promptNote: 'When the user asks about something that may be in your documents, call retrieve(query) first and ground your answer in what comes back — cite which document it came from.'
+                },
+                semantic: {
+                    label: 'Semantic / persistent memory',
+                    detail: 'Mem0 or Zep as the memory layer, backed by a vector store, keyed per user/session.',
+                    step: { title: 'Stand up persistent memory', desc: 'Run a memory layer alongside your model.', command: 'pip install mem0ai\n# or: docker run -p 8000:8000 zepai/zep' },
+                    promptNote: 'After each exchange, decide if anything is worth remembering long-term (a fact, preference, or decision). If so, call save_memory(fact). At the start of a session, call recall(context) to check what you already know about this user before responding.'
+                },
+                both: {
+                    label: 'Retrieval + persistent memory',
+                    detail: 'Qdrant for document retrieval, plus Mem0/Zep for persistent, agent-managed memory.',
+                    step: { title: 'Stand up both memory layers', desc: 'Run Qdrant for document retrieval and a memory layer for persistent memory.', command: 'docker run -p 6333:6333 qdrant/qdrant\npip install mem0ai' },
+                    promptNote: 'Use retrieve(query) to ground answers in provided documents. Separately, call save_memory(fact) for anything worth remembering long-term, and recall(context) at the start of a session to check prior context.'
+                },
+                none: {
+                    label: 'No memory layer',
+                    detail: 'Stateless — each session starts fresh. Nothing to stand up here.',
+                    step: null,
+                    promptNote: null
+                }
+            };
             var SENSITIVITY_NOTE = [
                 'Standard local deployment practices apply.',
                 'Recommend network segmentation for the AI stack, isolated from general traffic.',
@@ -1517,6 +1574,27 @@
                     if (a.purposes.indexOf('workflows') !== -1 || a.purposes.indexOf('tooling') !== -1) return 'agent';
                 }
                 return 'general';
+            }
+
+            function buildSystemPrompt(modelDisplay, track, memoryChoice, purposes) {
+                var role = track === 'code'
+                    ? 'a local coding assistant'
+                    : (track === 'agent' ? 'a local automation agent' : 'a local assistant');
+                var lines = [];
+                lines.push('You are ' + role + ' running on ' + modelDisplay + '. Be direct, and only take actions you have explicit permission for.');
+
+                if (purposes && purposes.indexOf('workflows') !== -1) {
+                    lines.push('You can run multi-step workflows, but only using the tools you\'ve been explicitly given for each step — never assume a permission you weren\'t granted. If a step fails, stop and report it rather than improvising a workaround.');
+                }
+                if (purposes && purposes.indexOf('tooling') !== -1) {
+                    lines.push('Only call tools you\'ve been given schemas for. Never invent a tool name or guess at a system you haven\'t been connected to.');
+                }
+                if (memoryChoice && MEMORY_DETAILS[memoryChoice] && MEMORY_DETAILS[memoryChoice].promptNote) {
+                    lines.push(MEMORY_DETAILS[memoryChoice].promptNote);
+                }
+                lines.push('If you\'re not confident in an answer, say so — don\'t fill the gap with something plausible-sounding.');
+
+                return lines.join('\n\n');
             }
 
             var current = 0;
@@ -1637,7 +1715,10 @@
 
                 var components = isAgent && answers.purposes && answers.purposes.length
                     ? answers.purposes.map(function (p) { return COMPONENT_DETAILS[p]; })
-                    : [{ label: 'Base chat/assistant model only', detail: 'No agent orchestration needed — the model above handles this directly.' }, RAG_ADDON];
+                    : [{ label: 'Base chat/assistant model only', detail: 'No agent orchestration needed — the model above handles this directly.' }];
+
+                var memoryChoice = answers.memory || 'none';
+                var memory = MEMORY_DETAILS[memoryChoice];
 
                 var usesOllama = serving.name.indexOf('Ollama') === 0;
                 var runCommand = usesOllama
@@ -1647,8 +1728,8 @@
                 var steps = [];
                 steps.push({ title: 'Provision the box', desc: 'Ubuntu 22.04+ (recommended), current GPU drivers if you’re using a GPU, and the disk/RAM/VRAM from the hardware spec above.' });
                 steps.push({ title: 'Install the serving engine and pull the model', desc: 'command below', command: runCommand });
-                if (!isAgent) {
-                    steps.push({ title: 'Add local RAG if you need document Q&A', desc: 'docker run -p 6333:6333 qdrant/qdrant, then index your documents with LlamaIndex or LangChain’s Qdrant integration. Skip this step if you only need a plain chat interface.' });
+                if (memory.step) {
+                    steps.push(memory.step);
                 }
                 if (isAgent && answers.purposes && answers.purposes.indexOf('workflows') !== -1) {
                     steps.push({ title: 'Wire up the orchestration layer', desc: 'Install LangGraph or CrewAI and define each workflow step, granting only the tool permissions that step actually needs.' });
@@ -1659,17 +1740,20 @@
                 if (isAgent && answers.purposes && answers.purposes.indexOf('code') !== -1) {
                     steps.push({ title: 'Connect your editor or CI', desc: 'Point Continue.dev or Cursor at your local endpoint (http://your-server:8000 or via Ollama’s API) for in-IDE completion, or call it from CI for automated review.' });
                 }
+                steps.push({ title: 'Load the system prompt', desc: 'Set the prompt below as the model’s system message in whatever you’re serving it through.' });
                 steps.push({ title: 'Lock down the network', desc: 'Keep the serving endpoint on your internal network only — do not expose it directly to the internet.' + (answers.sensitivity === 2 ? ' Given the data sensitivity here, also add network segmentation and audit logging before go-live.' : '') });
                 steps.push({ title: 'Test with real prompts before rollout', desc: 'Run it against representative questions or workflows from your own team before opening it up more broadly.' });
 
+                var systemPrompt = buildSystemPrompt(model.display, track, memoryChoice, answers.purposes);
+
                 function specText() {
-                    var lines = ['LOCAL AI BUILD CONFIGURATION', ''];
+                    var lines = ['LOCAL AI BUILD LIST', ''];
                     lines.push('Model: ' + model.display);
                     lines.push('  Ollama tag: ' + model.ollamaTag + '  |  Hugging Face repo: ' + model.hfRepo);
                     lines.push('Hardware: ' + hwSpec);
                     lines.push('Serving: ' + serving.name + ' — ' + serving.note);
-                    lines.push('Components:');
-                    components.forEach(function (c) { lines.push('  - ' + c.label + ': ' + c.detail); });
+                    components.forEach(function (c) { lines.push(c.label + ': ' + c.detail); });
+                    if (memoryChoice !== 'none') lines.push(memory.label + ': ' + memory.detail);
                     lines.push('Data handling: ' + sensNote);
                     lines.push('Availability: ' + availNote);
                     lines.push('');
@@ -1678,18 +1762,24 @@
                         lines.push((i + 1) + '. ' + s.title + ' — ' + s.desc);
                         if (s.command) lines.push('   $ ' + s.command.split('\n').join('\n   $ '));
                     });
+                    lines.push('');
+                    lines.push('SYSTEM PROMPT');
+                    lines.push(systemPrompt);
                     return lines.join('\n');
                 }
 
-                var html = '<h3>Your local AI build configuration</h3><p>Real components, real commands — enough to build this yourself. Want it built, integrated, and secured instead? That’s what the button below is for.</p>';
+                var html = '<h3>Your Local AI Build List</h3><p>The exact products, the setup commands, and the system prompt — everything needed to build this yourself. Want it built, integrated, and secured instead? That’s what the button below is for.</p>';
 
-                html += '<div class="zta-spec-heading">The stack</div>';
+                html += '<div class="zta-spec-heading">Build list</div>';
                 html += '<div class="zta-focus"><strong>Model</strong>' + model.display + '</div>';
                 html += '<div class="zta-focus"><strong>Hardware</strong>' + hwSpec + '</div>';
                 html += '<div class="zta-focus"><strong>Serving setup</strong>' + serving.name + ' — ' + serving.note + '</div>';
                 components.forEach(function (c) {
                     html += '<div class="zta-focus"><strong>' + c.label + '</strong>' + c.detail + '</div>';
                 });
+                if (memoryChoice !== 'none') {
+                    html += '<div class="zta-focus"><strong>' + memory.label + '</strong>' + memory.detail + '</div>';
+                }
                 html += '<div class="zta-focus"><strong>Data handling</strong>' + sensNote + '</div>';
                 html += '<div class="zta-focus"><strong>Availability</strong>' + availNote + '</div>';
 
@@ -1700,8 +1790,12 @@
                 });
                 html += '</ol>';
 
+                html += '<div class="zta-spec-heading">System prompt</div>';
+                html += '<p class="zta-spec-subnote">Starting point — adjust the tone and specifics to match your actual use case.</p>';
+                html += '<div class="zta-prompt">' + systemPrompt.replace(/</g, '&lt;') + '</div>';
+
                 html += '<div class="zta-results-cta">' +
-                    '<button type="button" class="btn btn-outline" id="laic-copy-spec">Copy Build Spec</button>' +
+                    '<button type="button" class="btn btn-outline" id="laic-copy-spec">Copy Build Kit</button>' +
                     '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="laic-get-proposal">Want This Built For You? Request Assistance</a>' +
                     '</div>' +
                     '<button class="zta-restart" type="button" id="laic-restart">Start over</button>';
