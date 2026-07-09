@@ -23,6 +23,12 @@ jobs:
 
       - name: Deploy to host1 staging
         run: |
-          echo "PWD: $(pwd)"
-          ls -la /data/storage1/staging-sites/m4quick-studios/ || echo "PATH NOT VISIBLE FROM RUNNER JOB"
-          rsync -a --delete --exclude='.git' --exclude='.gitea' ./ /data/storage1/staging-sites/m4quick-studios/site/
+          apt-get update -qq && apt-get install -y -qq openssh-client rsync > /dev/null
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          rsync -a --delete --exclude='.git' --exclude='.gitea' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./ anu-sir@10.0.0.254:
+        env:
+          DEPLOY_KEY: ${{ secrets.HOST1_DEPLOY_KEY }}
