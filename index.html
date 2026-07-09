@@ -149,7 +149,22 @@
             transition: border-color 0.15s, background 0.15s;
         }
         .zta-option:hover { border-color: #6a34d6; background: #f4f1fb; }
+        .zta-option.selected { border-color: #6a34d6; background: #f4f1fb; box-shadow: inset 0 0 0 1px #6a34d6; }
         .zta-back { margin-top: 22px; background: none; border: none; color: #6a6478; font-size: 0.85em; cursor: pointer; text-decoration: underline; padding: 0; }
+
+        .zta-option-row { display: flex; align-items: stretch; gap: 8px; }
+        .zta-option-row .zta-option { flex: 1; }
+        .zta-info-toggle {
+            flex-shrink: 0; background: #fff; border: 1px solid #d8d4e4; border-radius: 12px;
+            padding: 0 14px; cursor: pointer; font-family: inherit; font-size: 0.8em; color: #6a34d6;
+            white-space: nowrap; transition: border-color 0.15s, background 0.15s;
+        }
+        .zta-info-toggle:hover { border-color: #6a34d6; background: #f4f1fb; }
+        .zta-info-box {
+            background: #f4f1fb; border-left: 3px solid #6a34d6; border-radius: 8px;
+            padding: 12px 16px; margin: -4px 0 12px; font-size: 0.86em; color: #4a4560;
+        }
+        .zta-multi-continue[disabled] { opacity: 0.4; cursor: not-allowed; }
 
         .zta-results h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 6px; }
         .zta-results > p { color: #6a6478; margin-bottom: 26px; }
@@ -1355,15 +1370,50 @@
         })();
 
         (function () {
-            var QUESTIONS = [
+            var BASE_QUESTIONS = [
                 {
-                    key: 'useCase',
-                    question: 'What will you primarily use it for?',
+                    key: 'wantsAgent',
+                    type: 'single',
+                    question: 'Are you looking for a local AI agent?',
                     options: [
-                        { label: 'A general assistant/chatbot for your team', value: 'general' },
-                        { label: 'Search & Q&A over your own documents (RAG)', value: 'rag' },
-                        { label: 'A coding assistant', value: 'coding' },
-                        { label: 'Data analysis & automation agents', value: 'agents' }
+                        {
+                            label: 'Yes — it needs to actively do things, not just answer questions',
+                            value: true,
+                            info: 'Agent-style deployments need an orchestration layer and scoped tool-calling permissions on top of the base model. We’ll ask what the agent needs to do next, and that changes the components recommended below.'
+                        },
+                        {
+                            label: 'No — I just need a chat/assistant interface',
+                            value: false,
+                            info: 'A straight assistant deployment skips agent orchestration entirely. Smaller footprint, faster to stand up, and easier to secure than an agentic build.'
+                        }
+                    ]
+                },
+                {
+                    key: 'purposes',
+                    type: 'multi',
+                    showIf: function (a) { return a.wantsAgent === true; },
+                    question: 'What purposes do you expect the agent to serve?',
+                    options: [
+                        {
+                            label: 'Chat',
+                            value: 'chat',
+                            info: 'A conversational interface for your team — Q&A, drafting, summarization. This keeps the base model as the primary component; no extra orchestration needed for this purpose alone.'
+                        },
+                        {
+                            label: 'Code',
+                            value: 'code',
+                            info: 'Code generation and review, in your IDE or CI pipeline. This points the recommendation toward a code-specialized model family plus editor/CI integration.'
+                        },
+                        {
+                            label: 'Build custom workflows',
+                            value: 'workflows',
+                            info: 'Multi-step automations the agent runs on its own (e.g. "pull data, summarize, file a ticket"). This requires an orchestration layer and explicit, scoped tool permissions for each step.'
+                        },
+                        {
+                            label: 'Special Tooling',
+                            value: 'tooling',
+                            info: 'Custom integrations with your internal systems — ticketing, internal databases, proprietary APIs. This requires purpose-built, scoped function/tool-calling connectors for your specific stack.'
+                        }
                     ]
                 },
                 {
@@ -1417,11 +1467,11 @@
                 'Load-balanced multi-instance serving recommended',
                 'Multi-node serving infrastructure required'
             ];
-            var COMPONENTS_BY_USE_CASE = {
-                general: 'Base chat model — no additional components required',
-                rag: 'Add: local vector database + embedding model for document retrieval',
-                coding: 'Code-specialized model family, plus IDE/editor integration',
-                agents: 'Add: agent orchestration layer + scoped tool-calling framework'
+            var COMPONENTS_BY_PURPOSE = {
+                chat: 'Conversational base model tuned for team Q&A and drafting',
+                code: 'Code-specialized model family, plus IDE/CI integration',
+                workflows: 'Agent orchestration layer + scoped, step-by-step tool permissions',
+                tooling: 'Custom tool/function-calling connectors for your internal systems'
             };
             var SENSITIVITY_NOTE = [
                 'Standard local deployment practices apply.',
@@ -1442,32 +1492,93 @@
             var stepLabel = document.getElementById('laic-step-label');
             var questionEl = document.getElementById('laic-question');
 
+            function getActiveQuestions() {
+                return BASE_QUESTIONS.filter(function (q) {
+                    return !q.showIf || q.showIf(answers);
+                });
+            }
+
+            function advance(list) {
+                if (current < list.length - 1) {
+                    current++;
+                    renderQuestion();
+                } else {
+                    showResults();
+                }
+            }
+
             function renderQuestion() {
-                var q = QUESTIONS[current];
-                stepLabel.textContent = 'Question ' + (current + 1) + ' of ' + QUESTIONS.length;
-                progressFill.style.width = (((current + 1) / QUESTIONS.length) * 100) + '%';
+                var list = getActiveQuestions();
+                var q = list[current];
+                stepLabel.textContent = 'Question ' + (current + 1) + ' of ' + list.length;
+                progressFill.style.width = (((current + 1) / list.length) * 100) + '%';
                 backBtn.hidden = current === 0;
+
+                var isMulti = q.type === 'multi';
+                var selected = isMulti ? (answers[q.key] || []).slice() : null;
 
                 var html = '<h3>' + q.question + '</h3><div class="zta-options">';
                 q.options.forEach(function (opt, i) {
-                    html += '<button type="button" class="zta-option" data-index="' + i + '">' + opt.label + '</button>';
+                    var selectedClass = isMulti && selected.indexOf(opt.value) !== -1 ? ' selected' : '';
+                    html += '<div class="zta-option-row">';
+                    html += '<button type="button" class="zta-option' + selectedClass + '" data-index="' + i + '">' + opt.label + '</button>';
+                    if (opt.info) {
+                        html += '<button type="button" class="zta-info-toggle" data-index="' + i + '" aria-expanded="false">What does this mean? &darr;</button>';
+                    }
+                    html += '</div>';
+                    if (opt.info) {
+                        html += '<div class="zta-info-box" data-info-index="' + i + '" hidden>' + opt.info + '</div>';
+                    }
                 });
                 html += '</div>';
+                if (isMulti) {
+                    html += '<button type="button" class="btn btn-dark zta-multi-continue" id="laic-multi-continue"' + (selected.length === 0 ? ' disabled' : '') + ' style="margin-top:18px;">Continue</button>';
+                }
                 questionEl.innerHTML = html;
 
-                Array.prototype.forEach.call(questionEl.querySelectorAll('.zta-option'), function (btn) {
+                Array.prototype.forEach.call(questionEl.querySelectorAll('.zta-info-toggle'), function (btn) {
                     btn.addEventListener('click', function () {
-                        var opt = q.options[parseInt(btn.dataset.index, 10)];
-                        answers[q.key] = opt.value;
-                        answerOrder.push({ key: q.key, label: opt.label });
-                        if (current < QUESTIONS.length - 1) {
-                            current++;
-                            renderQuestion();
-                        } else {
-                            showResults();
-                        }
+                        var idx = btn.dataset.index;
+                        var box = questionEl.querySelector('.zta-info-box[data-info-index="' + idx + '"]');
+                        var expanded = btn.getAttribute('aria-expanded') === 'true';
+                        box.hidden = expanded;
+                        btn.setAttribute('aria-expanded', String(!expanded));
+                        btn.innerHTML = expanded ? 'What does this mean? &darr;' : 'Hide &uarr;';
                     });
                 });
+
+                if (isMulti) {
+                    var continueBtn = document.getElementById('laic-multi-continue');
+                    Array.prototype.forEach.call(questionEl.querySelectorAll('.zta-option'), function (btn) {
+                        btn.addEventListener('click', function () {
+                            var opt = q.options[parseInt(btn.dataset.index, 10)];
+                            var idx = selected.indexOf(opt.value);
+                            if (idx === -1) {
+                                selected.push(opt.value);
+                                btn.classList.add('selected');
+                            } else {
+                                selected.splice(idx, 1);
+                                btn.classList.remove('selected');
+                            }
+                            continueBtn.disabled = selected.length === 0;
+                        });
+                    });
+                    continueBtn.addEventListener('click', function () {
+                        var labels = q.options.filter(function (o) { return selected.indexOf(o.value) !== -1; }).map(function (o) { return o.label; });
+                        answers[q.key] = selected;
+                        answerOrder.push({ key: q.key, label: labels.join(', ') });
+                        advance(list);
+                    });
+                } else {
+                    Array.prototype.forEach.call(questionEl.querySelectorAll('.zta-option'), function (btn) {
+                        btn.addEventListener('click', function () {
+                            var opt = q.options[parseInt(btn.dataset.index, 10)];
+                            answers[q.key] = opt.value;
+                            answerOrder.push({ key: q.key, label: opt.label });
+                            advance(list);
+                        });
+                    });
+                }
             }
 
             function showResults() {
@@ -1476,7 +1587,9 @@
 
                 var model = MODEL_BY_HARDWARE[answers.hardware];
                 var serving = SERVING_BY_TEAM[answers.teamSize];
-                var components = COMPONENTS_BY_USE_CASE[answers.useCase];
+                var components = (answers.wantsAgent === true && answers.purposes && answers.purposes.length)
+                    ? answers.purposes.map(function (p) { return COMPONENTS_BY_PURPOSE[p]; }).join('; ')
+                    : 'Base chat/assistant model — no agent orchestration required. Local RAG (Q&A over your own documents) can be added on request.';
                 var sensNote = SENSITIVITY_NOTE[answers.sensitivity];
                 var availNote = answers.availability === 1
                     ? 'Always-on serving — plan for redundancy/failover.'
