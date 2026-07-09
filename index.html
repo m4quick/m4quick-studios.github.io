@@ -112,6 +112,25 @@
 
         h3.subhead { margin: 54px 0 5px 0; font-size: 1.4em; font-weight: 800; }
 
+        /* ---------- zero trust packages / org-size selector ---------- */
+        .size-selector { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 40px 0; }
+        .size-btn {
+            background: #fff; border: 1px solid #d8d4e4; color: #4a4458;
+            padding: 12px 20px; border-radius: 100px; font-weight: 700; font-size: 0.9em;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .size-btn:hover { border-color: #6a34d6; color: #6a34d6; }
+        .size-btn.active { background: #14141a; border-color: #14141a; color: #fff; }
+        .zt-package { position: relative; transition: box-shadow 0.3s, border-color 0.3s; }
+        .zt-package.highlight { border-color: #a3ff3c; box-shadow: 0 0 0 3px rgba(163,255,60,0.35); }
+        .zt-package .size-badge {
+            display: inline-block; font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 0.72em; letter-spacing: 0.04em; text-transform: uppercase;
+            color: #6a34d6; background: #f4f1fb; padding: 4px 10px; border-radius: 100px;
+            margin-bottom: 14px;
+        }
+        .zt-package.enterprise { border-color: #6a34d6; }
+
         /* ---------- pentest (dark ops) ---------- */
         .pentest-section {
             background: #0a0e14;
@@ -226,6 +245,7 @@
     <nav class="site-nav">
         <a class="logo" href="#">M4Quick Studios</a>
         <div class="navlinks">
+            <a href="#zero-trust-packages">Zero Trust</a>
             <a href="#products">Products</a>
             <a href="#cybersecurity-consulting">Consulting</a>
             <a href="#pentest">Pentest</a>
@@ -288,6 +308,78 @@
                     <div class="price">$47</div>
                     <div class="price-note">Python script + setup guide</div>
                     <a class="btn btn-dark" href="#newsletter">Get Notified at Launch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Zero Trust Packages ===== -->
+        <section class="block" id="zero-trust-packages">
+            <div class="eyebrow">Prepackaged · Not Offered by Compliance-Template Vendors</div>
+            <h2 class="block-title">Zero Trust, packaged to fit your organization.</h2>
+            <p class="block-desc">Built on the same CSA-endorsed structure behind the industry's Zero Trust certification — NIST SP 800-207 architecture, the CISA Zero Trust Maturity Model's 5 pillars, and CSA's Software-Defined Perimeter spec. Pick your org size to jump to the right package.</p>
+
+            <div class="size-selector" id="size-selector">
+                <button class="size-btn" data-target="zt-starter">1–10 users</button>
+                <button class="size-btn" data-target="zt-foundation">11–100 users</button>
+                <button class="size-btn" data-target="zt-complete">101–500 users</button>
+                <button class="size-btn" data-target="zt-enterprise">500+ users</button>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card zt-package" id="zt-starter">
+                    <div class="size-badge">1–10 users · Micro</div>
+                    <div class="dot">🔰</div>
+                    <h3>Zero Trust Starter</h3>
+                    <p>You don't need an enterprise security program — you need the two things that stop most breaches at this size.</p>
+                    <ul class="card-features">
+                        <li>Policy Set: Identity + Devices pillars only</li>
+                        <li>Quick-reference maturity checklist</li>
+                        <li>Traditional → Initial maturity, the realistic jump at this size</li>
+                    </ul>
+                    <div class="ai-note"><strong>Scope:</strong> Intentionally lightweight — no Procedures or Architecture tier yet.</div>
+                    <a class="btn btn-dark" href="#contact">Start with Zero Trust Starter</a>
+                </div>
+
+                <div class="card zt-package" id="zt-foundation">
+                    <div class="size-badge">11–100 users · Small Business</div>
+                    <div class="dot">🛡️</div>
+                    <h3>Zero Trust Foundation</h3>
+                    <p>Full coverage across all 5 CISA pillars — sized for a company running its own IT without a dedicated security lead.</p>
+                    <ul class="card-features">
+                        <li>Policy Set + Procedures, all 5 pillars</li>
+                        <li>Identity, Devices, Networks, Applications &amp; Workloads, Data</li>
+                        <li>Zero Trust Maturity Scorecard (Traditional → Advanced)</li>
+                    </ul>
+                    <div class="ai-note"><strong>Need more?</strong> Ties directly into Zero Trust Readiness &amp; Roadmaps consulting for anything that needs a human.</div>
+                    <a class="btn btn-dark" href="#contact">Start with Zero Trust Foundation</a>
+                </div>
+
+                <div class="card zt-package" id="zt-complete">
+                    <div class="size-badge">101–500 users · Mid-Market</div>
+                    <div class="dot">🏗️</div>
+                    <h3>Zero Trust Complete</h3>
+                    <p>Everything in Foundation, plus the cross-cutting capabilities and architecture diagrams mapped to your environment.</p>
+                    <ul class="card-features">
+                        <li>Full ladder: Policy, Procedures, Scorecard, Architecture Diagrams</li>
+                        <li>All 5 pillars + 3 cross-cutting capabilities (Visibility &amp; Analytics, Automation &amp; Orchestration, Governance)</li>
+                        <li>Maturity scored through Optimal</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> architecture diagrams generated from your current environment inputs.</div>
+                    <a class="btn btn-dark" href="#contact">Start with Zero Trust Complete</a>
+                </div>
+
+                <div class="card zt-package enterprise" id="zt-enterprise">
+                    <div class="size-badge">500+ users · Enterprise</div>
+                    <div class="dot">🏛️</div>
+                    <h3>Zero Trust Enterprise</h3>
+                    <p>The Complete package plus CSA's Software-Defined Perimeter technical architecture — for real network-level enforcement, not just policy.</p>
+                    <ul class="card-features">
+                        <li>Everything in Complete</li>
+                        <li>SDP architecture specification and implementation guidance</li>
+                        <li>Custom framework mapping for multi-standard environments</li>
+                    </ul>
+                    <div class="ai-note"><strong>Where this hands off:</strong> start here, then talk to us — this tier is where the package naturally leads into a scoped consulting engagement.</div>
+                    <a class="btn btn-dark" href="#contact">Talk to Us About Enterprise</a>
                 </div>
             </div>
         </section>
@@ -722,6 +814,25 @@
                 var clean = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
                 window.history.replaceState({}, '', clean);
             }
+        })();
+
+        (function () {
+            var buttons = document.querySelectorAll('#size-selector .size-btn');
+            buttons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    buttons.forEach(function (b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+
+                    document.querySelectorAll('.zt-package').forEach(function (card) {
+                        card.classList.remove('highlight');
+                    });
+                    var target = document.getElementById(btn.dataset.target);
+                    if (target) {
+                        target.classList.add('highlight');
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
         })();
     </script>
 
