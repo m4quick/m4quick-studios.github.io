@@ -20,3 +20,9 @@ jobs:
           git push github HEAD:main
         env:
           GH_SYNC_TOKEN: ${{ secrets.GH_SYNC_TOKEN }}
+
+      - name: Deploy to host1 staging
+        run: |
+          echo "PWD: $(pwd)"
+          ls -la /data/storage1/staging-sites/m4quick-studios/ || echo "PATH NOT VISIBLE FROM RUNNER JOB"
+          rsync -a --delete --exclude='.git' --exclude='.gitea' ./ /data/storage1/staging-sites/m4quick-studios/site/
