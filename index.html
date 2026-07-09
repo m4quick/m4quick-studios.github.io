@@ -304,6 +304,7 @@
     <nav class="site-nav">
         <a class="logo" href="#">M4Quick Studios</a>
         <div class="navlinks">
+            <a href="#local-ai">Local AI</a>
             <a href="#zero-trust-packages">Zero Trust</a>
             <a href="#cybersecurity-consulting">Consulting</a>
             <a href="#pentest">Pentest</a>
@@ -331,6 +332,103 @@
     </header>
 
     <div class="container">
+        <!-- ===== Local AI Specialist ===== -->
+        <section class="block" id="local-ai">
+            <div class="eyebrow">Private AI Infrastructure — Nothing Leaves Your Servers</div>
+            <h2 class="block-title">Your own AI stack, running entirely on your infrastructure.</h2>
+            <p class="block-desc">Scoped and built on your own servers — self-hosted models, your data, your network. Built from running this exact kind of stack in production, not a theoretical integration.</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="dot">🖥️</div>
+                    <h3>Self-Hosted LLM Deployment</h3>
+                    <p>A private model running on your own hardware, sized to what you actually have.</p>
+                    <ul class="card-features">
+                        <li>Model selection matched to your available hardware</li>
+                        <li>No API calls to any external provider</li>
+                        <li>Full control over updates and model swaps</li>
+                    </ul>
+                    <div class="ai-note"><strong>Why it matters:</strong> nothing your team asks the model ever leaves your network.</div>
+                    <a class="btn btn-dark" href="#contact">Scope My LLM Deployment</a>
+                </div>
+                <div class="card">
+                    <div class="dot">🗂️</div>
+                    <h3>Local Memory &amp; RAG</h3>
+                    <p>Search over your own documents and data — indexed and queried entirely on your infrastructure.</p>
+                    <ul class="card-features">
+                        <li>Vector search over your own document set</li>
+                        <li>No document content sent to a third party for indexing</li>
+                        <li>Sized to grow with your data, not a fixed quota</li>
+                    </ul>
+                    <div class="ai-note"><strong>AI-assisted:</strong> retrieval tuned to how your team actually asks questions.</div>
+                    <a class="btn btn-dark" href="#contact">Scope My Local RAG Setup</a>
+                </div>
+                <div class="card">
+                    <div class="dot">🤖</div>
+                    <h3>Agent &amp; Automation Tooling</h3>
+                    <p>On-prem agents and automation, built the same way we build and run our own.</p>
+                    <ul class="card-features">
+                        <li>Task automation running entirely on your servers</li>
+                        <li>Tool access scoped to exactly what each agent needs</li>
+                        <li>No cloud orchestration layer in the loop</li>
+                    </ul>
+                    <div class="ai-note"><strong>Why it's different:</strong> built from operating a production agent stack, not a demo.</div>
+                    <a class="btn btn-dark" href="#contact">Scope My Agent Build</a>
+                </div>
+                <div class="card">
+                    <div class="dot">📡</div>
+                    <h3>Local Orchestration &amp; Monitoring</h3>
+                    <p>Keep the whole stack observable and maintained without depending on any cloud dashboard.</p>
+                    <ul class="card-features">
+                        <li>Health monitoring and logging, all on-prem</li>
+                        <li>Alerting that doesn't route through a third party</li>
+                        <li>Documentation your own team can maintain after handoff</li>
+                    </ul>
+                    <div class="ai-note"><strong>Outcome:</strong> a stack your team can actually operate, not a black box.</div>
+                    <a class="btn btn-dark" href="#contact">Scope My Monitoring Setup</a>
+                </div>
+            </div>
+
+            <h3 class="subhead">Engagement Models</h3>
+            <div class="engagement-models">
+                <div class="engagement-card">
+                    <div class="scope-label">2–3 weeks</div>
+                    <h4>Proof of Concept</h4>
+                    <p><strong>Scope:</strong> One use case, one model, one server — prove it works before committing further.</p>
+                    <p><strong>Output:</strong> Working demo on your own hardware, plus a scaling recommendation.</p>
+                    <p><strong>Ideal for:</strong> Teams who want to see it running before scoping a full build.</p>
+                </div>
+                <div class="engagement-card">
+                    <div class="scope-label">4–8 weeks</div>
+                    <h4>Full Deployment</h4>
+                    <p><strong>Scope:</strong> Complete stack — model, memory/RAG, agents, and orchestration — sized to your environment.</p>
+                    <p><strong>Output:</strong> Production-ready private AI infrastructure, handed off with documentation.</p>
+                    <p><strong>Ideal for:</strong> Organizations ready to commit to a fully on-prem AI setup.</p>
+                </div>
+                <div class="engagement-card">
+                    <div class="scope-label">Retainer</div>
+                    <h4>Ongoing Support</h4>
+                    <p><strong>Scope:</strong> Model updates, monitoring, and maintenance after deployment.</p>
+                    <p><strong>Output:</strong> A stack that stays current without becoming your team's full-time job.</p>
+                    <p><strong>Ideal for:</strong> Teams without in-house ML/infra capacity to maintain it solo.</p>
+                </div>
+            </div>
+
+            <h3 class="subhead">How It Works</h3>
+            <ol class="process-list">
+                <li><strong>Discovery call</strong><span class="desc">Understand your hardware, use cases, and data-sensitivity requirements.</span></li>
+                <li><strong>Infrastructure assessment</strong><span class="desc">What you already have, and what (if anything) needs to be added.</span></li>
+                <li><strong>Build &amp; deploy</strong><span class="desc">Stand up the stack on your own servers.</span></li>
+                <li><strong>Testing &amp; handoff</strong><span class="desc">Validate with your team before calling it done.</span></li>
+                <li><strong>Optional ongoing support</strong><span class="desc">Keep it maintained without hiring for it full-time.</span></li>
+            </ol>
+
+            <div class="section-cta">
+                <p>Pricing is scoped after the discovery call — depends heavily on existing hardware and use case.</p>
+                <a class="btn btn-dark" href="#contact">Book a Discovery Call</a>
+            </div>
+        </section>
+
         <!-- ===== Zero Trust Packages ===== -->
         <section class="block" id="zero-trust-packages">
             <div class="eyebrow">Prepackaged · Not Offered by Compliance-Template Vendors</div>
@@ -563,19 +661,6 @@
                     </ul>
                     <div class="ai-note"><strong>AI-assisted:</strong> framework comparison, gap reports, drafted policy language.</div>
                     <a class="btn btn-dark" href="#contact">Assess My Policies</a>
-                </div>
-                <div class="card">
-                    <div class="dot">🖥️</div>
-                    <h3>Local AI Specialist</h3>
-                    <p>Scoped and built on your own servers — private AI infrastructure where your data never crosses to any cloud provider.</p>
-                    <ul class="card-features">
-                        <li>Self-hosted LLM deployment, sized to your hardware</li>
-                        <li>Local vector memory / RAG for your own documents and data</li>
-                        <li>Agent and automation tooling running entirely on-prem</li>
-                        <li>Local orchestration — no API calls leaving your network</li>
-                    </ul>
-                    <div class="ai-note"><strong>Why it's different:</strong> built from running this exact kind of stack in production, not a theoretical integration.</div>
-                    <a class="btn btn-dark" href="#contact">Scope My Local AI Build</a>
                 </div>
             </div>
 
