@@ -167,6 +167,29 @@
         .zta-size-prompt p { font-size: 0.85em; font-weight: 700; color: #4a4458; margin-bottom: 10px; }
         .zta-size-prompt .size-selector { margin: 0 0 4px 0; }
 
+        /* ---------- agent zero trust ---------- */
+        .agent-zt-note {
+            background: #f4f1fb; border: 1px solid #d8c9f7; border-radius: 14px;
+            padding: 22px 26px; margin: 8px 0 40px 0; font-size: 0.92em; color: #4a4458;
+        }
+        .agent-zt-note strong { color: #14141a; }
+        .agent-zt-sources { margin-top: 10px; font-size: 0.85em; color: #6a6478; }
+
+        .maturity-matrix-wrap { overflow-x: auto; margin: 8px 0 40px 0; border-radius: 14px; border: 1px solid #e6e3ee; }
+        .maturity-matrix { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 0.85em; }
+        .maturity-matrix th, .maturity-matrix td { padding: 14px 16px; text-align: left; vertical-align: top; border: 1px solid #e6e3ee; }
+        .maturity-matrix thead th { background: #14141a; color: #fff; font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.04em; }
+        .maturity-matrix thead th.pillar-col { background: #14141a; }
+        .maturity-matrix tbody th { background: #fff; font-weight: 800; color: #14141a; white-space: nowrap; }
+        .maturity-matrix td { line-height: 1.45; }
+        .stage-0 { background: #fdeceb; }
+        .stage-1 { background: #fdf3e3; }
+        .stage-2 { background: #f4f1fb; }
+        .stage-3 { background: #eefde0; }
+        .maturity-legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 16px 0 40px 0; font-size: 0.82em; color: #4a4458; }
+        .maturity-legend span { display: inline-flex; align-items: center; gap: 8px; }
+        .maturity-legend .swatch { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+
         /* ---------- pentest (dark ops) ---------- */
         .pentest-section {
             background: #0a0e14;
@@ -394,6 +417,91 @@
                 </div>
 
                 <div class="zta-results" id="zta-results" hidden></div>
+            </div>
+        </section>
+
+        <!-- ===== Agent Zero Trust Assessment ===== -->
+        <section class="block" id="agent-zero-trust">
+            <div class="eyebrow">The Frontier — No Official Standard Exists Yet</div>
+            <h2 class="block-title">Agent Zero Trust: securing the AI agents you've already deployed.</h2>
+            <p class="block-desc">NIST launched an AI Agent Standards Initiative in February 2026, but its first formal deliverable isn't due until Q4 2026 — there's no finalized "NIST SP 800-207 for agents" to buy against yet. That doesn't mean the risk waits. Most organizations running AI agents today have no distinct agent identity, no enforced tool-permission scoping, and no audit trail of what their agents actually did.</p>
+
+            <div class="agent-zt-note">
+                <strong>Where this model comes from:</strong> With no single finalized standard yet, this assessment is built by synthesizing the direction of NIST's AI Agent Standards Initiative, MITRE ATLAS's cataloged agent-specific attack techniques (tool invocation abuse, agent-as-command-and-control, prompt injection), Microsoft's Zero Trust for AI and Entra Agent ID framework, and the Model Context Protocol's authorization mechanics — into a practical reference you can assess your own environment against today. It's presented as our own working model, not an official standard, and it will be revised as NIST's Interoperability Profile and other guidance matures.
+                <div class="agent-zt-sources">Grounded in: NIST AI Agent Standards Initiative (Feb 2026) · MITRE ATLAS · Microsoft Zero Trust for AI / Entra Agent ID · Model Context Protocol authorization spec</div>
+            </div>
+
+            <h3 class="subhead">The M4Quick Agent Zero Trust Maturity Model</h3>
+            <div class="maturity-matrix-wrap">
+                <table class="maturity-matrix">
+                    <thead>
+                        <tr>
+                            <th class="pillar-col">Pillar</th>
+                            <th>Stage 0 · Ungoverned</th>
+                            <th>Stage 1 · Aware</th>
+                            <th>Stage 2 · Managed</th>
+                            <th>Stage 3 · Adaptive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Agent Identity</th>
+                            <td class="stage-0">Agents run under shared human or service-account credentials</td>
+                            <td class="stage-1">Some agents have distinct identities, inconsistently applied</td>
+                            <td class="stage-2">Every agent has a distinct, verifiable identity of its own</td>
+                            <td class="stage-3">Agent identity is automatically provisioned and continuously verified</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Tool &amp; Permission Scoping</th>
+                            <td class="stage-0">Agents have broad, standing access to tools and APIs</td>
+                            <td class="stage-1">Tool access is documented but not enforced</td>
+                            <td class="stage-2">Tool access is scoped per-agent, least-privilege by default</td>
+                            <td class="stage-3">Tool permissions adjust dynamically per task or plan step</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Authorization &amp; Access</th>
+                            <td class="stage-0">No formal authorization flow — credentials pulled from the environment</td>
+                            <td class="stage-1">Some tools use OAuth-based auth, inconsistently applied</td>
+                            <td class="stage-2">OAuth-based authorization enforced across agent-to-tool calls</td>
+                            <td class="stage-3">Centralized, continuously re-verified authorization across all agents</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Prompt Injection &amp; Input Defense</th>
+                            <td class="stage-0">No defenses against injected instructions, direct or indirect</td>
+                            <td class="stage-1">Basic input filtering on some agents</td>
+                            <td class="stage-2">Defense-in-depth: input handling, tool isolation, memory controls</td>
+                            <td class="stage-3">Runtime monitoring actively detects and blocks injection attempts</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Audit &amp; Observability</th>
+                            <td class="stage-0">No visibility into what agents actually did</td>
+                            <td class="stage-1">Logs exist but aren't reviewed</td>
+                            <td class="stage-2">Agent tool calls and decisions are logged and reviewed</td>
+                            <td class="stage-3">Full decision-chain observability with automated anomaly alerts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="maturity-legend">
+                <span><span class="swatch" style="background:#f4a8a2;"></span>Stage 0 — Ungoverned</span>
+                <span><span class="swatch" style="background:#f0cd7e;"></span>Stage 1 — Aware</span>
+                <span><span class="swatch" style="background:#c9b6ec;"></span>Stage 2 — Managed</span>
+                <span><span class="swatch" style="background:#a3ff3c;"></span>Stage 3 — Adaptive</span>
+            </div>
+
+            <h3 class="subhead">What the Assessment Includes</h3>
+            <p class="block-desc" style="margin-bottom:20px;">This is scoped as an advisory engagement, not a document purchase — there isn't yet a mature, stable control catalog to sell as templates the way there is for traditional Zero Trust.</p>
+            <ul class="card-features" style="max-width:640px; font-size:1em; margin-bottom:30px;">
+                <li>Inventory of every AI agent and tool integration currently running, and what each can actually access</li>
+                <li>MCP / tool-integration audit — flagging STDIO (no built-in auth) vs. proper OAuth-based authorization</li>
+                <li>Agent identity check — distinct identity per agent, or everything sharing one credential</li>
+                <li>Access policy review — explicit deny-by-default, or relying on default-allow</li>
+                <li>Scored against the 5-pillar model above, with a plain-language roadmap for closing the biggest gaps first</li>
+            </ul>
+
+            <div class="section-cta">
+                <p>Pricing is scoped after a discovery call — this space moves month to month, so scope gets confirmed against current guidance, not a fixed catalog.</p>
+                <a class="btn btn-dark" href="#contact" id="agent-zt-cta">Book an Agent Zero Trust Assessment</a>
             </div>
         </section>
 
@@ -770,6 +878,7 @@
                         <select name="track" id="intake-track" required>
                             <option value="">Select...</option>
                             <option>Zero Trust Package</option>
+                            <option>Agent Zero Trust Assessment</option>
                             <option>Cybersecurity Consulting</option>
                             <option>Penetration Testing</option>
                             <option>Architecture Documentation</option>
@@ -1098,6 +1207,15 @@
                     current--;
                     renderQuestion();
                 }
+            });
+        })();
+
+        (function () {
+            var btn = document.getElementById('agent-zt-cta');
+            if (!btn) return;
+            btn.addEventListener('click', function () {
+                var trackSelect = document.getElementById('intake-track');
+                if (trackSelect) trackSelect.value = 'Agent Zero Trust Assessment';
             });
         })();
     </script>
