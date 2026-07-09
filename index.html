@@ -332,6 +332,25 @@
     </header>
 
     <div class="container">
+        <!-- ===== Free Tools Teaser ===== -->
+        <section class="block" id="free-tools">
+            <div class="eyebrow">Start here — free, no email required</div>
+            <h2 class="block-title">Two free tools. Real answers in under 5 minutes.</h2>
+            <p class="block-desc">Answer a few quick questions and get a real recommendation back immediately — a build configuration or a maturity score, not a lead-gen form in disguise.</p>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>Local AI Model Build Configuration</h3>
+                    <p>Tell us your use case, hardware, team size, and data sensitivity — get a recommended model size, components, and serving setup back instantly.</p>
+                    <a class="btn btn-primary" href="#laic" id="free-tools-laic-cta">Get My Build Configuration</a>
+                </div>
+                <div class="card">
+                    <h3>Zero Trust Maturity Assessment</h3>
+                    <p>Five plain-language questions, one per CISA pillar — see which pillars are weak and get a package recommendation.</p>
+                    <a class="btn btn-primary" href="#zta" id="free-tools-zta-cta">Take the Free Assessment</a>
+                </div>
+            </div>
+        </section>
+
         <!-- ===== Local AI Specialist ===== -->
         <section class="block" id="local-ai">
             <div class="eyebrow">Private AI Infrastructure — Nothing Leaves Your Servers</div>
@@ -426,6 +445,23 @@
             <div class="section-cta">
                 <p>Pricing is scoped after the discovery call — depends heavily on existing hardware and use case.</p>
                 <a class="btn btn-dark" href="#contact">Book a Discovery Call</a>
+            </div>
+
+            <div class="zta" id="laic">
+                <div class="zta-intro" id="laic-intro">
+                    <h3>Free: Get a recommended build configuration</h3>
+                    <p>Answer 5 quick questions about your use case, hardware, and team size — get a recommended model size, components, and serving setup back immediately. No email required to see your results.</p>
+                    <button class="btn btn-dark" id="laic-start" type="button">Get My Build Configuration</button>
+                </div>
+
+                <div class="zta-quiz" id="laic-quiz" hidden>
+                    <div class="zta-progress-track"><div class="zta-progress-fill" id="laic-progress-fill"></div></div>
+                    <div class="zta-step-label" id="laic-step-label">Question 1 of 5</div>
+                    <div class="zta-question" id="laic-question"></div>
+                    <button class="zta-back" id="laic-back" type="button" hidden>&larr; Back</button>
+                </div>
+
+                <div class="zta-results" id="laic-results" hidden></div>
             </div>
         </section>
 
@@ -975,6 +1011,7 @@
                     <label>What do you need help with?
                         <select name="track" id="intake-track" required>
                             <option value="">Select...</option>
+                            <option>Local AI Specialist</option>
                             <option>Zero Trust Package</option>
                             <option>Agent Zero Trust Assessment</option>
                             <option>Cybersecurity Consulting</option>
@@ -1315,6 +1352,207 @@
                 var trackSelect = document.getElementById('intake-track');
                 if (trackSelect) trackSelect.value = 'Agent Zero Trust Assessment';
             });
+        })();
+
+        (function () {
+            var QUESTIONS = [
+                {
+                    key: 'useCase',
+                    question: 'What will you primarily use it for?',
+                    options: [
+                        { label: 'A general assistant/chatbot for your team', value: 'general' },
+                        { label: 'Search & Q&A over your own documents (RAG)', value: 'rag' },
+                        { label: 'A coding assistant', value: 'coding' },
+                        { label: 'Data analysis & automation agents', value: 'agents' }
+                    ]
+                },
+                {
+                    key: 'hardware',
+                    question: 'What hardware do you have available?',
+                    options: [
+                        { label: 'No dedicated GPU (CPU only)', value: 0 },
+                        { label: 'Consumer GPU (8–16GB VRAM)', value: 1 },
+                        { label: 'Workstation GPU (24–48GB VRAM)', value: 2 },
+                        { label: 'Server-grade or multiple GPUs', value: 3 }
+                    ]
+                },
+                {
+                    key: 'teamSize',
+                    question: 'How many people will use it?',
+                    options: [
+                        { label: '1–5', value: 0 },
+                        { label: '6–25', value: 1 },
+                        { label: '26–100', value: 2 },
+                        { label: '100+', value: 3 }
+                    ]
+                },
+                {
+                    key: 'sensitivity',
+                    question: 'How sensitive is the data involved?',
+                    options: [
+                        { label: 'Public or low sensitivity', value: 0 },
+                        { label: 'Internal, moderate sensitivity', value: 1 },
+                        { label: 'Highly regulated (health, finance, legal, etc.)', value: 2 }
+                    ]
+                },
+                {
+                    key: 'availability',
+                    question: 'Does it need to be available in real time, or is on-demand fine?',
+                    options: [
+                        { label: 'Real-time, always-on', value: 1 },
+                        { label: 'On-demand or batch processing is fine', value: 0 }
+                    ]
+                }
+            ];
+
+            var MODEL_BY_HARDWARE = [
+                '7–8B parameters, 4-bit quantized — runs on CPU alone',
+                '7–13B parameters, 4–8 bit quantized',
+                '13–34B parameters, light quantization',
+                '34–70B+ parameters, full precision or light quantization'
+            ];
+            var SERVING_BY_TEAM = [
+                'Single-instance server is sufficient',
+                'Single server with request queuing recommended',
+                'Load-balanced multi-instance serving recommended',
+                'Multi-node serving infrastructure required'
+            ];
+            var COMPONENTS_BY_USE_CASE = {
+                general: 'Base chat model — no additional components required',
+                rag: 'Add: local vector database + embedding model for document retrieval',
+                coding: 'Code-specialized model family, plus IDE/editor integration',
+                agents: 'Add: agent orchestration layer + scoped tool-calling framework'
+            };
+            var SENSITIVITY_NOTE = [
+                'Standard local deployment practices apply.',
+                'Recommend network segmentation for the AI stack, isolated from general traffic.',
+                'Recommend full air-gap consideration and audit logging from day one.'
+            ];
+
+            var current = 0;
+            var answers = {};
+            var answerOrder = [];
+
+            var introEl = document.getElementById('laic-intro');
+            var quizEl = document.getElementById('laic-quiz');
+            var resultsEl = document.getElementById('laic-results');
+            var startBtn = document.getElementById('laic-start');
+            var backBtn = document.getElementById('laic-back');
+            var progressFill = document.getElementById('laic-progress-fill');
+            var stepLabel = document.getElementById('laic-step-label');
+            var questionEl = document.getElementById('laic-question');
+
+            function renderQuestion() {
+                var q = QUESTIONS[current];
+                stepLabel.textContent = 'Question ' + (current + 1) + ' of ' + QUESTIONS.length;
+                progressFill.style.width = (((current + 1) / QUESTIONS.length) * 100) + '%';
+                backBtn.hidden = current === 0;
+
+                var html = '<h3>' + q.question + '</h3><div class="zta-options">';
+                q.options.forEach(function (opt, i) {
+                    html += '<button type="button" class="zta-option" data-index="' + i + '">' + opt.label + '</button>';
+                });
+                html += '</div>';
+                questionEl.innerHTML = html;
+
+                Array.prototype.forEach.call(questionEl.querySelectorAll('.zta-option'), function (btn) {
+                    btn.addEventListener('click', function () {
+                        var opt = q.options[parseInt(btn.dataset.index, 10)];
+                        answers[q.key] = opt.value;
+                        answerOrder.push({ key: q.key, label: opt.label });
+                        if (current < QUESTIONS.length - 1) {
+                            current++;
+                            renderQuestion();
+                        } else {
+                            showResults();
+                        }
+                    });
+                });
+            }
+
+            function showResults() {
+                quizEl.hidden = true;
+                resultsEl.hidden = false;
+
+                var model = MODEL_BY_HARDWARE[answers.hardware];
+                var serving = SERVING_BY_TEAM[answers.teamSize];
+                var components = COMPONENTS_BY_USE_CASE[answers.useCase];
+                var sensNote = SENSITIVITY_NOTE[answers.sensitivity];
+                var availNote = answers.availability === 1
+                    ? 'Always-on serving — plan for redundancy/failover.'
+                    : 'On-demand serving can reduce hardware costs significantly.';
+
+                var html = '<h3>Your recommended build configuration</h3><p>Based on your answers — a starting point, refined further on a discovery call.</p>';
+
+                html += '<div class="zta-focus"><strong>Model size</strong>' + model + '</div>';
+                html += '<div class="zta-focus"><strong>Components</strong>' + components + '</div>';
+                html += '<div class="zta-focus"><strong>Serving setup</strong>' + serving + '</div>';
+                html += '<div class="zta-focus"><strong>Data handling</strong>' + sensNote + '</div>';
+                html += '<div class="zta-focus"><strong>Availability</strong>' + availNote + '</div>';
+
+                html += '<div class="zta-results-cta">' +
+                    '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="laic-get-proposal">Get My Personalized Proposal</a>' +
+                    '</div>' +
+                    '<button class="zta-restart" type="button" id="laic-restart">Start over</button>';
+
+                resultsEl.innerHTML = html;
+
+                document.getElementById('laic-get-proposal').addEventListener('click', function () {
+                    var trackSelect = document.getElementById('intake-track');
+                    var messageBox = document.getElementById('intake-message');
+                    if (trackSelect) trackSelect.value = 'Local AI Specialist';
+                    if (messageBox) {
+                        var lines = ['Local AI Build Configuration results:'];
+                        answerOrder.forEach(function (a) {
+                            lines.push('- ' + a.key + ': ' + a.label);
+                        });
+                        lines.push('');
+                        lines.push('Recommended model: ' + model);
+                        lines.push('Recommended components: ' + components);
+                        lines.push('Serving setup: ' + serving);
+                        messageBox.value = lines.join('\n');
+                    }
+                });
+
+                document.getElementById('laic-restart').addEventListener('click', function () {
+                    current = 0;
+                    answers = {};
+                    answerOrder = [];
+                    resultsEl.hidden = true;
+                    quizEl.hidden = false;
+                    renderQuestion();
+                });
+            }
+
+            startBtn.addEventListener('click', function () {
+                introEl.hidden = true;
+                quizEl.hidden = false;
+                renderQuestion();
+            });
+
+            backBtn.addEventListener('click', function () {
+                if (current > 0) {
+                    current--;
+                    answerOrder.pop();
+                    renderQuestion();
+                }
+            });
+        })();
+
+        (function () {
+            function wireTeaserCta(ctaId, startBtnId) {
+                var cta = document.getElementById(ctaId);
+                var startBtn = document.getElementById(startBtnId);
+                if (!cta || !startBtn) return;
+                cta.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var target = document.getElementById(cta.getAttribute('href').slice(1));
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    startBtn.click();
+                });
+            }
+            wireTeaserCta('free-tools-laic-cta', 'laic-start');
+            wireTeaserCta('free-tools-zta-cta', 'zta-start');
         })();
     </script>
 
