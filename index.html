@@ -131,6 +131,39 @@
         }
         .zt-package.enterprise { border-color: #6a34d6; }
 
+        /* ---------- zero trust assessment ---------- */
+        .zta { background: #fff; border: 1px solid #e6e3ee; border-radius: 20px; padding: 40px; margin-top: 48px; }
+        .zta-intro { text-align: center; max-width: 520px; margin: 0 auto; }
+        .zta-intro h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 10px; }
+        .zta-intro p { color: #6a6478; margin-bottom: 22px; }
+
+        .zta-progress-track { background: #e6e3ee; border-radius: 100px; height: 6px; overflow: hidden; margin-bottom: 8px; }
+        .zta-progress-fill { background: #a3ff3c; height: 100%; border-radius: 100px; transition: width 0.3s ease; width: 20%; }
+        .zta-step-label { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.72em; letter-spacing: 0.05em; text-transform: uppercase; color: #6a34d6; margin-bottom: 24px; }
+
+        .zta-question h3 { font-size: 1.25em; font-weight: 800; margin-bottom: 22px; max-width: 620px; }
+        .zta-options { display: flex; flex-direction: column; gap: 12px; }
+        .zta-option {
+            text-align: left; background: #fff; border: 1px solid #d8d4e4; border-radius: 12px;
+            padding: 16px 18px; cursor: pointer; font-family: inherit; font-size: 0.94em; color: #14141a;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .zta-option:hover { border-color: #6a34d6; background: #f4f1fb; }
+        .zta-back { margin-top: 22px; background: none; border: none; color: #6a6478; font-size: 0.85em; cursor: pointer; text-decoration: underline; padding: 0; }
+
+        .zta-results h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 6px; }
+        .zta-results > p { color: #6a6478; margin-bottom: 26px; }
+        .zta-pillar-row { display: grid; grid-template-columns: 160px 1fr 90px; gap: 14px; align-items: center; margin-bottom: 14px; }
+        .zta-pillar-name { font-weight: 700; font-size: 0.92em; }
+        .zta-pillar-track { background: #eeecf3; border-radius: 100px; height: 10px; overflow: hidden; }
+        .zta-pillar-fill { height: 100%; border-radius: 100px; background: #6a34d6; }
+        .zta-pillar-fill.weak { background: #e0555f; }
+        .zta-pillar-stage { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.72em; color: #6a6478; text-align: right; }
+        .zta-focus { background: #f4f1fb; border-left: 3px solid #6a34d6; border-radius: 8px; padding: 16px 18px; margin: 22px 0; font-size: 0.92em; }
+        .zta-focus strong { display: block; margin-bottom: 4px; }
+        .zta-results-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; }
+        .zta-restart { background: none; border: none; color: #6a6478; font-size: 0.85em; cursor: pointer; text-decoration: underline; padding: 10px 0; }
+
         /* ---------- pentest (dark ops) ---------- */
         .pentest-section {
             background: #0a0e14;
@@ -341,6 +374,23 @@
                     <div class="ai-note"><strong>Where this hands off:</strong> start here, then talk to us — this tier is where the package naturally leads into a scoped consulting engagement.</div>
                     <a class="btn btn-dark" href="#contact">Talk to Us About Enterprise</a>
                 </div>
+            </div>
+
+            <div class="zta" id="zta">
+                <div class="zta-intro" id="zta-intro">
+                    <h3>Not sure where your gaps actually are?</h3>
+                    <p>Answer 5 quick questions about how your organization handles identity, devices, networks, applications, and data — takes about 2 minutes, no email required to see your results.</p>
+                    <button class="btn btn-dark" id="zta-start" type="button">Take the Zero Trust Assessment</button>
+                </div>
+
+                <div class="zta-quiz" id="zta-quiz" hidden>
+                    <div class="zta-progress-track"><div class="zta-progress-fill" id="zta-progress-fill"></div></div>
+                    <div class="zta-step-label" id="zta-step-label">Question 1 of 5</div>
+                    <div class="zta-question" id="zta-question"></div>
+                    <button class="zta-back" id="zta-back" type="button" hidden>&larr; Back</button>
+                </div>
+
+                <div class="zta-results" id="zta-results" hidden></div>
             </div>
         </section>
 
@@ -714,8 +764,9 @@
                         </select>
                     </label>
                     <label>What do you need help with?
-                        <select name="track" required>
+                        <select name="track" id="intake-track" required>
                             <option value="">Select...</option>
+                            <option>Zero Trust Package</option>
                             <option>Cybersecurity Consulting</option>
                             <option>Penetration Testing</option>
                             <option>Architecture Documentation</option>
@@ -734,7 +785,7 @@
                     </label>
                 </div>
                 <label class="intake-message">Tell me a bit about what you're dealing with
-                    <textarea name="message" rows="4" required maxlength="3000"></textarea>
+                    <textarea name="message" id="intake-message" rows="4" required maxlength="3000"></textarea>
                 </label>
                 <button type="submit" class="btn btn-dark">Send</button>
             </form>
@@ -832,6 +883,170 @@
                         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 });
+            });
+        })();
+
+        (function () {
+            var STAGE_NAMES = ['Traditional', 'Initial', 'Advanced', 'Optimal'];
+
+            var QUESTIONS = [
+                {
+                    pillar: 'Identity',
+                    question: 'How do employees log in to company systems?',
+                    options: [
+                        'Just a username and password',
+                        'Password + MFA for some accounts, but not enforced everywhere',
+                        'MFA enforced everywhere, with some conditional access rules',
+                        'Continuous, risk-based verification that adapts in real time'
+                    ]
+                },
+                {
+                    pillar: 'Devices',
+                    question: 'How do you know which devices can access company data?',
+                    options: [
+                        "We don't really track this — any device with the password gets in",
+                        "We have a basic list of company devices, but personal devices aren't managed",
+                        'All devices are enrolled and checked for basic health before access',
+                        'Every access request checks real-time device health and trust, managed or not'
+                    ]
+                },
+                {
+                    pillar: 'Networks',
+                    question: 'How is your network segmented?',
+                    options: [
+                        "One flat network — once you're in, you can reach everything",
+                        'Basic segmentation, like guest Wi-Fi separate from internal',
+                        'Segmented by function or department, with defined boundaries',
+                        'Micro-segmented to individual workloads, no implicit trust by location'
+                    ]
+                },
+                {
+                    pillar: 'Applications & Workloads',
+                    question: 'How do you manage access to your business applications?',
+                    options: [
+                        "Apps are trusted once you're on the network — no separate access control",
+                        'Some apps have their own logins, inconsistently',
+                        'Centralized single sign-on across most apps, with role-based access',
+                        'Every app request is authorized individually, based on identity, device, and context'
+                    ]
+                },
+                {
+                    pillar: 'Data',
+                    question: 'How is sensitive data protected?',
+                    options: [
+                        "We're not sure where our sensitive data actually lives",
+                        "We've identified where sensitive data lives, but protection is inconsistent",
+                        'Sensitive data is classified, encrypted, and access is restricted by role',
+                        'Data is automatically classified and protected wherever it goes, with continuous monitoring'
+                    ]
+                }
+            ];
+
+            var current = 0;
+            var answers = [null, null, null, null, null];
+
+            var introEl = document.getElementById('zta-intro');
+            var quizEl = document.getElementById('zta-quiz');
+            var resultsEl = document.getElementById('zta-results');
+            var startBtn = document.getElementById('zta-start');
+            var backBtn = document.getElementById('zta-back');
+            var progressFill = document.getElementById('zta-progress-fill');
+            var stepLabel = document.getElementById('zta-step-label');
+            var questionEl = document.getElementById('zta-question');
+
+            function renderQuestion() {
+                var q = QUESTIONS[current];
+                stepLabel.textContent = 'Question ' + (current + 1) + ' of ' + QUESTIONS.length + ' — ' + q.pillar;
+                progressFill.style.width = (((current + 1) / QUESTIONS.length) * 100) + '%';
+                backBtn.hidden = current === 0;
+
+                var html = '<h3>' + q.question + '</h3><div class="zta-options">';
+                q.options.forEach(function (opt, i) {
+                    html += '<button type="button" class="zta-option" data-stage="' + i + '">' + opt + '</button>';
+                });
+                html += '</div>';
+                questionEl.innerHTML = html;
+
+                Array.prototype.forEach.call(questionEl.querySelectorAll('.zta-option'), function (btn) {
+                    btn.addEventListener('click', function () {
+                        answers[current] = parseInt(btn.dataset.stage, 10);
+                        if (current < QUESTIONS.length - 1) {
+                            current++;
+                            renderQuestion();
+                        } else {
+                            showResults();
+                        }
+                    });
+                });
+            }
+
+            function showResults() {
+                quizEl.hidden = true;
+                resultsEl.hidden = false;
+
+                var minStage = Math.min.apply(null, answers);
+                var weakPillars = [];
+                QUESTIONS.forEach(function (q, i) {
+                    if (answers[i] === minStage) weakPillars.push(q.pillar);
+                });
+
+                var html = '<h3>Your Zero Trust snapshot</h3><p>Here\'s where each pillar stands today, based on your answers.</p>';
+                QUESTIONS.forEach(function (q, i) {
+                    var stage = answers[i];
+                    var isWeak = stage === minStage;
+                    html += '<div class="zta-pillar-row">' +
+                        '<div class="zta-pillar-name">' + q.pillar + '</div>' +
+                        '<div class="zta-pillar-track"><div class="zta-pillar-fill' + (isWeak ? ' weak' : '') + '" style="width:' + (((stage + 1) / 4) * 100) + '%"></div></div>' +
+                        '<div class="zta-pillar-stage">' + STAGE_NAMES[stage] + '</div>' +
+                        '</div>';
+                });
+
+                html += '<div class="zta-focus"><strong>Your focus area' + (weakPillars.length > 1 ? 's' : '') + ': ' + weakPillars.join(' & ') + '</strong>' +
+                    'This is the most realistic place to start — closing the biggest gap first, rather than spreading effort evenly across all five pillars.</div>';
+
+                html += '<div class="zta-results-cta">' +
+                    '<a class="btn btn-dark" href="#zero-trust-packages" id="zta-see-package">See My Recommended Package</a>' +
+                    '<a class="btn btn-mint" style="background:#a3ff3c;color:#14141a;" href="#contact" id="zta-get-proposal">Get My Personalized Proposal</a>' +
+                    '</div>' +
+                    '<button class="zta-restart" type="button" id="zta-restart">Start over</button>';
+
+                resultsEl.innerHTML = html;
+
+                document.getElementById('zta-get-proposal').addEventListener('click', function () {
+                    var trackSelect = document.getElementById('intake-track');
+                    var messageBox = document.getElementById('intake-message');
+                    if (trackSelect) trackSelect.value = 'Zero Trust Package';
+                    if (messageBox) {
+                        var lines = ['Zero Trust Assessment results:'];
+                        QUESTIONS.forEach(function (q, i) {
+                            lines.push('- ' + q.pillar + ': ' + STAGE_NAMES[answers[i]]);
+                        });
+                        lines.push('');
+                        lines.push('Focus area' + (weakPillars.length > 1 ? 's' : '') + ': ' + weakPillars.join(' & '));
+                        messageBox.value = lines.join('\n');
+                    }
+                });
+
+                document.getElementById('zta-restart').addEventListener('click', function () {
+                    current = 0;
+                    answers = [null, null, null, null, null];
+                    resultsEl.hidden = true;
+                    quizEl.hidden = false;
+                    renderQuestion();
+                });
+            }
+
+            startBtn.addEventListener('click', function () {
+                introEl.hidden = true;
+                quizEl.hidden = false;
+                renderQuestion();
+            });
+
+            backBtn.addEventListener('click', function () {
+                if (current > 0) {
+                    current--;
+                    renderQuestion();
+                }
             });
         })();
     </script>
