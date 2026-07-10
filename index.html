@@ -261,6 +261,10 @@
         .maturity-legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 16px 0 40px 0; font-size: 0.82em; color: #4a4458; }
         .maturity-legend span { display: inline-flex; align-items: center; gap: 8px; }
         .maturity-legend .swatch { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+        .cov-strong { background: #eefde0; }
+        .cov-partial { background: #f4f1fb; }
+        .cov-none { background: #f4f3f7; color: #6a6478; }
+        .cov-pending { background: #fdf3e3; text-align: center; font-style: italic; color: #6a6478; }
 
         /* ---------- pentest (dark ops) ---------- */
         .pentest-section {
@@ -793,7 +797,62 @@
                 <div class="agent-zt-sources">Grounded in: NIST AI Agent Standards Initiative (Feb 2026) · MITRE ATLAS · Microsoft Zero Trust for AI / Entra Agent ID · Model Context Protocol authorization spec</div>
             </div>
 
-            <h3 class="subhead">The M4Quick Agent Zero Trust Maturity Model</h3>
+            <h3 class="subhead">The Real Frameworks, Mapped Side by Side</h3>
+            <p class="block-desc" style="margin-bottom:16px;">We didn't invent a maturity model — these are the actual frameworks in play today, mapped against each other so the overlap is visible and so is what nobody's covering yet.</p>
+            <div class="maturity-matrix-wrap">
+                <table class="maturity-matrix">
+                    <thead>
+                        <tr>
+                            <th class="pillar-col">Framework</th>
+                            <th>Agent Identity</th>
+                            <th>Tool &amp; Permission Scoping</th>
+                            <th>Authorization &amp; Access</th>
+                            <th>Prompt Injection &amp; Input Defense</th>
+                            <th>Audit &amp; Observability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">NIST AI Agent Standards Initiative</th>
+                            <td class="cov-pending" colspan="5">Direction-setting only — first formal deliverable isn't due until Q4 2026. Nothing concrete to map in any column yet.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">MITRE ATLAS</th>
+                            <td class="cov-none">Not an identity framework — assigns no identity, verifies none</td>
+                            <td class="cov-partial">Catalogs tool-invocation abuse &amp; multi-agent trust exploitation as attack techniques — informs risk, enforces nothing</td>
+                            <td class="cov-none">No authorization mechanism of its own</td>
+                            <td class="cov-strong">Core strength — 2026 update added dedicated agentic techniques for prompt injection &amp; multi-agent trust attacks</td>
+                            <td class="cov-none">By design, threat-side only: "no audit-trail control, no inventory mechanism, no enforcement of its own"</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Microsoft Zero Trust for AI / Entra Agent ID</th>
+                            <td class="cov-strong">Agent Registry + a managed identity per agent — reached GA in April 2026</td>
+                            <td class="cov-partial">Scoped Access Packages with human-sponsor approval — real scoping, not yet dynamic per task step</td>
+                            <td class="cov-strong">Conditional Access evaluates every agent authorization request in real time</td>
+                            <td class="cov-none">Identity/access-focused, not an input-defense layer — Prompt Shields is a separate product</td>
+                            <td class="cov-strong">Every agent tool call and data lookup logged to Microsoft Sentinel</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">MCP Authorization Spec</th>
+                            <td class="cov-none">Authorizes clients &amp; tokens, not agent identity itself</td>
+                            <td class="cov-partial">OAuth scopes support least-privilege access — but authorization is optional in MCP, so many servers ship with none at all</td>
+                            <td class="cov-strong">Its entire purpose — OAuth 2.1, PKCE, token audience validation, step-up auth for runtime privilege changes</td>
+                            <td class="cov-none">Different layer entirely — the spec is silent on input handling</td>
+                            <td class="cov-none">Spec doesn't mandate logging or audit trails</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="maturity-legend">
+                <span><span class="swatch" style="background:#a3ff3c;"></span>Strong — this is the framework's core job</span>
+                <span><span class="swatch" style="background:#c9b6ec;"></span>Partial — touches it, doesn't enforce it</span>
+                <span><span class="swatch" style="background:#c7c3d1;"></span>Out of scope — not what this framework is for</span>
+                <span><span class="swatch" style="background:#f0cd7e;"></span>Pending — direction set, nothing finalized</span>
+            </div>
+            <p class="block-desc" style="margin: 4px 0 40px; font-size:0.92em;">The overlap is real: Entra Agent ID and the MCP spec independently solve Authorization &amp; Access — use them together rather than picking one. The gap is real too: nobody currently owns Audit &amp; Observability as a standard, and only ATLAS treats Prompt Injection as a first-class control area.</p>
+
+            <h3 class="subhead">How We Score an Environment (Our Synthesis, Not a Standard)</h3>
+            <p class="block-desc" style="margin-bottom:16px;">Since none of the frameworks above ship a finished maturity scale of their own, this is the rubric we assess against — built by combining their coverage into one practical scorecard.</p>
             <div class="maturity-matrix-wrap">
                 <table class="maturity-matrix">
                     <thead>
