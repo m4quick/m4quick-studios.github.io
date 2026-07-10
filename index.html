@@ -90,14 +90,20 @@
         .sd-hot:focus-visible { outline: 2px solid #6a34d6; outline-offset: 3px; }
         .sd-tooltip {
             position: absolute; pointer-events: none; z-index: 5; left: 0; top: 0;
-            background: #14141a; color: #fff; font-size: 12.5px; font-weight: 700;
-            padding: 7px 12px; border-radius: 8px; white-space: nowrap;
+            background: #14141a; color: #fff; font-size: 12.5px;
+            padding: 7px 12px; border-radius: 8px; max-width: 200px;
             transform: translate(-50%, calc(-100% - 10px));
+            transition: max-width 0.15s ease, padding 0.15s ease;
         }
         .sd-tooltip:after {
             content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
             border: 5px solid transparent; border-top-color: #14141a;
         }
+        .sd-tooltip-title { font-weight: 700; white-space: nowrap; }
+        .sd-tooltip-body { display: none; margin-top: 7px; font-weight: 500; font-size: 0.93em; line-height: 1.45; white-space: normal; color: #d8d4e4; }
+        .sd-tooltip.expanded { max-width: 280px; padding: 12px 14px; }
+        .sd-tooltip.expanded .sd-tooltip-title { white-space: normal; }
+        .sd-tooltip.expanded .sd-tooltip-body { display: block; }
         .sd-modal-backdrop {
             position: fixed; inset: 0; background: rgba(20,20,26,0.55); z-index: 200;
             display: flex; align-items: center; justify-content: center; padding: 24px;
@@ -663,7 +669,10 @@
                         </g>
                         <text x="340" y="1110" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; configures this stack, builds MCP-Mesh</text>
                     </svg>
-                    <div class="sd-tooltip" id="sdTooltip" hidden></div>
+                    <div class="sd-tooltip" id="sdTooltip" hidden>
+                        <div class="sd-tooltip-title" id="sdTooltipTitle"></div>
+                        <div class="sd-tooltip-body" id="sdTooltipBody"></div>
+                    </div>
                     <div class="sd-modal-backdrop" id="sdModalBackdrop" hidden>
                         <div class="sd-modal" role="dialog" aria-modal="true" aria-labelledby="sdModalTitle">
                             <button type="button" class="sd-modal-close" id="sdModalClose" aria-label="Close">&times;</button>
@@ -2825,6 +2834,11 @@
                 }
             };
 
+            var tooltipTitleEl = document.getElementById('sdTooltipTitle');
+            var tooltipBodyEl = document.getElementById('sdTooltipBody');
+            var hoverExpandTimer = null;
+            var HOVER_EXPAND_DELAY = 3000;
+
             function positionTooltip(g) {
                 var cardRect = card.getBoundingClientRect();
                 var gRect = g.getBoundingClientRect();
@@ -2835,13 +2849,24 @@
             function showTooltip(g) {
                 var info = SD_INFO[g.getAttribute('data-key')];
                 if (!info) return;
-                tooltip.textContent = info.title;
+                tooltipTitleEl.textContent = info.title;
+                tooltipBodyEl.textContent = info.body;
+                tooltip.classList.remove('expanded');
                 tooltip.hidden = false;
                 positionTooltip(g);
+                if (hoverExpandTimer) clearTimeout(hoverExpandTimer);
+                hoverExpandTimer = setTimeout(function () {
+                    if (!tooltip.hidden) tooltip.classList.add('expanded');
+                }, HOVER_EXPAND_DELAY);
             }
 
             function hideTooltip() {
                 tooltip.hidden = true;
+                tooltip.classList.remove('expanded');
+                if (hoverExpandTimer) {
+                    clearTimeout(hoverExpandTimer);
+                    hoverExpandTimer = null;
+                }
             }
 
             function openModal(key) {
