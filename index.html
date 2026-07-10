@@ -433,9 +433,9 @@
                 <h3 class="stack-diagram-title">What's inside a full local AI build</h3>
                 <p class="stack-diagram-desc">Every layer of a production-grade local AI stack — serving platform down to storage — with M4Quick's security and efficiency overlay wrapped around the whole thing.</p>
                 <div class="stack-diagram-card">
-                    <svg width="100%" viewBox="0 0 680 860" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+                    <svg width="100%" viewBox="0 0 680 940" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
                         <title id="stackDiagramTitle">Exploded view of a local AI stack</title>
-                        <desc id="stackDiagramDesc">A serving platform layer, an AI model chip with an internal quantization density gauge, an agent layer with a storage spec panel, the M4Quick Gateway providing MCP access control, audit, and policy enforcement with office-assistant capabilities connected to it, and a memory, RAG, API and storage resource layer — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
+                        <desc id="stackDiagramDesc">A serving platform layer, an AI model chip with an internal quantization density gauge, an agent layer with six framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) and a storage spec panel, the M4Quick Gateway providing MCP access control, audit, and policy enforcement with office-assistant capabilities connected to it, and a memory, RAG, API and storage resource layer noting that Honcho requires Postgres with pgvector and Docker — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
                         <defs>
                             <marker id="sdArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
                             <linearGradient id="sdChipGlow" x1="0" y1="0" x2="0" y2="1">
@@ -443,7 +443,7 @@
                                 <stop offset="100%" stop-color="#6a34d6"/>
                             </linearGradient>
                         </defs>
-                        <rect x="24" y="20" width="604" height="820" rx="24" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="6 4"/>
+                        <rect x="24" y="20" width="604" height="896" rx="24" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="6 4"/>
                         <rect x="120" y="40" width="440" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
                         <text x="340" y="62" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Serving platform</text>
                         <rect x="140" y="84" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
@@ -501,66 +501,73 @@
                         <rect x="60" y="386" width="3" height="3" fill="#6a34d6"/>
                         <text x="72" y="384" font-size="12" fill="#6a6478" dominant-baseline="central">NVMe</text>
                         <text x="72" y="398" font-size="12" fill="#6a6478" dominant-baseline="central">3500+ MB/s rec</text>
-                        <rect x="200" y="320" width="360" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="380" y="342" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent layer &#183; orchestrates the model</text>
-                        <rect x="220" y="360" width="94" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="267" y="378" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">OpenClaw</text>
-                        <rect x="333" y="360" width="94" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="380" y="378" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Hermes</text>
-                        <rect x="446" y="360" width="94" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="493" y="378" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Mem0</text>
-                        <line x1="340" y1="420" x2="340" y2="450" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="34" y="456" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="84" y="468" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Email</text>
-                        <line x1="134" y1="468" x2="160" y2="468" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="34" y="486" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="84" y="498" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Meetings</text>
-                        <line x1="134" y1="498" x2="160" y2="498" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="160" y="450" width="360" height="64" rx="14" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="340" y="470" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">M4Quick Gateway</text>
-                        <text x="340" y="490" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">MCP access control, audit &amp; policy enforcement</text>
-                        <rect x="528" y="456" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="575" y="468" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Workflows</text>
-                        <line x1="520" y1="468" x2="528" y2="468" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="528" y="486" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="575" y="498" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Diagrams</text>
-                        <line x1="520" y1="498" x2="528" y2="498" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <line x1="340" y1="514" x2="340" y2="544" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="120" y="544" width="440" height="256" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="340" y="566" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Memory, RAG, API &amp; storage</text>
-                        <rect x="44" y="605" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <line x1="48" y1="613" x2="62" y2="613" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <line x1="48" y1="619" x2="62" y2="619" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <line x1="48" y1="625" x2="62" y2="625" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <text x="55" y="647" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">Semantic</text>
-                        <text x="55" y="661" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">ingestion</text>
-                        <line x1="70" y1="625" x2="134" y2="625" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="140" y="580" width="190" height="95" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="235" y="596" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Retrieval (RAG)</text>
-                        <circle cx="158" cy="620" r="3" fill="#6a34d6"/>
-                        <text x="168" y="620" font-size="12" fill="#14141a" dominant-baseline="central">Qdrant</text>
-                        <text x="235" y="642" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
-                        <rect x="350" y="580" width="190" height="95" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="445" y="596" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Semantic / persistent</text>
-                        <circle cx="368" cy="616" r="3" fill="#6a34d6"/>
-                        <text x="378" y="616" font-size="12" fill="#14141a" dominant-baseline="central">Honcho</text>
-                        <circle cx="368" cy="632" r="3" fill="#6a34d6"/>
-                        <text x="378" y="632" font-size="12" fill="#14141a" dominant-baseline="central">Zep</text>
-                        <text x="445" y="650" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: chats, facts</text>
-                        <rect x="140" y="685" width="190" height="95" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="235" y="705" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">API</text>
-                        <circle cx="158" cy="730" r="3" fill="#6a34d6"/>
-                        <text x="168" y="730" font-size="12" fill="#14141a" dominant-baseline="central">External calls &amp; tools</text>
-                        <rect x="350" y="685" width="190" height="95" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="445" y="705" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Storage</text>
-                        <circle cx="368" cy="725" r="6" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <circle cx="368" cy="725" r="2" fill="#6a34d6"/>
-                        <text x="380" y="725" font-size="12" fill="#14141a" dominant-baseline="central">SATA 250 MB/s min</text>
-                        <rect x="362" y="741" width="18" height="6" rx="1.5" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <rect x="365" y="743" width="3" height="3" fill="#6a34d6"/>
-                        <rect x="372" y="743" width="3" height="3" fill="#6a34d6"/>
-                        <text x="384" y="744" font-size="12" fill="#14141a" dominant-baseline="central">NVMe 3500+ rec</text>
-                        <text x="340" y="820" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; efficiency &amp; safety overlay</text>
+                        <rect x="200" y="320" width="360" height="140" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="380" y="340" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent layer &#183; orchestrates the model</text>
+                        <rect x="220" y="362" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="270" y="376" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">OpenClaw</text>
+                        <rect x="330" y="362" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="380" y="376" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">CrewAI</text>
+                        <rect x="440" y="362" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="490" y="376" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">LangGraph</text>
+                        <rect x="220" y="398" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="270" y="412" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">AutoGen</text>
+                        <rect x="330" y="398" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="380" y="412" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Hermes</text>
+                        <rect x="440" y="398" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="490" y="412" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Mem0</text>
+                        <line x1="340" y1="460" x2="340" y2="490" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="34" y="496" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="84" y="508" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Email</text>
+                        <line x1="134" y1="508" x2="160" y2="508" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="34" y="526" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="84" y="538" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Meetings</text>
+                        <line x1="134" y1="538" x2="160" y2="538" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="160" y="490" width="360" height="64" rx="14" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="340" y="510" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">M4Quick Gateway</text>
+                        <text x="340" y="530" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">MCP access control, audit &amp; policy enforcement</text>
+                        <rect x="528" y="496" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="575" y="508" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Workflows</text>
+                        <line x1="520" y1="508" x2="528" y2="508" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="528" y="526" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="575" y="538" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Diagrams</text>
+                        <line x1="520" y1="538" x2="528" y2="538" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <line x1="340" y1="554" x2="340" y2="584" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="120" y="584" width="440" height="284" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="340" y="606" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Memory, RAG, API &amp; storage</text>
+                        <rect x="44" y="645" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <line x1="48" y1="653" x2="62" y2="653" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <line x1="48" y1="659" x2="62" y2="659" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <line x1="48" y1="665" x2="62" y2="665" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <text x="55" y="687" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">Semantic</text>
+                        <text x="55" y="701" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">ingestion</text>
+                        <line x1="70" y1="665" x2="134" y2="665" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="140" y="620" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="235" y="636" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Retrieval (RAG)</text>
+                        <circle cx="158" cy="660" r="3" fill="#6a34d6"/>
+                        <text x="168" y="660" font-size="12" fill="#14141a" dominant-baseline="central">Qdrant</text>
+                        <text x="235" y="690" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
+                        <rect x="350" y="620" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="445" y="636" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Semantic / persistent</text>
+                        <circle cx="368" cy="656" r="3" fill="#6a34d6"/>
+                        <text x="378" y="656" font-size="12" fill="#14141a" dominant-baseline="central">Honcho</text>
+                        <circle cx="368" cy="672" r="3" fill="#6a34d6"/>
+                        <text x="378" y="672" font-size="12" fill="#14141a" dominant-baseline="central">Zep</text>
+                        <text x="445" y="692" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: chats, facts</text>
+                        <text x="445" y="710" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Needs: Postgres + Docker</text>
+                        <rect x="140" y="740" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="235" y="756" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">API</text>
+                        <circle cx="158" cy="780" r="3" fill="#6a34d6"/>
+                        <text x="168" y="780" font-size="12" fill="#14141a" dominant-baseline="central">External calls &amp; tools</text>
+                        <rect x="350" y="740" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="445" y="756" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Storage</text>
+                        <circle cx="368" cy="775" r="6" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <circle cx="368" cy="775" r="2" fill="#6a34d6"/>
+                        <text x="380" y="775" font-size="12" fill="#14141a" dominant-baseline="central">SATA 250 MB/s min</text>
+                        <rect x="362" y="791" width="18" height="6" rx="1.5" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <rect x="365" y="793" width="3" height="3" fill="#6a34d6"/>
+                        <rect x="372" y="793" width="3" height="3" fill="#6a34d6"/>
+                        <text x="384" y="794" font-size="12" fill="#14141a" dominant-baseline="central">NVMe 3500+ rec</text>
+                        <text x="340" y="898" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; efficiency &amp; safety overlay</text>
                     </svg>
                 </div>
             </div>
