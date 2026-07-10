@@ -181,6 +181,20 @@
             background: #14141a; color: #e6e3ee; font-size: 0.86em; line-height: 1.6;
             padding: 18px 20px; border-radius: 10px; white-space: pre-wrap; margin: 4px 0 0;
         }
+        .zta-diagram { background: #f4f1fb; border-radius: 12px; padding: 20px; overflow-x: auto; }
+        .zta-diagram svg { display: block; max-width: 100%; height: auto; }
+        .zta-mode-toggle { display: flex; gap: 8px; margin-bottom: 10px; }
+        .zta-mode-btn {
+            background: #fff; border: 1px solid #d8d4e4; border-radius: 100px; padding: 8px 18px;
+            font-family: inherit; font-size: 0.82em; font-weight: 700; color: #6a6478; cursor: pointer;
+        }
+        .zta-mode-btn.active { background: #14141a; color: #fff; border-color: #14141a; }
+        .zta-support-panel {
+            background: #f4f1fb; border-left: 3px solid #6a34d6; border-radius: 8px;
+            padding: 20px 22px; margin-top: 24px;
+        }
+        .zta-support-panel h4 { font-size: 1.02em; font-weight: 800; margin-bottom: 6px; }
+        .zta-support-panel p { color: #4a4560; font-size: 0.9em; margin-bottom: 14px; }
 
         .zta-results h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 6px; }
         .zta-results > p { color: #6a6478; margin-bottom: 26px; }
@@ -1043,6 +1057,7 @@
                         <select name="track" id="intake-track" required>
                             <option value="">Select...</option>
                             <option>Local AI Specialist</option>
+                            <option>Local AI Support Subscription</option>
                             <option>Zero Trust Package</option>
                             <option>Agent Zero Trust Assessment</option>
                             <option>Cybersecurity Consulting</option>
@@ -1388,6 +1403,50 @@
         (function () {
             var BASE_QUESTIONS = [
                 {
+                    key: 'context',
+                    type: 'single',
+                    question: 'Is this for a personal project, or for work?',
+                    options: [
+                        {
+                            label: 'Personal project / home lab',
+                            value: 'personal',
+                            info: 'We’ll keep things simple and skip anything that only matters for teams — you can always add more later.'
+                        },
+                        {
+                            label: 'Work / organization',
+                            value: 'work',
+                            info: 'We’ll include team size, data sensitivity, and integration options relevant to a business deployment.'
+                        }
+                    ]
+                },
+                {
+                    key: 'platform',
+                    type: 'single',
+                    question: 'Which local AI platform do you want to use?',
+                    options: [
+                        {
+                            label: 'Ollama — simple, runs from a terminal',
+                            value: 'ollama',
+                            info: 'The most widely used way to run local models. One command to install, one to download a model, one to run it. Best if you’re comfortable typing a few commands.'
+                        },
+                        {
+                            label: 'LM Studio — a desktop app, no terminal required',
+                            value: 'lmstudio',
+                            info: 'A point-and-click desktop app: search for a model, click download, click "start server." No command line at all — the easiest on-ramp if this is your first time.'
+                        },
+                        {
+                            label: 'vLLM — production-grade serving for teams',
+                            value: 'vllm',
+                            info: 'Built for serving many concurrent users efficiently. More setup than Ollama or LM Studio — the right choice once you’re past a single user or two.'
+                        },
+                        {
+                            label: 'Not sure — recommend one for me',
+                            value: 'unsure',
+                            info: 'We’ll pick based on your other answers (hardware, team size, and whether this is personal or work) and explain why.'
+                        }
+                    ]
+                },
+                {
                     key: 'wantsAgent',
                     type: 'single',
                     question: 'Are you looking for a local AI agent?',
@@ -1428,7 +1487,7 @@
                         {
                             label: 'Special Tooling',
                             value: 'tooling',
-                            info: 'Custom integrations with your internal systems — ticketing, internal databases, proprietary APIs. This requires purpose-built, scoped function/tool-calling connectors for your specific stack.'
+                            info: 'Custom integrations with other apps or systems — internal tools and ticketing/databases for work, or smart-home, scripts, and personal apps for a home lab. This requires purpose-built, scoped function/tool-calling connectors for your specific setup.'
                         }
                     ]
                 },
@@ -1466,11 +1525,17 @@
                         { label: 'No dedicated GPU (CPU only)', value: 0 },
                         { label: 'Consumer GPU (8–16GB VRAM)', value: 1 },
                         { label: 'Workstation GPU (24–48GB VRAM)', value: 2 },
-                        { label: 'Server-grade or multiple GPUs', value: 3 }
+                        { label: 'Server-grade or multiple GPUs', value: 3 },
+                        {
+                            label: 'Not sure what I have',
+                            value: 'unsure',
+                            info: 'No problem — we’ll default to a small, CPU-friendly model that runs on almost anything. You can always step up once you know your hardware.'
+                        }
                     ]
                 },
                 {
                     key: 'teamSize',
+                    showIf: function (a) { return a.context === 'work'; },
                     question: 'How many people will use it?',
                     options: [
                         { label: '1–5', value: 0 },
@@ -1524,12 +1589,20 @@
                 'Disk: ~20–45GB for the model. VRAM: 24–48GB. System RAM: 64GB recommended.',
                 'Disk: 40–150GB+ depending on model size. VRAM: 80GB+ or multiple GPUs. System RAM: 128GB+ recommended.'
             ];
-            var SERVING_BY_TEAM = [
-                { name: 'Ollama', note: 'single instance is plenty for this team size' },
-                { name: 'Ollama behind Nginx, or vLLM', note: 'vLLM adds an OpenAI-compatible API with request batching if you want it' },
-                { name: 'vLLM', note: 'single well-specced instance with request batching and an OpenAI-compatible API' },
-                { name: 'vLLM (multi-instance, load-balanced)', note: 'one instance per GPU/node behind Nginx or Traefik for this many concurrent users' }
-            ];
+            function servingInfoFor(platform, teamTier) {
+                if (platform === 'lmstudio') {
+                    return { name: 'LM Studio', note: 'desktop app with a built-in local server — simplest option, best for a single person or small team' };
+                }
+                if (platform === 'ollama') {
+                    return teamTier <= 1
+                        ? { name: 'Ollama', note: 'single instance is plenty for this team size' }
+                        : { name: 'Ollama behind Nginx', note: 'add a reverse proxy if you want to share it across your team, or move to vLLM for heavier concurrent use' };
+                }
+                if (teamTier >= 3) {
+                    return { name: 'vLLM (multi-instance, load-balanced)', note: 'one instance per GPU/node behind Nginx or Traefik for this many concurrent users' };
+                }
+                return { name: 'vLLM', note: 'OpenAI-compatible API with request batching for concurrent users' };
+            }
             var COMPONENT_DETAILS = {
                 chat: { label: 'Conversational base model only', detail: 'No extra components needed — the model above handles this on its own.' },
                 code: { label: 'Editor / CI integration', detail: 'Point Continue.dev or Cursor at your local endpoint for in-IDE completion, or call the model directly from CI for automated code review.' },
@@ -1576,6 +1649,47 @@
                 return 'general';
             }
 
+            var PLATFORM_LABELS = { ollama: 'Ollama', lmstudio: 'LM Studio', vllm: 'vLLM' };
+
+            function resolveHardwareTier(a) {
+                return a.hardware === 'unsure' ? 0 : a.hardware;
+            }
+
+            function resolveTeamTier(a) {
+                return a.hasOwnProperty('teamSize') ? a.teamSize : 0;
+            }
+
+            function pickPlatform(a) {
+                if (a.platform && a.platform !== 'unsure') return a.platform;
+                var teamTier = resolveTeamTier(a);
+                if (a.context === 'personal') return 'lmstudio';
+                return teamTier >= 2 ? 'vllm' : 'ollama';
+            }
+
+            function buildInstallStep(platform, model) {
+                if (platform === 'ollama') {
+                    return {
+                        title: 'Install Ollama and pull the model',
+                        desc: 'command below',
+                        command: 'curl -fsSL https://ollama.com/install.sh | sh\nollama pull ' + model.ollamaTag + '\nollama run ' + model.ollamaTag,
+                        shell: true
+                    };
+                }
+                if (platform === 'vllm') {
+                    return {
+                        title: 'Install vLLM and start serving',
+                        desc: 'command below',
+                        command: 'pip install vllm\nvllm serve ' + model.hfRepo + ' --host 0.0.0.0 --port 8000',
+                        shell: true
+                    };
+                }
+                return {
+                    title: 'Install LM Studio and load the model',
+                    desc: 'Download LM Studio from lmstudio.ai, open it, search for “' + model.hfRepo + '” in the model browser, click Download, then click Load. Open the "Local Server" tab and click Start Server (default: http://localhost:1234).',
+                    shell: false
+                };
+            }
+
             function buildSystemPrompt(modelDisplay, track, memoryChoice, purposes) {
                 var role = track === 'code'
                     ? 'a local coding assistant'
@@ -1595,6 +1709,63 @@
                 lines.push('If you\'re not confident in an answer, say so — don\'t fill the gap with something plausible-sounding.');
 
                 return lines.join('\n\n');
+            }
+
+            function buildScript(platform, model, memory, mode) {
+                var lines = ['#!/usr/bin/env bash', 'set -e', ''];
+                function step(desc, cmd) {
+                    var safeDesc = desc.replace(/"/g, '\\"');
+                    if (mode === 'guided') {
+                        lines.push('read -p "' + safeDesc + '? [Y/n] " ok && [[ $ok == [Yy]* || -z $ok ]] || exit 0');
+                    } else {
+                        lines.push('echo "==> ' + safeDesc + '"');
+                    }
+                    lines.push(cmd);
+                    lines.push('');
+                }
+                if (platform === 'ollama') {
+                    step('Install Ollama', 'curl -fsSL https://ollama.com/install.sh | sh');
+                    step('Pull the model (' + model.ollamaTag + ')', 'ollama pull ' + model.ollamaTag);
+                } else if (platform === 'vllm') {
+                    step('Install vLLM', 'pip install vllm');
+                }
+                if (memory && memory.step && memory.step.command) {
+                    step(memory.step.title, memory.step.command);
+                }
+                if (platform === 'ollama') {
+                    lines.push('echo "Starting ' + model.ollamaTag + ' — Ctrl+C to stop"');
+                    lines.push('ollama run ' + model.ollamaTag);
+                } else if (platform === 'vllm') {
+                    lines.push('echo "Starting vLLM server on port 8000 — Ctrl+C to stop"');
+                    lines.push('vllm serve ' + model.hfRepo + ' --host 0.0.0.0 --port 8000');
+                }
+                return lines.join('\n');
+            }
+
+            function escapeXml(s) {
+                return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            }
+
+            function buildDiagramSvg(boxes) {
+                var boxW = 160, boxH = 74, gap = 46, padding = 24;
+                var totalW = boxes.length * boxW + (boxes.length - 1) * gap + padding * 2;
+                var totalH = boxH + padding * 2;
+                var svg = '<svg viewBox="0 0 ' + totalW + ' ' + totalH + '" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, sans-serif">';
+                boxes.forEach(function (b, i) {
+                    var x = padding + i * (boxW + gap);
+                    var y = padding;
+                    svg += '<rect x="' + x + '" y="' + y + '" width="' + boxW + '" height="' + boxH + '" rx="14" fill="#ffffff" stroke="#6a34d6" stroke-width="2"/>';
+                    svg += '<text x="' + (x + boxW / 2) + '" y="' + (y + boxH / 2 - 6) + '" text-anchor="middle" font-size="14" font-weight="700" fill="#14141a">' + escapeXml(b.title) + '</text>';
+                    svg += '<text x="' + (x + boxW / 2) + '" y="' + (y + boxH / 2 + 15) + '" text-anchor="middle" font-size="11" fill="#6a6478">' + escapeXml(b.sub) + '</text>';
+                    if (i < boxes.length - 1) {
+                        var arrowX1 = x + boxW, arrowX2 = x + boxW + gap;
+                        var arrowY = y + boxH / 2;
+                        svg += '<line x1="' + arrowX1 + '" y1="' + arrowY + '" x2="' + (arrowX2 - 8) + '" y2="' + arrowY + '" stroke="#a3ff3c" stroke-width="3"/>';
+                        svg += '<polygon points="' + (arrowX2 - 8) + ',' + (arrowY - 6) + ' ' + arrowX2 + ',' + arrowY + ' ' + (arrowX2 - 8) + ',' + (arrowY + 6) + '" fill="#a3ff3c"/>';
+                    }
+                });
+                svg += '</svg>';
+                return svg;
             }
 
             var current = 0;
@@ -1705,9 +1876,12 @@
 
                 var isAgent = answers.wantsAgent === true;
                 var track = pickTrack(answers);
-                var model = MODEL_MATRIX[track][answers.hardware];
-                var hwSpec = HARDWARE_SPEC[answers.hardware];
-                var serving = SERVING_BY_TEAM[answers.teamSize];
+                var hwTier = resolveHardwareTier(answers);
+                var teamTier = resolveTeamTier(answers);
+                var model = MODEL_MATRIX[track][hwTier];
+                var hwSpec = HARDWARE_SPEC[hwTier];
+                var platform = pickPlatform(answers);
+                var serving = servingInfoFor(platform, teamTier);
                 var sensNote = SENSITIVITY_NOTE[answers.sensitivity];
                 var availNote = answers.availability === 1
                     ? 'Always-on serving — plan for redundancy/failover.'
@@ -1720,14 +1894,11 @@
                 var memoryChoice = answers.memory || 'none';
                 var memory = MEMORY_DETAILS[memoryChoice];
 
-                var usesOllama = serving.name.indexOf('Ollama') === 0;
-                var runCommand = usesOllama
-                    ? 'curl -fsSL https://ollama.com/install.sh | sh\nollama pull ' + model.ollamaTag + '\nollama run ' + model.ollamaTag
-                    : 'pip install vllm\nvllm serve ' + model.hfRepo + ' --host 0.0.0.0 --port 8000';
+                var installStep = buildInstallStep(platform, model);
 
                 var steps = [];
-                steps.push({ title: 'Provision the box', desc: 'Ubuntu 22.04+ (recommended), current GPU drivers if you’re using a GPU, and the disk/RAM/VRAM from the hardware spec above.' });
-                steps.push({ title: 'Install the serving engine and pull the model', desc: 'command below', command: runCommand });
+                steps.push({ title: 'Provision the box', desc: (platform === 'lmstudio' ? 'Any modern Windows, Mac, or Linux machine — ' : 'Ubuntu 22.04+ (recommended), current GPU drivers if you’re using a GPU, and ') + 'the disk/RAM/VRAM from the hardware spec above.' });
+                steps.push(installStep);
                 if (memory.step) {
                     steps.push(memory.step);
                 }
@@ -1746,8 +1917,17 @@
 
                 var systemPrompt = buildSystemPrompt(model.display, track, memoryChoice, answers.purposes);
 
+                var diagramBoxes = [];
+                diagramBoxes.push({ title: 'You', sub: answers.context === 'personal' ? 'home lab' : 'your team' });
+                diagramBoxes.push({ title: PLATFORM_LABELS[platform], sub: 'serving engine' });
+                diagramBoxes.push({ title: model.display.split(' (')[0], sub: 'model' });
+                if (memoryChoice !== 'none') diagramBoxes.push({ title: memory.label, sub: 'memory' });
+                if (isAgent && answers.purposes && answers.purposes.length) diagramBoxes.push({ title: 'Orchestration', sub: answers.purposes.join(', ') });
+                var diagramSvg = buildDiagramSvg(diagramBoxes);
+
                 function specText() {
                     var lines = ['LOCAL AI BUILD LIST', ''];
+                    lines.push('Platform: ' + PLATFORM_LABELS[platform]);
                     lines.push('Model: ' + model.display);
                     lines.push('  Ollama tag: ' + model.ollamaTag + '  |  Hugging Face repo: ' + model.hfRepo);
                     lines.push('Hardware: ' + hwSpec);
@@ -1765,12 +1945,15 @@
                     lines.push('');
                     lines.push('SYSTEM PROMPT');
                     lines.push(systemPrompt);
+                    lines.push('');
+                    lines.push('(A full install script and a visual build diagram are also available to copy/download on the page.)');
                     return lines.join('\n');
                 }
 
-                var html = '<h3>Your Local AI Build List</h3><p>The exact products, the setup commands, and the system prompt — everything needed to build this yourself. Want it built, integrated, and secured instead? That’s what the button below is for.</p>';
+                var html = '<h3>Your Local AI Build List</h3><p>The exact products, the setup commands, a build diagram, and the system prompt — everything needed to build this yourself. Want it built, integrated, and secured instead? That’s what the button below is for.</p>';
 
                 html += '<div class="zta-spec-heading">Build list</div>';
+                html += '<div class="zta-focus"><strong>Platform</strong>' + PLATFORM_LABELS[platform] + '</div>';
                 html += '<div class="zta-focus"><strong>Model</strong>' + model.display + '</div>';
                 html += '<div class="zta-focus"><strong>Hardware</strong>' + hwSpec + '</div>';
                 html += '<div class="zta-focus"><strong>Serving setup</strong>' + serving.name + ' — ' + serving.note + '</div>';
@@ -1783,12 +1966,27 @@
                 html += '<div class="zta-focus"><strong>Data handling</strong>' + sensNote + '</div>';
                 html += '<div class="zta-focus"><strong>Availability</strong>' + availNote + '</div>';
 
+                html += '<div class="zta-spec-heading">Your setup, visually</div>';
+                html += '<div class="zta-diagram">' + diagramSvg + '</div>';
+                html += '<button type="button" class="btn btn-outline" id="laic-download-diagram" style="margin-top:10px;">Download Diagram (.svg)</button>';
+
                 html += '<div class="zta-spec-heading">How you’d build this</div>';
                 html += '<ol class="process-list">';
                 steps.forEach(function (s) {
                     html += '<li><strong>' + s.title + '</strong><span class="desc">' + s.desc + '</span>' + (s.command ? '<code class="zta-command">' + s.command.replace(/</g, '&lt;') + '</code>' : '') + '</li>';
                 });
                 html += '</ol>';
+
+                if (installStep.shell) {
+                    html += '<div class="zta-spec-heading">Full install script</div>';
+                    html += '<p class="zta-spec-subnote">Automated runs straight through. Guided pauses and asks before each step.</p>';
+                    html += '<div class="zta-mode-toggle">' +
+                        '<button type="button" class="zta-mode-btn active" data-mode="automated" id="laic-mode-automated">Automated</button>' +
+                        '<button type="button" class="zta-mode-btn" data-mode="guided" id="laic-mode-guided">Guided</button>' +
+                        '</div>';
+                    html += '<code class="zta-command" id="laic-script-block">' + escapeXml(buildScript(platform, model, memory, 'automated')) + '</code>';
+                    html += '<button type="button" class="btn btn-outline" id="laic-download-script" style="margin-top:10px;">Download Script (.sh)</button>';
+                }
 
                 html += '<div class="zta-spec-heading">System prompt</div>';
                 html += '<p class="zta-spec-subnote">Starting point — adjust the tone and specifics to match your actual use case.</p>';
@@ -1797,10 +1995,54 @@
                 html += '<div class="zta-results-cta">' +
                     '<button type="button" class="btn btn-outline" id="laic-copy-spec">Copy Build Kit</button>' +
                     '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="laic-get-proposal">Want This Built For You? Request Assistance</a>' +
-                    '</div>' +
-                    '<button class="zta-restart" type="button" id="laic-restart">Start over</button>';
+                    '</div>';
+
+                html += '<div class="zta-support-panel">' +
+                    '<h4>Prefer not to go it alone?</h4>' +
+                    '<p>Subscribe to Local AI Support Services — a person helps you through the whole setup today, with AI-assisted support rolling out. Cancel anytime.</p>' +
+                    '<a class="btn btn-dark" href="#contact" id="laic-support-cta">Get on the Support List</a>' +
+                    '</div>';
+
+                html += '<button class="zta-restart" type="button" id="laic-restart">Start over</button>';
 
                 resultsEl.innerHTML = html;
+
+                document.getElementById('laic-download-diagram').addEventListener('click', function () {
+                    var blob = new Blob([diagramSvg], { type: 'image/svg+xml' });
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'local-ai-build-diagram.svg';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+
+                if (installStep.shell) {
+                    var currentScriptMode = 'automated';
+                    var scriptBlock = document.getElementById('laic-script-block');
+                    var modeButtons = document.querySelectorAll('.zta-mode-btn');
+                    modeButtons.forEach(function (btn) {
+                        btn.addEventListener('click', function () {
+                            modeButtons.forEach(function (b) { b.classList.remove('active'); });
+                            btn.classList.add('active');
+                            currentScriptMode = btn.dataset.mode;
+                            scriptBlock.textContent = buildScript(platform, model, memory, currentScriptMode);
+                        });
+                    });
+                    document.getElementById('laic-download-script').addEventListener('click', function () {
+                        var blob = new Blob([buildScript(platform, model, memory, currentScriptMode)], { type: 'text/x-sh' });
+                        var url = URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'local-ai-setup.sh';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    });
+                }
 
                 document.getElementById('laic-copy-spec').addEventListener('click', function () {
                     var btn = this;
@@ -1843,6 +2085,15 @@
                     if (trackSelect) trackSelect.value = 'Local AI Specialist';
                     if (messageBox) {
                         messageBox.value = 'I’d like help building this:\n\n' + specText();
+                    }
+                });
+
+                document.getElementById('laic-support-cta').addEventListener('click', function () {
+                    var trackSelect = document.getElementById('intake-track');
+                    var messageBox = document.getElementById('intake-message');
+                    if (trackSelect) trackSelect.value = 'Local AI Support Subscription';
+                    if (messageBox) {
+                        messageBox.value = 'I’m interested in the Local AI Support subscription (human/AI-assisted setup + ongoing help) for this build:\n\n' + specText();
                     }
                 });
 
