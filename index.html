@@ -475,7 +475,7 @@
                 <div class="stack-diagram-card">
                     <svg width="100%" viewBox="0 0 680 1150" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
                         <title id="stackDiagramTitle">Exploded view of a local AI stack</title>
-                        <desc id="stackDiagramDesc">A serving platform layer (Ollama, LM Studio, vLLM), an AI model chip with an internal quantization density gauge and a system RAM sizing panel, an interfaces layer showing how people reach the system (OpenWebUI for chat, oterm for terminal use, voice, and vision) sitting directly above the agent layer it connects to, an agent layer with six orchestration framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) plus lightweight coding agents (Aider, Goose, Cline) and a storage spec panel, a roadmap call-fidelity layer that will correct malformed tool calls before they leave the agent, the zt-mcp-gateway component of the MCP-Mesh product family — a shipped and verified Zero Trust Gateway providing cryptographic identity and access control that fronts real MCP servers and APIs such as email, meetings, workflows, and diagrams, and an agent memory section mapping four cloud memory patterns to local equivalents: in-context working memory via the model's own context window, short-term session memory via Redis and SQLite or Postgres, semantic memory via Qdrant, Honcho, Zep, and Neo4j, and cross-agent memory via Redis and MinIO for multi-agent handoffs — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
+                        <desc id="stackDiagramDesc">A serving platform layer (Ollama, LM Studio, vLLM), an AI model chip with an internal quantization density gauge and a system RAM sizing panel, an interfaces layer showing how people reach the system (OpenWebUI for chat, oterm for terminal use, voice, and vision) sitting directly above the agent layer it connects to, an agent layer with six orchestration framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) plus lightweight coding agents (Aider, Goose, Cline) and a storage spec panel, the MCP-Mesh product family grouping two components — a roadmap call-fidelity layer that will correct malformed tool calls before they leave the agent, and zt-mcp-gateway, a shipped and verified Zero Trust Gateway providing cryptographic identity and access control — that together front real MCP servers and APIs such as email, meetings, workflows, and diagrams, and an agent memory section mapping four cloud memory patterns to local equivalents: in-context working memory via the model's own context window, short-term session memory via Redis and SQLite or Postgres, semantic memory via Qdrant, Honcho, Zep, and Neo4j, and cross-agent memory via Redis and MinIO for multi-agent handoffs — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
                         <defs>
                             <marker id="sdArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
                             <linearGradient id="sdChipGlow" x1="0" y1="0" x2="0" y2="1">
@@ -587,75 +587,79 @@
                         <rect x="440" y="572" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="490" y="586" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cline</text>
                         </g>
-                        <line x1="340" y1="614" x2="340" y2="634" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <line x1="340" y1="614" x2="340" y2="630" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="MCP-Mesh product family" data-key="mcpMesh">
+                        <rect x="160" y="630" width="360" height="146" rx="16" fill="none" stroke="#6a34d6" stroke-width="1.25" stroke-dasharray="6 4"/>
+                        <text x="340" y="648" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="#6a34d6">MCP-Mesh</text>
+                        </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Call-fidelity layer, roadmap component" data-key="callFidelity">
-                        <rect x="160" y="634" width="360" height="50" rx="14" fill="#f4f3f7" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="5 4"/>
-                        <text x="340" y="649" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#8a8496">MCP-MESH &#183; ROADMAP</text>
-                        <text x="340" y="665" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#4a4458">Call-fidelity layer</text>
+                        <rect x="176" y="662" width="328" height="44" rx="12" fill="#f4f3f7" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="5 4"/>
+                        <text x="340" y="674" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#8a8496">ROADMAP</text>
+                        <text x="340" y="690" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#4a4458">Call-fidelity layer</text>
                         </g>
-                        <line x1="340" y1="684" x2="340" y2="704" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <g class="sd-hot" tabindex="0" role="button" aria-label="MCP servers, email and meetings" data-key="mcpLeft">
-                        <text x="84" y="696" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">MCP servers</text>
-                        <rect x="34" y="710" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="84" y="722" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Email</text>
-                        <line x1="160" y1="722" x2="134" y2="722" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="34" y="740" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="84" y="752" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Meetings</text>
-                        <line x1="160" y1="752" x2="134" y2="752" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        </g>
+                        <line x1="340" y1="706" x2="340" y2="714" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="3 3"/>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Zero Trust Gateway" data-key="gateway">
-                        <rect x="160" y="704" width="360" height="64" rx="14" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="340" y="714" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#6a34d6">MCP-MESH &#183; ZT-MCP-GATEWAY &#183; SHIPPED</text>
-                        <text x="340" y="730" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Zero Trust Gateway</text>
-                        <text x="340" y="748" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Cryptographic identity &amp; access control</text>
+                        <rect x="176" y="714" width="328" height="54" rx="12" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="340" y="726" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#6a34d6">ZT-MCP-GATEWAY &#183; SHIPPED</text>
+                        <text x="340" y="740" text-anchor="middle" dominant-baseline="central" font-size="12.5" font-weight="700" fill="#14141a">Zero Trust Gateway</text>
+                        <text x="340" y="756" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">Cryptographic identity &amp; access control</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="MCP servers, email and meetings" data-key="mcpLeft">
+                        <text x="84" y="706" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">MCP servers</text>
+                        <rect x="34" y="720" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="84" y="732" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Email</text>
+                        <line x1="176" y1="732" x2="134" y2="732" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="34" y="750" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="84" y="762" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Meetings</text>
+                        <line x1="176" y1="762" x2="134" y2="762" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="APIs, workflows and diagrams" data-key="mcpRight">
-                        <text x="575" y="696" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">&amp; APIs</text>
-                        <rect x="528" y="710" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="575" y="722" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Workflows</text>
-                        <line x1="520" y1="722" x2="528" y2="722" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="528" y="740" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="575" y="752" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Diagrams</text>
-                        <line x1="520" y1="752" x2="528" y2="752" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <text x="575" y="706" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">&amp; APIs</text>
+                        <rect x="528" y="720" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="575" y="732" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Workflows</text>
+                        <line x1="504" y1="732" x2="528" y2="732" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="528" y="750" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="575" y="762" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Diagrams</text>
+                        <line x1="504" y1="762" x2="528" y2="762" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
                         </g>
-                        <line x1="340" y1="768" x2="340" y2="798" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="120" y="798" width="440" height="284" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="340" y="820" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent memory &#8212; local equivalents</text>
+                        <line x1="340" y1="776" x2="340" y2="796" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="120" y="796" width="440" height="284" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="340" y="818" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent memory &#8212; local equivalents</text>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="In-context working memory" data-key="memIncontext">
-                        <rect x="140" y="834" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="235" y="850" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">In-context working</text>
-                        <text x="235" y="874" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Context: Ollama/vLLM window</text>
-                        <text x="235" y="894" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Summarize: LlamaIndex</text>
+                        <rect x="140" y="832" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="235" y="848" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">In-context working</text>
+                        <text x="235" y="872" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Context: Ollama/vLLM window</text>
+                        <text x="235" y="892" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Summarize: LlamaIndex</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Short-term session memory" data-key="memShortterm">
-                        <rect x="350" y="834" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="445" y="850" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Short-term session</text>
-                        <text x="445" y="870" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
-                        <text x="445" y="886" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">SQLite / Postgres</text>
-                        <text x="445" y="904" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">LangGraph checkpointer</text>
+                        <rect x="350" y="832" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="445" y="848" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Short-term session</text>
+                        <text x="445" y="868" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
+                        <text x="445" y="884" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">SQLite / Postgres</text>
+                        <text x="445" y="902" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">LangGraph checkpointer</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Semantic memory" data-key="memSemantic">
-                        <rect x="44" y="979" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <line x1="48" y1="987" x2="62" y2="987" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <line x1="48" y1="993" x2="62" y2="993" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <line x1="48" y1="999" x2="62" y2="999" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <text x="55" y="1021" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">Semantic</text>
-                        <text x="55" y="1035" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">ingestion</text>
-                        <line x1="70" y1="999" x2="134" y2="999" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="140" y="954" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="235" y="970" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Semantic memory</text>
-                        <text x="235" y="990" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Qdrant, Honcho, Zep, Neo4j</text>
-                        <text x="235" y="1008" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
-                        <text x="235" y="1026" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Needs: Postgres + Docker</text>
+                        <rect x="44" y="977" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <line x1="48" y1="985" x2="62" y2="985" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <line x1="48" y1="991" x2="62" y2="991" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <line x1="48" y1="997" x2="62" y2="997" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <text x="55" y="1019" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">Semantic</text>
+                        <text x="55" y="1033" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">ingestion</text>
+                        <line x1="70" y1="997" x2="134" y2="997" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="140" y="952" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="235" y="968" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Semantic memory</text>
+                        <text x="235" y="988" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Qdrant, Honcho, Zep, Neo4j</text>
+                        <text x="235" y="1006" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
+                        <text x="235" y="1024" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Needs: Postgres + Docker</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Cross-agent memory" data-key="memCrossagent">
-                        <rect x="350" y="954" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="445" y="970" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cross-agent memory</text>
-                        <text x="445" y="990" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
-                        <text x="445" y="1006" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">MinIO (S3-compatible)</text>
-                        <text x="445" y="1024" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Multi-agent handoffs</text>
+                        <rect x="350" y="952" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="445" y="968" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cross-agent memory</text>
+                        <text x="445" y="988" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
+                        <text x="445" y="1004" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">MinIO (S3-compatible)</text>
+                        <text x="445" y="1022" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Multi-agent handoffs</text>
                         </g>
-                        <text x="340" y="1112" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; efficiency &amp; safety overlay</text>
+                        <text x="340" y="1110" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; efficiency &amp; safety overlay</text>
                     </svg>
                     <div class="sd-tooltip" id="sdTooltip" hidden></div>
                     <div class="sd-modal-backdrop" id="sdModalBackdrop" hidden>
@@ -667,7 +671,7 @@
                     </div>
                 </div>
                 <p class="stack-diagram-hint">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="10"/><line x1="12" y1="14" x2="12" y2="10"/><line x1="12" y1="6" x2="12.01" y2="6"/></svg>
                     Hover any piece of the diagram for a quick note, or click it for the full explanation.
                 </p>
             </div>
@@ -2784,6 +2788,10 @@
                 mcpLeft: {
                     title: 'MCP Servers — Real Integrations',
                     body: "Email and Meetings aren't hosted by the Gateway — they're real MCP servers (or direct APIs) that already exist. The Gateway fronts them; it doesn't reimplement them."
+                },
+                mcpMesh: {
+                    title: 'MCP-Mesh',
+                    body: "Our product family for reducing the risk of running AI agents that call tools — not one monolith, but modular components you adopt independently. zt-mcp-gateway (shipped) and the call-fidelity layer (roadmap) are the first two: they solve different, unrelated failure modes at different points in the request pipeline, so a customer with only one of the two problems isn't forced to buy a bundle to fix it."
                 },
                 callFidelity: {
                     title: 'Call-Fidelity Layer — Roadmap',
