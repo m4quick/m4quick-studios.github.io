@@ -471,7 +471,7 @@
 
             <div class="stack-diagram-wrap">
                 <h3 class="stack-diagram-title">What's inside a full local AI build</h3>
-                <p class="stack-diagram-desc">Every layer of a production-grade local AI stack — serving platform down to storage — with M4Quick's security and efficiency overlay wrapped around the whole thing.</p>
+                <p class="stack-diagram-desc">Every layer of a production-grade local AI stack, configured and integrated for you — serving platform, model, interfaces, agent framework, and memory. MCP-Mesh, outlined below, is different: it's the product M4Quick actually builds.</p>
                 <div class="stack-diagram-card">
                     <svg width="100%" viewBox="0 0 680 1150" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
                         <title id="stackDiagramTitle">Exploded view of a local AI stack</title>
@@ -589,8 +589,10 @@
                         </g>
                         <line x1="340" y1="614" x2="340" y2="630" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="MCP-Mesh product family" data-key="mcpMesh">
-                        <rect x="160" y="630" width="360" height="146" rx="16" fill="none" stroke="#6a34d6" stroke-width="1.25" stroke-dasharray="6 4"/>
-                        <text x="340" y="648" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="#6a34d6">MCP-Mesh</text>
+                        <rect x="160" y="630" width="360" height="146" rx="16" fill="#ffffff" stroke="#6a34d6" stroke-width="2.5"/>
+                        <rect x="414" y="636" width="100" height="16" rx="8" fill="#a3ff3c"/>
+                        <text x="464" y="644" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="800" letter-spacing="0.04em" fill="#1d1533">BUILT BY M4QUICK</text>
+                        <text x="340" y="649" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="800" fill="#6a34d6">MCP-Mesh</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Call-fidelity layer, roadmap component" data-key="callFidelity">
                         <rect x="176" y="662" width="328" height="44" rx="12" fill="#f4f3f7" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="5 4"/>
@@ -659,7 +661,7 @@
                         <text x="445" y="1004" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">MinIO (S3-compatible)</text>
                         <text x="445" y="1022" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Multi-agent handoffs</text>
                         </g>
-                        <text x="340" y="1110" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; efficiency &amp; safety overlay</text>
+                        <text x="340" y="1110" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; configures this stack, builds MCP-Mesh</text>
                     </svg>
                     <div class="sd-tooltip" id="sdTooltip" hidden></div>
                     <div class="sd-modal-backdrop" id="sdModalBackdrop" hidden>
@@ -2790,8 +2792,8 @@
                     body: "Email and Meetings aren't hosted by the Gateway — they're real MCP servers (or direct APIs) that already exist. The Gateway fronts them; it doesn't reimplement them."
                 },
                 mcpMesh: {
-                    title: 'MCP-Mesh',
-                    body: "Our product family for reducing the risk of running AI agents that call tools — not one monolith, but modular components you adopt independently. zt-mcp-gateway (shipped) and the call-fidelity layer (roadmap) are the first two: they solve different, unrelated failure modes at different points in the request pipeline, so a customer with only one of the two problems isn't forced to buy a bundle to fix it."
+                    title: 'MCP-Mesh — built by M4Quick',
+                    body: "The one piece of this stack we actually build, not just configure. Everything else in this diagram — the serving platform, the model, the agent framework, memory — is real open-source infrastructure we select and integrate for you. MCP-Mesh is different: it's our own product family, developed in-house. zt-mcp-gateway (shipped) and the call-fidelity layer (roadmap) solve different, unrelated failure modes at different points in the request pipeline, so a customer with only one of the two problems isn't forced to buy a bundle to fix it."
                 },
                 callFidelity: {
                     title: 'Call-Fidelity Layer — Roadmap',
