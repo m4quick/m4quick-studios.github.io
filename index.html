@@ -479,9 +479,9 @@
                 <h3 class="stack-diagram-title">What's inside a full local AI build</h3>
                 <p class="stack-diagram-desc">Every layer of a production-grade local AI stack, configured and integrated for you — serving platform, model, interfaces, agent framework, and memory. MCP-Mesh, outlined below, is different: it's the product M4Quick actually builds.</p>
                 <div class="stack-diagram-card">
-                    <svg width="100%" viewBox="0 0 680 1150" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+                    <svg width="100%" viewBox="0 0 680 1165" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
                         <title id="stackDiagramTitle">Exploded view of a local AI stack</title>
-                        <desc id="stackDiagramDesc">A serving platform layer (Ollama, LM Studio, vLLM), an AI model chip with an internal quantization density gauge and a system RAM sizing panel, an interfaces layer showing how people reach the system (OpenWebUI for chat, oterm for terminal use, voice, and vision) sitting directly above the agent layer it connects to, an agent layer with six orchestration framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) plus lightweight coding agents (Aider, Goose, Cline) and a storage spec panel, the MCP-Mesh product family grouping two components — a roadmap call-fidelity layer that will correct malformed tool calls before they leave the agent, and zt-mcp-gateway, a shipped and verified Zero Trust Gateway providing cryptographic identity and access control — that together front real, popular MCP servers such as GitHub, macOS (via apple-mcp and macos-mcp), Slack, and Notion, and an agent memory section mapping four cloud memory patterns to local equivalents: in-context working memory via the model's own context window, short-term session memory via Redis and SQLite or Postgres, semantic memory via Qdrant, Honcho, Zep, and Neo4j, and cross-agent memory via Redis and MinIO for multi-agent handoffs — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
+                        <desc id="stackDiagramDesc">A serving platform layer (Ollama, LM Studio, vLLM), an AI model chip with an internal quantization density gauge and a system RAM sizing panel, an interfaces layer split into input and output channels — input via OpenWebUI, a terminal client like oterm, Telegram, Discord, voice-to-text, and vision-to-text; output via OpenWebUI, terminal, Telegram, and Discord — sitting directly above the agent layer it connects to, an agent layer with six orchestration framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) plus lightweight coding agents (Aider, Goose, Cline) and a storage spec panel, the MCP-Mesh product family grouping two components — a roadmap call-fidelity layer that will correct malformed tool calls before they leave the agent, and zt-mcp-gateway, a shipped and verified Zero Trust Gateway providing cryptographic identity and access control — that together front real, popular MCP servers such as GitHub, macOS (via apple-mcp and macos-mcp), Slack, and Notion, and an agent memory section mapping four cloud memory patterns to local equivalents: in-context working memory via the model's own context window, short-term session memory via Redis and SQLite or Postgres, semantic memory via Qdrant, Honcho, Zep, and Neo4j, and cross-agent memory via Redis and MinIO for multi-agent handoffs — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
                         <defs>
                             <marker id="sdArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
                             <linearGradient id="sdChipGlow" x1="0" y1="0" x2="0" y2="1">
@@ -489,7 +489,7 @@
                                 <stop offset="100%" stop-color="#6a34d6"/>
                             </linearGradient>
                         </defs>
-                        <rect x="24" y="20" width="604" height="1110" rx="24" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="6 4"/>
+                        <rect x="24" y="20" width="604" height="1125" rx="24" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="6 4"/>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Serving Platform layer" data-key="serving">
                         <rect x="120" y="40" width="440" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
                         <text x="340" y="62" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Serving platform</text>
@@ -545,129 +545,129 @@
                         <text x="496" y="299" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.1:70b</text>
                         </g>
                         <line x1="340" y1="290" x2="340" y2="320" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <g class="sd-hot" tabindex="0" role="button" aria-label="Interfaces layer" data-key="interfaces">
-                        <rect x="120" y="320" width="440" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Interfaces &#183; how people reach it</text>
-                        <rect x="148" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="193" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">OpenWebUI</text>
-                        <rect x="246" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="291" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">oterm (TUI)</text>
-                        <rect x="344" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="389" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Voice</text>
-                        <rect x="442" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="487" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Vision</text>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Interfaces layer: input and output channels" data-key="interfaces">
+                        <rect x="120" y="320" width="440" height="115" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="340" y="340" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Interfaces &#183; how people reach it</text>
+                        <line x1="340" y1="352" x2="340" y2="425" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="230" y="360" text-anchor="middle" dominant-baseline="central" font-size="11.5" font-weight="700" fill="#6a34d6">Input Interfaces</text>
+                        <text x="230" y="378" text-anchor="middle" dominant-baseline="central" font-size="10.5" fill="#4a4458">OpenWebUI, TUI, Telegram,</text>
+                        <text x="230" y="393" text-anchor="middle" dominant-baseline="central" font-size="10.5" fill="#4a4458">Discord, voice-to-text,</text>
+                        <text x="230" y="408" text-anchor="middle" dominant-baseline="central" font-size="10.5" fill="#4a4458">vision-to-text</text>
+                        <text x="450" y="360" text-anchor="middle" dominant-baseline="central" font-size="11.5" font-weight="700" fill="#6a34d6">Output Interfaces</text>
+                        <text x="450" y="378" text-anchor="middle" dominant-baseline="central" font-size="10.5" fill="#4a4458">OpenWebUI, TUI,</text>
+                        <text x="450" y="393" text-anchor="middle" dominant-baseline="central" font-size="10.5" fill="#4a4458">Telegram, Discord</text>
                         </g>
-                        <line x1="340" y1="420" x2="340" y2="440" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <line x1="340" y1="435" x2="340" y2="455" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Storage panel" data-key="storage">
-                        <text x="115" y="452" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Storage</text>
-                        <circle cx="58" cy="476" r="8" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <circle cx="58" cy="476" r="3" fill="#6a34d6"/>
-                        <text x="72" y="470" font-size="12" fill="#6a6478" dominant-baseline="central">SATA SSD</text>
-                        <text x="72" y="484" font-size="12" fill="#6a6478" dominant-baseline="central">250 MB/s min</text>
-                        <rect x="50" y="504" width="16" height="6" rx="1.5" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <rect x="53" y="506" width="3" height="3" fill="#6a34d6"/>
-                        <rect x="60" y="506" width="3" height="3" fill="#6a34d6"/>
-                        <text x="72" y="504" font-size="12" fill="#6a6478" dominant-baseline="central">NVMe</text>
-                        <text x="72" y="518" font-size="12" fill="#6a6478" dominant-baseline="central">3500+ MB/s rec</text>
+                        <text x="115" y="467" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Storage</text>
+                        <circle cx="58" cy="491" r="8" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <circle cx="58" cy="491" r="3" fill="#6a34d6"/>
+                        <text x="72" y="485" font-size="12" fill="#6a6478" dominant-baseline="central">SATA SSD</text>
+                        <text x="72" y="499" font-size="12" fill="#6a6478" dominant-baseline="central">250 MB/s min</text>
+                        <rect x="50" y="519" width="16" height="6" rx="1.5" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <rect x="53" y="521" width="3" height="3" fill="#6a34d6"/>
+                        <rect x="60" y="521" width="3" height="3" fill="#6a34d6"/>
+                        <text x="72" y="519" font-size="12" fill="#6a6478" dominant-baseline="central">NVMe</text>
+                        <text x="72" y="533" font-size="12" fill="#6a6478" dominant-baseline="central">3500+ MB/s rec</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Agent layer" data-key="agentLayer">
-                        <rect x="200" y="440" width="360" height="174" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="380" y="460" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent layer &#183; orchestrates the model</text>
-                        <rect x="220" y="482" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="270" y="496" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">OpenClaw</text>
-                        <rect x="330" y="482" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="380" y="496" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">CrewAI</text>
-                        <rect x="440" y="482" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="490" y="496" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">LangGraph</text>
-                        <rect x="220" y="518" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="270" y="532" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">AutoGen</text>
-                        <rect x="330" y="518" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="380" y="532" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Hermes</text>
-                        <rect x="440" y="518" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="490" y="532" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Mem0</text>
-                        <text x="380" y="560" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">+ lightweight coding agents</text>
-                        <rect x="220" y="572" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="270" y="586" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Aider</text>
-                        <rect x="330" y="572" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="380" y="586" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Goose</text>
-                        <rect x="440" y="572" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="490" y="586" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cline</text>
+                        <rect x="200" y="455" width="360" height="174" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="380" y="475" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent layer &#183; orchestrates the model</text>
+                        <rect x="220" y="497" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="270" y="511" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">OpenClaw</text>
+                        <rect x="330" y="497" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="380" y="511" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">CrewAI</text>
+                        <rect x="440" y="497" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="490" y="511" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">LangGraph</text>
+                        <rect x="220" y="533" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="270" y="547" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">AutoGen</text>
+                        <rect x="330" y="533" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="380" y="547" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Hermes</text>
+                        <rect x="440" y="533" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="490" y="547" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Mem0</text>
+                        <text x="380" y="575" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">+ lightweight coding agents</text>
+                        <rect x="220" y="587" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="270" y="601" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Aider</text>
+                        <rect x="330" y="587" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="380" y="601" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Goose</text>
+                        <rect x="440" y="587" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="490" y="601" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cline</text>
                         </g>
-                        <line x1="340" y1="614" x2="340" y2="630" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <line x1="340" y1="629" x2="340" y2="645" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="MCP-Mesh product family" data-key="mcpMesh">
-                        <rect x="160" y="630" width="360" height="146" rx="16" fill="#ffffff" stroke="#6a34d6" stroke-width="2.5"/>
-                        <rect x="414" y="636" width="100" height="16" rx="8" fill="#a3ff3c"/>
-                        <text x="464" y="644" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="800" letter-spacing="0.04em" fill="#1d1533">BUILT BY M4QUICK</text>
-                        <text x="340" y="649" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="800" fill="#6a34d6">MCP-Mesh</text>
+                        <rect x="160" y="645" width="360" height="146" rx="16" fill="#ffffff" stroke="#6a34d6" stroke-width="2.5"/>
+                        <rect x="414" y="651" width="100" height="16" rx="8" fill="#a3ff3c"/>
+                        <text x="464" y="659" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="800" letter-spacing="0.04em" fill="#1d1533">BUILT BY M4QUICK</text>
+                        <text x="340" y="664" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="800" fill="#6a34d6">MCP-Mesh</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Call-fidelity layer, roadmap component" data-key="callFidelity">
-                        <rect x="176" y="662" width="328" height="44" rx="12" fill="#f4f3f7" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="5 4"/>
-                        <text x="340" y="674" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#8a8496">ROADMAP</text>
-                        <text x="340" y="690" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#4a4458">Call-fidelity layer</text>
+                        <rect x="176" y="677" width="328" height="44" rx="12" fill="#f4f3f7" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="5 4"/>
+                        <text x="340" y="689" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#8a8496">ROADMAP</text>
+                        <text x="340" y="705" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="700" fill="#4a4458">Call-fidelity layer</text>
                         </g>
-                        <line x1="340" y1="706" x2="340" y2="714" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="3 3"/>
+                        <line x1="340" y1="721" x2="340" y2="729" stroke="#c7c3d1" stroke-width="1" stroke-dasharray="3 3"/>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Zero Trust Gateway" data-key="gateway">
-                        <rect x="176" y="714" width="328" height="54" rx="12" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="340" y="726" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#6a34d6">ZT-MCP-GATEWAY &#183; SHIPPED</text>
-                        <text x="340" y="740" text-anchor="middle" dominant-baseline="central" font-size="12.5" font-weight="700" fill="#14141a">Zero Trust Gateway</text>
-                        <text x="340" y="756" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">Cryptographic identity &amp; access control</text>
+                        <rect x="176" y="729" width="328" height="54" rx="12" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="340" y="741" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" letter-spacing="0.06em" fill="#6a34d6">ZT-MCP-GATEWAY &#183; SHIPPED</text>
+                        <text x="340" y="755" text-anchor="middle" dominant-baseline="central" font-size="12.5" font-weight="700" fill="#14141a">Zero Trust Gateway</text>
+                        <text x="340" y="771" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">Cryptographic identity &amp; access control</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="MCP servers: GitHub and macOS" data-key="mcpLeft">
-                        <text x="84" y="706" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">MCP servers</text>
-                        <rect x="34" y="720" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="84" y="732" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">GitHub</text>
-                        <line x1="176" y1="732" x2="134" y2="732" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="34" y="750" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="84" y="762" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">macOS</text>
-                        <line x1="176" y1="762" x2="134" y2="762" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <text x="84" y="721" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">MCP servers</text>
+                        <rect x="34" y="735" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="84" y="747" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">GitHub</text>
+                        <line x1="176" y1="747" x2="134" y2="747" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="34" y="765" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="84" y="777" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">macOS</text>
+                        <line x1="176" y1="777" x2="134" y2="777" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="MCP servers: Slack and Notion" data-key="mcpRight">
-                        <text x="575" y="706" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">&amp; more</text>
-                        <rect x="528" y="720" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="575" y="732" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Slack</text>
-                        <line x1="504" y1="732" x2="528" y2="732" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="528" y="750" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="575" y="762" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Notion</text>
-                        <line x1="504" y1="762" x2="528" y2="762" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <text x="575" y="721" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">&amp; more</text>
+                        <rect x="528" y="735" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="575" y="747" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Slack</text>
+                        <line x1="504" y1="747" x2="528" y2="747" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="528" y="765" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="575" y="777" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Notion</text>
+                        <line x1="504" y1="777" x2="528" y2="777" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
                         </g>
-                        <line x1="340" y1="776" x2="340" y2="796" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="120" y="796" width="440" height="284" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="340" y="818" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent memory &#8212; local equivalents</text>
+                        <line x1="340" y1="791" x2="340" y2="811" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <rect x="120" y="811" width="440" height="284" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="340" y="833" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent memory &#8212; local equivalents</text>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="In-context working memory" data-key="memIncontext">
-                        <rect x="140" y="832" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="235" y="848" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">In-context working</text>
-                        <text x="235" y="872" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Context: Ollama/vLLM window</text>
-                        <text x="235" y="892" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Summarize: LlamaIndex</text>
+                        <rect x="140" y="847" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="235" y="863" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">In-context working</text>
+                        <text x="235" y="887" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Context: Ollama/vLLM window</text>
+                        <text x="235" y="907" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Summarize: LlamaIndex</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Short-term session memory" data-key="memShortterm">
-                        <rect x="350" y="832" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="445" y="848" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Short-term session</text>
-                        <text x="445" y="868" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
-                        <text x="445" y="884" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">SQLite / Postgres</text>
-                        <text x="445" y="902" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">LangGraph checkpointer</text>
+                        <rect x="350" y="847" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="445" y="863" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Short-term session</text>
+                        <text x="445" y="883" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
+                        <text x="445" y="899" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">SQLite / Postgres</text>
+                        <text x="445" y="917" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">LangGraph checkpointer</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Semantic memory" data-key="memSemantic">
-                        <rect x="44" y="977" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
-                        <line x1="48" y1="985" x2="62" y2="985" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <line x1="48" y1="991" x2="62" y2="991" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <line x1="48" y1="997" x2="62" y2="997" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
-                        <text x="55" y="1019" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">Semantic</text>
-                        <text x="55" y="1033" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">ingestion</text>
-                        <line x1="70" y1="997" x2="134" y2="997" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
-                        <rect x="140" y="952" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="235" y="968" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Semantic memory</text>
-                        <text x="235" y="988" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Qdrant, Honcho, Zep, Neo4j</text>
-                        <text x="235" y="1006" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
-                        <text x="235" y="1024" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Needs: Postgres + Docker</text>
+                        <rect x="44" y="992" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
+                        <line x1="48" y1="1000" x2="62" y2="1000" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <line x1="48" y1="1006" x2="62" y2="1006" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <line x1="48" y1="1012" x2="62" y2="1012" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
+                        <text x="55" y="1034" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">Semantic</text>
+                        <text x="55" y="1048" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a34d6">ingestion</text>
+                        <line x1="70" y1="1012" x2="134" y2="1012" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        <rect x="140" y="967" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="235" y="983" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Semantic memory</text>
+                        <text x="235" y="1003" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Qdrant, Honcho, Zep, Neo4j</text>
+                        <text x="235" y="1021" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
+                        <text x="235" y="1039" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Needs: Postgres + Docker</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="Cross-agent memory" data-key="memCrossagent">
-                        <rect x="350" y="952" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="445" y="968" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cross-agent memory</text>
-                        <text x="445" y="988" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
-                        <text x="445" y="1004" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">MinIO (S3-compatible)</text>
-                        <text x="445" y="1022" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Multi-agent handoffs</text>
+                        <rect x="350" y="967" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="445" y="983" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cross-agent memory</text>
+                        <text x="445" y="1003" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
+                        <text x="445" y="1019" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">MinIO (S3-compatible)</text>
+                        <text x="445" y="1037" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Multi-agent handoffs</text>
                         </g>
-                        <text x="340" y="1110" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; configures this stack, builds MCP-Mesh</text>
+                        <text x="340" y="1125" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; configures this stack, builds MCP-Mesh</text>
                     </svg>
                     <div class="sd-tooltip" id="sdTooltip" hidden>
                         <div class="sd-tooltip-title" id="sdTooltipTitle"></div>
@@ -682,7 +682,7 @@
                     </div>
                 </div>
                 <p class="stack-diagram-hint">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="10"/><line x1="12" y1="14" x2="12" y2="10"/><line x1="12" y1="6" x2="12.01" y2="6"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="25" r="10"/><line x1="12" y1="29" x2="12" y2="25"/><line x1="12" y1="21" x2="12.01" y2="21"/></svg>
                     Hover any piece of the diagram for a quick note, or click it for the full explanation.
                 </p>
             </div>
@@ -2785,8 +2785,8 @@
                     body: "Q4 · lean: llama3.2:3b, phi3:mini — runs on modest hardware. Q8 · balanced: llama3.1:8b, qwen2.5:14b — the sweet spot for most single-GPU or unified-memory setups. FP16 · densest: gemma4:12b, llama3.1:70b — needs serious VRAM/RAM, best quality."
                 },
                 interfaces: {
-                    title: 'Interfaces — How People Reach It',
-                    body: "OpenWebUI is the standard browser chat UI. oterm is the leading terminal (TUI) client for people who live in a shell. Voice and Vision are optional input modalities layered on top when the use case calls for them. All of these talk to the Agent layer directly below, not straight to the raw model — that's what lets the same conversation invoke tools, recall memory, and stay policy-governed."
+                    title: 'Interfaces — Input & Output Channels',
+                    body: "Not every channel works the same way in both directions. Input interfaces are everywhere text, voice, or images can originate: OpenWebUI (browser chat), a TUI like oterm for people who live in a shell, Telegram and Discord bots, plus voice-to-text and vision-to-text for spoken or visual input. Output interfaces are where a response can actually be delivered back: OpenWebUI, TUI, Telegram, and Discord all support replies — voice and vision are input-only here, no text-to-speech or image generation wired up yet. All of these talk to the Agent layer directly below, not straight to the raw model — that's what lets the same conversation invoke tools, recall memory, and stay policy-governed."
                 },
                 storage: {
                     title: 'Storage',
