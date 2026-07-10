@@ -80,8 +80,40 @@
         .stack-diagram-wrap { margin: -12px 0 44px; }
         .stack-diagram-title { font-size: 1.15em; font-weight: 800; margin-bottom: 6px; }
         .stack-diagram-desc { color: #6a6478; max-width: 620px; font-size: 0.94em; margin-bottom: 20px; }
-        .stack-diagram-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 20px; padding: 24px; overflow-x: auto; box-shadow: 0 4px 20px rgba(20,20,26,0.06); }
+        .stack-diagram-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 20px; padding: 24px; overflow-x: auto; overflow-y: visible; box-shadow: 0 4px 20px rgba(20,20,26,0.06); position: relative; }
         .stack-diagram-card svg { display: block; min-width: 480px; }
+        .stack-diagram-hint { font-size: 0.82em; color: #6a6478; margin: 10px 0 0; display: flex; align-items: center; gap: 6px; }
+        .stack-diagram-hint svg { display: inline-block; width: 14px; height: 14px; min-width: 0; flex: none; }
+        .sd-hot { cursor: pointer; }
+        .sd-hot:hover { outline: 2px solid #a3ff3c; outline-offset: 3px; }
+        .sd-hot:focus { outline: none; }
+        .sd-hot:focus-visible { outline: 2px solid #6a34d6; outline-offset: 3px; }
+        .sd-tooltip {
+            position: absolute; pointer-events: none; z-index: 5; left: 0; top: 0;
+            background: #14141a; color: #fff; font-size: 12.5px; font-weight: 700;
+            padding: 7px 12px; border-radius: 8px; white-space: nowrap;
+            transform: translate(-50%, calc(-100% - 10px));
+        }
+        .sd-tooltip:after {
+            content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+            border: 5px solid transparent; border-top-color: #14141a;
+        }
+        .sd-modal-backdrop {
+            position: fixed; inset: 0; background: rgba(20,20,26,0.55); z-index: 200;
+            display: flex; align-items: center; justify-content: center; padding: 24px;
+        }
+        .sd-modal-backdrop[hidden] { display: none; }
+        .sd-modal {
+            background: #fff; border-radius: 18px; padding: 30px 32px; max-width: 440px; width: 100%;
+            position: relative; box-shadow: 0 20px 60px rgba(20,20,26,0.3);
+        }
+        .sd-modal h4 { margin: 0 0 12px; font-size: 1.2em; color: #14141a; padding-right: 24px; }
+        .sd-modal p { margin: 0; font-size: 0.96em; line-height: 1.6; color: #4a4458; }
+        .sd-modal-close {
+            position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%;
+            border: none; background: #f4f3f7; color: #14141a; font-size: 20px; line-height: 1; cursor: pointer;
+        }
+        .sd-modal-close:hover { background: #e6e3ee; }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .card { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(20,20,26,0.06); display: flex; flex-direction: column; }
         .card .dot { width: 38px; height: 38px; border-radius: 10px; background: #a3ff3c; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; flex-shrink: 0; }
@@ -439,7 +471,7 @@
                 <div class="stack-diagram-card">
                     <svg width="100%" viewBox="0 0 680 1090" role="img" aria-labelledby="stackDiagramTitle stackDiagramDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
                         <title id="stackDiagramTitle">Exploded view of a local AI stack</title>
-                        <desc id="stackDiagramDesc">An interfaces layer showing how people reach the system (OpenWebUI for chat, oterm for terminal use, voice, and vision), a serving platform layer, an AI model chip with an internal quantization density gauge, an agent layer with six orchestration framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) plus lightweight coding agents (Aider, Goose, Cline) and a storage spec panel, a Zero Trust Gateway providing MCP and API access control, audit, and policy enforcement that fronts real MCP servers and APIs such as email, meetings, workflows, and diagrams, and an agent memory section mapping four cloud memory patterns to local equivalents: in-context working memory via the model's own context window, short-term session memory via Redis and SQLite or Postgres, semantic memory via Qdrant, Honcho, Zep, and Neo4j, and cross-agent memory via Redis and MinIO for multi-agent handoffs — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
+                        <desc id="stackDiagramDesc">A serving platform layer (Ollama, LM Studio, vLLM), an AI model chip with an internal quantization density gauge and a system RAM sizing panel, an interfaces layer showing how people reach the system (OpenWebUI for chat, oterm for terminal use, voice, and vision) sitting directly above the agent layer it connects to, an agent layer with six orchestration framework options (OpenClaw, CrewAI, LangGraph, AutoGen, Hermes, Mem0) plus lightweight coding agents (Aider, Goose, Cline) and a storage spec panel, a Zero Trust Gateway providing MCP and API access control, audit, and policy enforcement that fronts real MCP servers and APIs such as email, meetings, workflows, and diagrams, and an agent memory section mapping four cloud memory patterns to local equivalents: in-context working memory via the model's own context window, short-term session memory via Redis and SQLite or Postgres, semantic memory via Qdrant, Honcho, Zep, and Neo4j, and cross-agent memory via Redis and MinIO for multi-agent handoffs — all enclosed in an M4Quick Studios security and efficiency overlay.</desc>
                         <defs>
                             <marker id="sdArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
                             <linearGradient id="sdChipGlow" x1="0" y1="0" x2="0" y2="1">
@@ -448,64 +480,75 @@
                             </linearGradient>
                         </defs>
                         <rect x="24" y="20" width="604" height="1050" rx="24" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="6 4"/>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Serving Platform layer" data-key="serving">
                         <rect x="120" y="40" width="440" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="340" y="62" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Interfaces &#183; how people reach it</text>
-                        <rect x="148" y="84" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="193" y="102" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">OpenWebUI</text>
-                        <rect x="246" y="84" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="291" y="102" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">oterm (TUI)</text>
-                        <rect x="344" y="84" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="389" y="102" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Voice</text>
-                        <rect x="442" y="84" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="487" y="102" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Vision</text>
+                        <text x="340" y="62" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Serving platform</text>
+                        <rect x="140" y="84" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="198" y="102" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Ollama</text>
+                        <rect x="282" y="84" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="340" y="102" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">LM Studio</text>
+                        <rect x="424" y="84" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="482" y="102" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">vLLM</text>
+                        </g>
                         <line x1="340" y1="140" x2="340" y2="160" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <rect x="120" y="160" width="440" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="340" y="182" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Serving platform</text>
-                        <rect x="140" y="204" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="198" y="222" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Ollama</text>
-                        <rect x="282" y="204" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="340" y="222" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">LM Studio</text>
-                        <rect x="424" y="204" width="116" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
-                        <text x="482" y="222" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">vLLM</text>
-                        <line x1="340" y1="260" x2="340" y2="280" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
-                        <text x="120" y="272" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">System RAM</text>
-                        <rect x="44" y="288" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="79" y="300" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">32GB</text>
-                        <rect x="122" y="288" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="157" y="300" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">64GB</text>
-                        <rect x="44" y="320" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="79" y="332" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">96GB</text>
-                        <rect x="122" y="320" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="157" y="332" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">128GB</text>
-                        <rect x="44" y="352" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="79" y="364" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">256GB</text>
-                        <rect x="122" y="352" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
-                        <text x="157" y="364" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">512GB</text>
-                        <text x="120" y="394" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">DDR4-3200 (min)</text>
-                        <text x="120" y="408" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">DDR5-6400+ (ideal)</text>
-                        <rect x="250" y="280" width="180" height="130" rx="16" fill="url(#sdChipGlow)" stroke="#a3ff3c" stroke-width="1.5"/>
-                        <text x="340" y="312" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#ffffff">AI model</text>
-                        <text x="340" y="330" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#ffffff" opacity="0.85">on-device memory</text>
-                        <rect x="260" y="352" width="48" height="22" rx="6" fill="#ffffff" opacity="0.22"/>
-                        <text x="284" y="363" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#ffffff">Q4</text>
-                        <rect x="316" y="352" width="48" height="22" rx="6" fill="#ffffff" opacity="0.5"/>
-                        <text x="340" y="363" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#ffffff">Q8</text>
-                        <rect x="372" y="352" width="48" height="22" rx="6" fill="#ffffff" opacity="0.9"/>
-                        <text x="396" y="363" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill="#1d1533">FP16</text>
-                        <text x="340" y="392" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#ffffff" opacity="0.7">quantization density</text>
-                        <rect x="474" y="268" width="14" height="14" rx="3" fill="url(#sdChipGlow)" opacity="0.28"/>
-                        <text x="496" y="275" font-size="12" fill="#6a6478" dominant-baseline="central">Q4 &#183; lean</text>
-                        <text x="496" y="293" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.2:3b</text>
-                        <text x="496" y="307" font-size="12" fill="#6a6478" dominant-baseline="central">phi3:mini</text>
-                        <rect x="474" y="324" width="14" height="14" rx="3" fill="url(#sdChipGlow)" opacity="0.55"/>
-                        <text x="496" y="331" font-size="12" fill="#6a6478" dominant-baseline="central">Q8 &#183; balanced</text>
-                        <text x="496" y="349" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.1:8b</text>
-                        <text x="496" y="363" font-size="12" fill="#6a6478" dominant-baseline="central">qwen2.5:14b</text>
-                        <rect x="474" y="380" width="14" height="14" rx="3" fill="url(#sdChipGlow)"/>
-                        <text x="496" y="387" font-size="12" fill="#6a6478" dominant-baseline="central">FP16 &#183; densest</text>
-                        <text x="496" y="405" font-size="12" fill="#6a6478" dominant-baseline="central">gemma4:12b</text>
-                        <text x="496" y="419" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.1:70b</text>
-                        <line x1="340" y1="410" x2="340" y2="440" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="System RAM sizing panel" data-key="ram">
+                        <text x="120" y="152" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">System RAM</text>
+                        <rect x="44" y="168" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="79" y="180" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">32GB</text>
+                        <rect x="122" y="168" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="157" y="180" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">64GB</text>
+                        <rect x="44" y="200" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="79" y="212" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">96GB</text>
+                        <rect x="122" y="200" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="157" y="212" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">128GB</text>
+                        <rect x="44" y="232" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="79" y="244" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">256GB</text>
+                        <rect x="122" y="232" width="70" height="24" rx="6" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="157" y="244" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">512GB</text>
+                        <text x="120" y="274" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">DDR4-3200 (min)</text>
+                        <text x="120" y="288" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">DDR5-6400+ (ideal)</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="AI model quantization gauge" data-key="model">
+                        <rect x="250" y="160" width="180" height="130" rx="16" fill="url(#sdChipGlow)" stroke="#a3ff3c" stroke-width="1.5"/>
+                        <text x="340" y="192" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#ffffff">AI model</text>
+                        <text x="340" y="210" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#ffffff" opacity="0.85">on-device memory</text>
+                        <rect x="260" y="232" width="48" height="22" rx="6" fill="#ffffff" opacity="0.22"/>
+                        <text x="284" y="243" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#ffffff">Q4</text>
+                        <rect x="316" y="232" width="48" height="22" rx="6" fill="#ffffff" opacity="0.5"/>
+                        <text x="340" y="243" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#ffffff">Q8</text>
+                        <rect x="372" y="232" width="48" height="22" rx="6" fill="#ffffff" opacity="0.9"/>
+                        <text x="396" y="243" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill="#1d1533">FP16</text>
+                        <text x="340" y="272" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#ffffff" opacity="0.7">quantization density</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Quantization tier model examples" data-key="quant">
+                        <rect x="474" y="148" width="14" height="14" rx="3" fill="url(#sdChipGlow)" opacity="0.28"/>
+                        <text x="496" y="155" font-size="12" fill="#6a6478" dominant-baseline="central">Q4 &#183; lean</text>
+                        <text x="496" y="173" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.2:3b</text>
+                        <text x="496" y="187" font-size="12" fill="#6a6478" dominant-baseline="central">phi3:mini</text>
+                        <rect x="474" y="204" width="14" height="14" rx="3" fill="url(#sdChipGlow)" opacity="0.55"/>
+                        <text x="496" y="211" font-size="12" fill="#6a6478" dominant-baseline="central">Q8 &#183; balanced</text>
+                        <text x="496" y="229" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.1:8b</text>
+                        <text x="496" y="243" font-size="12" fill="#6a6478" dominant-baseline="central">qwen2.5:14b</text>
+                        <rect x="474" y="260" width="14" height="14" rx="3" fill="url(#sdChipGlow)"/>
+                        <text x="496" y="267" font-size="12" fill="#6a6478" dominant-baseline="central">FP16 &#183; densest</text>
+                        <text x="496" y="285" font-size="12" fill="#6a6478" dominant-baseline="central">gemma4:12b</text>
+                        <text x="496" y="299" font-size="12" fill="#6a6478" dominant-baseline="central">llama3.1:70b</text>
+                        </g>
+                        <line x1="340" y1="290" x2="340" y2="320" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Interfaces layer" data-key="interfaces">
+                        <rect x="120" y="320" width="440" height="100" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
+                        <text x="340" y="342" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Interfaces &#183; how people reach it</text>
+                        <rect x="148" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="193" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">OpenWebUI</text>
+                        <rect x="246" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="291" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">oterm (TUI)</text>
+                        <rect x="344" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="389" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Voice</text>
+                        <rect x="442" y="364" width="90" height="36" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
+                        <text x="487" y="382" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Vision</text>
+                        </g>
+                        <line x1="340" y1="420" x2="340" y2="440" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Storage panel" data-key="storage">
                         <text x="115" y="452" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Storage</text>
                         <circle cx="58" cy="476" r="8" fill="none" stroke="#6a34d6" stroke-width="1"/>
                         <circle cx="58" cy="476" r="3" fill="#6a34d6"/>
@@ -516,6 +559,8 @@
                         <rect x="60" y="506" width="3" height="3" fill="#6a34d6"/>
                         <text x="72" y="504" font-size="12" fill="#6a6478" dominant-baseline="central">NVMe</text>
                         <text x="72" y="518" font-size="12" fill="#6a6478" dominant-baseline="central">3500+ MB/s rec</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Agent layer" data-key="agentLayer">
                         <rect x="200" y="440" width="360" height="174" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
                         <text x="380" y="460" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent layer &#183; orchestrates the model</text>
                         <rect x="220" y="482" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
@@ -537,7 +582,9 @@
                         <text x="380" y="586" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Goose</text>
                         <rect x="440" y="572" width="100" height="28" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="490" y="586" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cline</text>
+                        </g>
                         <line x1="340" y1="614" x2="340" y2="644" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="MCP servers, email and meetings" data-key="mcpLeft">
                         <text x="84" y="636" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">MCP servers</text>
                         <rect x="34" y="650" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="84" y="662" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Email</text>
@@ -545,9 +592,13 @@
                         <rect x="34" y="680" width="100" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="84" y="692" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Meetings</text>
                         <line x1="160" y1="692" x2="134" y2="692" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Zero Trust Gateway" data-key="gateway">
                         <rect x="160" y="644" width="360" height="64" rx="14" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="340" y="664" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Zero Trust Gateway</text>
                         <text x="340" y="684" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">MCP &amp; API access control, audit, policy</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="APIs, workflows and diagrams" data-key="mcpRight">
                         <text x="575" y="636" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#6a6478">&amp; APIs</text>
                         <rect x="528" y="650" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="575" y="662" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Workflows</text>
@@ -555,18 +606,24 @@
                         <rect x="528" y="680" width="94" height="24" rx="8" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="575" y="692" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Diagrams</text>
                         <line x1="520" y1="692" x2="528" y2="692" fill="none" stroke="#6a34d6" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sdArrow)"/>
+                        </g>
                         <line x1="340" y1="708" x2="340" y2="738" stroke="#d8d4e4" stroke-width="1" stroke-dasharray="4 3"/>
                         <rect x="120" y="738" width="440" height="284" rx="16" fill="#ffffff" stroke="#e6e3ee" stroke-width="1"/>
                         <text x="340" y="760" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#14141a">Agent memory &#8212; local equivalents</text>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="In-context working memory" data-key="memIncontext">
                         <rect x="140" y="774" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="235" y="790" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">In-context working</text>
                         <text x="235" y="814" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Context: Ollama/vLLM window</text>
                         <text x="235" y="834" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Summarize: LlamaIndex</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Short-term session memory" data-key="memShortterm">
                         <rect x="350" y="774" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="445" y="790" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Short-term session</text>
                         <text x="445" y="810" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
                         <text x="445" y="826" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">SQLite / Postgres</text>
                         <text x="445" y="844" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">LangGraph checkpointer</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Semantic memory" data-key="memSemantic">
                         <rect x="44" y="919" width="22" height="28" rx="2" fill="none" stroke="#6a34d6" stroke-width="1"/>
                         <line x1="48" y1="927" x2="62" y2="927" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
                         <line x1="48" y1="933" x2="62" y2="933" stroke="#6a34d6" stroke-width="0.5" opacity="0.6"/>
@@ -579,14 +636,29 @@
                         <text x="235" y="930" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Qdrant, Honcho, Zep, Neo4j</text>
                         <text x="235" y="948" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Ingests: docs, web, code</text>
                         <text x="235" y="966" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#6a6478">Needs: Postgres + Docker</text>
+                        </g>
+                        <g class="sd-hot" tabindex="0" role="button" aria-label="Cross-agent memory" data-key="memCrossagent">
                         <rect x="350" y="894" width="190" height="110" rx="10" fill="#f4f1fb" stroke="#6a34d6" stroke-width="1"/>
                         <text x="445" y="910" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="700" fill="#14141a">Cross-agent memory</text>
                         <text x="445" y="930" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">Redis (self-hosted)</text>
                         <text x="445" y="946" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#14141a">MinIO (S3-compatible)</text>
                         <text x="445" y="964" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">Multi-agent handoffs</text>
+                        </g>
                         <text x="340" y="1052" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#6a34d6">M4Quick Studios &#8212; efficiency &amp; safety overlay</text>
                     </svg>
+                    <div class="sd-tooltip" id="sdTooltip" hidden></div>
+                    <div class="sd-modal-backdrop" id="sdModalBackdrop" hidden>
+                        <div class="sd-modal" role="dialog" aria-modal="true" aria-labelledby="sdModalTitle">
+                            <button type="button" class="sd-modal-close" id="sdModalClose" aria-label="Close">&times;</button>
+                            <h4 id="sdModalTitle"></h4>
+                            <p id="sdModalBody"></p>
+                        </div>
+                    </div>
                 </div>
+                <p class="stack-diagram-hint">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Hover any piece of the diagram for a quick note, or click it for the full explanation.
+                </p>
             </div>
 
             <div class="cards-grid">
@@ -793,8 +865,8 @@
             <p class="block-desc">NIST launched an AI Agent Standards Initiative in February 2026, but its first formal deliverable isn't due until Q4 2026 — there's no finalized "NIST SP 800-207 for agents" to buy against yet. That doesn't mean the risk waits. Most organizations running AI agents today have no distinct agent identity, no enforced tool-permission scoping, and no audit trail of what their agents actually did.</p>
 
             <div class="agent-zt-note">
-                <strong>Where this model comes from:</strong> With no single finalized standard yet, this assessment is built by synthesizing the direction of NIST's AI Agent Standards Initiative, MITRE ATLAS's cataloged agent-specific attack techniques (tool invocation abuse, agent-as-command-and-control, prompt injection), Microsoft's Zero Trust for AI and Entra Agent ID framework, and the Model Context Protocol's authorization mechanics — into a practical reference you can assess your own environment against today. It's presented as our own working model, not an official standard, and it will be revised as NIST's Interoperability Profile and other guidance matures.
-                <div class="agent-zt-sources">Grounded in: NIST AI Agent Standards Initiative (Feb 2026) · MITRE ATLAS · Microsoft Zero Trust for AI / Entra Agent ID · Model Context Protocol authorization spec</div>
+                <strong>Where this comes from:</strong> With no single finalized standard yet, we follow the frameworks that already exist — NIST's AI Agent Standards Initiative, the Cloud Security Alliance's Agentic Trust Framework, MITRE ATLAS's cataloged agent-specific attack techniques (tool invocation abuse, agent-as-command-and-control, prompt injection), Microsoft's Zero Trust for AI and Entra Agent ID framework, and the Model Context Protocol's authorization mechanics — each in the areas it actually covers. Nobody yet publishes one finished agent maturity scale, so we synthesize their combined direction into the practical scorecard below. It's presented as our working synthesis, not an official standard, and it will be revised as NIST's Interoperability Profile and other guidance matures.
+                <div class="agent-zt-sources">Grounded in: NIST AI Agent Standards Initiative (Feb 2026) · Cloud Security Alliance Agentic Trust Framework (Feb 2026) · MITRE ATLAS · Microsoft Zero Trust for AI / Entra Agent ID · Model Context Protocol authorization spec</div>
             </div>
 
             <h3 class="subhead">The Real Frameworks, Mapped Side by Side</h3>
@@ -825,6 +897,14 @@
                             <td class="cov-none">By design, threat-side only: "no audit-trail control, no inventory mechanism, no enforcement of its own"</td>
                         </tr>
                         <tr>
+                            <th scope="row">CSA Agentic Trust Framework</th>
+                            <td class="cov-strong">Core focus — full identity chain per agent: who owns it, its purpose, its claimed capabilities</td>
+                            <td class="cov-strong">Calls for dynamic, intent-based access that adapts to agent actions in real time, not static grants</td>
+                            <td class="cov-partial">Treats agents as principals under existing identity governance — a governance model, not an auth protocol itself</td>
+                            <td class="cov-none">Identity-governance framework, not an input-defense catalog</td>
+                            <td class="cov-partial">Calls for continuous behavioral verification, not just initial auth — no concrete logging spec of its own</td>
+                        </tr>
+                        <tr>
                             <th scope="row">Microsoft Zero Trust for AI / Entra Agent ID</th>
                             <td class="cov-strong">Agent Registry + a managed identity per agent — reached GA in April 2026</td>
                             <td class="cov-partial">Scoped Access Packages with human-sponsor approval — real scoping, not yet dynamic per task step</td>
@@ -849,7 +929,7 @@
                 <span><span class="swatch" style="background:#c7c3d1;"></span>Out of scope — not what this framework is for</span>
                 <span><span class="swatch" style="background:#f0cd7e;"></span>Pending — direction set, nothing finalized</span>
             </div>
-            <p class="block-desc" style="margin: 4px 0 40px; font-size:0.92em;">The overlap is real: Entra Agent ID and the MCP spec independently solve Authorization &amp; Access — use them together rather than picking one. The gap is real too: nobody currently owns Audit &amp; Observability as a standard, and only ATLAS treats Prompt Injection as a first-class control area.</p>
+            <p class="block-desc" style="margin: 4px 0 40px; font-size:0.92em;">The overlap is real: CSA and Entra Agent ID both push hard on Agent Identity, and Entra Agent ID and the MCP spec independently solve Authorization &amp; Access — use the overlapping ones together rather than picking just one. The gap is real too: nobody currently owns Audit &amp; Observability as a hard standard, and only ATLAS treats Prompt Injection as a first-class control area. Our assessments follow all five of these — never claiming credit for ground they already cover.</p>
 
             <h3 class="subhead">How We Score an Environment (Our Synthesis, Not a Standard)</h3>
             <p class="block-desc" style="margin-bottom:16px;">Since none of the frameworks above ship a finished maturity scale of their own, this is the rubric we assess against — built by combining their coverage into one practical scorecard.</p>
@@ -2590,6 +2670,137 @@
             }
             wireTeaserCta('free-tools-laic-cta', 'laic-start');
             wireTeaserCta('free-tools-zta-cta', 'zta-start');
+        })();
+
+        (function () {
+            var card = document.querySelector('.stack-diagram-card');
+            var svg = card ? card.querySelector('svg') : null;
+            if (!svg) return;
+            var tooltip = document.getElementById('sdTooltip');
+            var backdrop = document.getElementById('sdModalBackdrop');
+            var modalTitle = document.getElementById('sdModalTitle');
+            var modalBody = document.getElementById('sdModalBody');
+            var modalClose = document.getElementById('sdModalClose');
+
+            var SD_INFO = {
+                serving: {
+                    title: 'Serving Platform',
+                    body: "The runtime that loads the model and exposes it over an API. Ollama is the fastest path to a working local setup. LM Studio adds a GUI for less technical setups. vLLM is the production-grade choice when you need high-throughput serving across multiple GPUs."
+                },
+                ram: {
+                    title: 'System RAM Sizing',
+                    body: "Sized to the model's weights plus quantization overhead, not just its disclosed parameter count. DDR4-3200 is the practical minimum; DDR5-6400+ meaningfully speeds up token generation on unified-memory and CPU-offload setups."
+                },
+                model: {
+                    title: 'AI Model — Quantization Density',
+                    body: "Quantization trades precision for memory footprint. Q4 (4-bit) is the leanest — fits more model on less RAM, with some quality loss. Q8 (8-bit) balances quality and size. FP16 is the densest and most accurate, but needs the most memory. The right quantization is as much a hardware decision as a model decision."
+                },
+                quant: {
+                    title: 'Model Examples by Quantization Tier',
+                    body: "Q4 · lean: llama3.2:3b, phi3:mini — runs on modest hardware. Q8 · balanced: llama3.1:8b, qwen2.5:14b — the sweet spot for most single-GPU or unified-memory setups. FP16 · densest: gemma4:12b, llama3.1:70b — needs serious VRAM/RAM, best quality."
+                },
+                interfaces: {
+                    title: 'Interfaces — How People Reach It',
+                    body: "OpenWebUI is the standard browser chat UI. oterm is the leading terminal (TUI) client for people who live in a shell. Voice and Vision are optional input modalities layered on top when the use case calls for them. All of these talk to the Agent layer directly below, not straight to the raw model — that's what lets the same conversation invoke tools, recall memory, and stay policy-governed."
+                },
+                storage: {
+                    title: 'Storage',
+                    body: "Model weights and vector indexes are read constantly during inference, so disk speed matters. A SATA SSD (250 MB/s) is a workable minimum for smaller models. NVMe (3500+ MB/s) is recommended once you're running larger models or multiple concurrent agents."
+                },
+                agentLayer: {
+                    title: 'Agent Layer — Orchestrates the Model',
+                    body: "This is the orchestration layer, not a knowledge layer — it decides which tool gets called, in what order, and how a task gets decomposed across model calls. OpenClaw, CrewAI, and LangGraph handle multi-step and multi-agent orchestration; AutoGen and Hermes add conversational multi-agent patterns; Mem0 layers memory management into the loop. Aider, Goose, and Cline are lighter single-purpose coding agents rather than full orchestration frameworks — included because they're often the first agent someone actually runs locally."
+                },
+                mcpLeft: {
+                    title: 'MCP Servers — Real Integrations',
+                    body: "Email and Meetings aren't hosted by the Gateway — they're real MCP servers (or direct APIs) that already exist. The Gateway fronts them; it doesn't reimplement them."
+                },
+                gateway: {
+                    title: 'Zero Trust Gateway',
+                    body: "Sits between the Agent layer and every MCP server or API it's allowed to reach. It handles access control (who or what can call which tool), audit (a record of every call), and policy (deny-by-default, scoped per agent) — the same job Entra Agent ID and the MCP auth spec do in the cloud world, applied locally."
+                },
+                mcpRight: {
+                    title: 'MCP Servers — Real Integrations',
+                    body: "Workflows and Diagrams aren't hosted by the Gateway either — same as Email and Meetings, these are real MCP servers or APIs the Gateway fronts and governs, not features it reimplements itself."
+                },
+                memIncontext: {
+                    title: 'In-Context Working Memory',
+                    body: "The model's own context window — whatever's in the current conversation. Cheapest and fastest, but it's gone once the window fills or the session ends. LlamaIndex handles summarization when a conversation needs to outlive the window."
+                },
+                memShortterm: {
+                    title: 'Short-Term Session Memory',
+                    body: "Survives a single session but not necessarily forever. Redis holds fast key-value session state; SQLite or Postgres persist it to disk. LangGraph's checkpointer is the standard way an agent framework plugs into this layer."
+                },
+                memSemantic: {
+                    title: 'Semantic Memory',
+                    body: "The local equivalent of a cloud vector database — durable, searchable knowledge the agent can recall across sessions. Qdrant is the most common self-hosted vector store; Honcho, Zep, and Neo4j add higher-level memory or graph abstractions on top. Ingests documents, web content, and code. Honcho specifically needs Postgres + Docker to run."
+                },
+                memCrossagent: {
+                    title: 'Cross-Agent Memory',
+                    body: "State that needs to move between multiple agents working the same task — a handoff, not just recall. Redis for fast shared state, MinIO (S3-compatible) for larger shared artifacts like files or generated documents."
+                }
+            };
+
+            function positionTooltip(g) {
+                var cardRect = card.getBoundingClientRect();
+                var gRect = g.getBoundingClientRect();
+                tooltip.style.left = (gRect.left - cardRect.left + gRect.width / 2 + card.scrollLeft) + 'px';
+                tooltip.style.top = (gRect.top - cardRect.top) + 'px';
+            }
+
+            function showTooltip(g) {
+                var info = SD_INFO[g.getAttribute('data-key')];
+                if (!info) return;
+                tooltip.textContent = info.title;
+                tooltip.hidden = false;
+                positionTooltip(g);
+            }
+
+            function hideTooltip() {
+                tooltip.hidden = true;
+            }
+
+            function openModal(key) {
+                var info = SD_INFO[key];
+                if (!info) return;
+                modalTitle.textContent = info.title;
+                modalBody.textContent = info.body;
+                backdrop.hidden = false;
+                modalClose.focus();
+            }
+
+            function closeModal() {
+                if (backdrop.hidden) return;
+                backdrop.hidden = true;
+            }
+
+            var hotspots = svg.querySelectorAll('.sd-hot');
+            for (var i = 0; i < hotspots.length; i++) {
+                (function (g) {
+                    var key = g.getAttribute('data-key');
+                    g.addEventListener('mouseenter', function () { showTooltip(g); });
+                    g.addEventListener('mousemove', function () { positionTooltip(g); });
+                    g.addEventListener('mouseleave', hideTooltip);
+                    g.addEventListener('focus', function () { showTooltip(g); });
+                    g.addEventListener('blur', hideTooltip);
+                    g.addEventListener('click', function () { hideTooltip(); openModal(key); });
+                    g.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            hideTooltip();
+                            openModal(key);
+                        }
+                    });
+                })(hotspots[i]);
+            }
+
+            modalClose.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', function (e) {
+                if (e.target === backdrop) closeModal();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && !backdrop.hidden) closeModal();
+            });
         })();
     </script>
 
