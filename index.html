@@ -82,6 +82,12 @@
         .stack-diagram-desc { color: #6a6478; max-width: 620px; font-size: 0.94em; margin-bottom: 20px; }
         .stack-diagram-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 20px; padding: 24px; overflow-x: auto; overflow-y: visible; box-shadow: 0 4px 20px rgba(20,20,26,0.06); position: relative; }
         .stack-diagram-card svg { display: block; min-width: 480px; }
+        .stack-diagram-card:after {
+            content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 36px;
+            background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.96));
+            border-radius: 0 20px 20px 0; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+        }
+        .stack-diagram-card.has-more-right:after { opacity: 1; }
         .stack-diagram-hint { font-size: 0.82em; color: #6a6478; margin: 10px 0 0; display: flex; align-items: center; gap: 6px; }
         .stack-diagram-hint svg { display: inline-block; width: 14px; height: 14px; min-width: 0; flex: none; }
         .sd-hot { cursor: pointer; }
@@ -683,8 +689,8 @@
                     </div>
                 </div>
                 <p class="stack-diagram-hint">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="43" r="10"/><line x1="12" y1="47" x2="12" y2="43"/><line x1="12" y1="39" x2="12.01" y2="39"/></svg>
-                    Hover any piece of the diagram for a quick note, or click it for the full explanation.
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a34d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Hover any piece for a quick note, or click it for the full explanation. Wider than your screen? Swipe or scroll sideways to see the rest.
                 </p>
             </div>
 
@@ -901,12 +907,12 @@
                     <div class="dot">&#128274;</div>
                     <h3>zt-mcp-gateway</h3>
                     <span class="mesh-status shipped">Shipped &amp; Verified</span>
-                    <p>Cryptographic identity and access control for MCP tool calls — every caller is a real, certificate-verified identity before a request ever reaches a tool.</p>
+                    <p>Cryptographic identity and access control for MCP tool calls. Every caller is certificate-verified before it reaches a tool.</p>
                     <ul class="card-features">
-                        <li>Self-hosted OpenZiti network with its own certificate authority — identity issuance never leaves your infrastructure</li>
-                        <li>Verified against the real binary: an authorized identity completes a real handshake and shows up in the gateway's own logs</li>
-                        <li>An unauthorized identity is rejected at the network layer — it never reaches the application, and leaves no log trace of the attempt</li>
-                        <li>Runs as an independent serving mode alongside your existing setup — adopting it doesn't require giving up any transport already in use</li>
+                        <li>Self-hosted OpenZiti network, own certificate authority — identity never leaves your infrastructure</li>
+                        <li>Verified live: an authorized identity completes a real handshake and appears in the gateway's logs</li>
+                        <li>An unauthorized identity is rejected at the network layer — never reaches the app, no log trace</li>
+                        <li>Runs alongside your existing setup — no need to give up any transport you already use</li>
                     </ul>
                     <div class="price-note">Fork of the Apache-2.0-licensed openziti/mcp-gateway</div>
                 </div>
@@ -914,11 +920,11 @@
                     <div class="dot">&#129513;</div>
                     <h3>Call-Fidelity Layer</h3>
                     <span class="mesh-status roadmap">Roadmap</span>
-                    <p>Corrects malformed or invalid tool calls before they leave the agent — a model-and-runtime-specific failure mode, distinct from access control.</p>
+                    <p>Corrects malformed tool calls before they leave the agent — a different failure mode than access control.</p>
                     <ul class="card-features">
-                        <li>Targets a real, reproduced problem: several local models fail to reliably format tool calls correctly, regardless of serving engine</li>
-                        <li>Confirmed directly against qwen2.5-coder and devstral, reproduced identically across Ollama, llama.cpp, and MLX</li>
-                        <li>Sits upstream of the gateway, at the inference layer — before a request is even valid MCP</li>
+                        <li>Targets a real problem: several local models fail to format tool calls correctly, on any serving engine</li>
+                        <li>Confirmed on qwen2.5-coder and devstral — reproduced on Ollama, llama.cpp, and MLX</li>
+                        <li>Sits upstream of the gateway — before a request is even valid MCP</li>
                     </ul>
                     <div class="price-note">Researched and scoped — no code written yet</div>
                 </div>
@@ -2756,6 +2762,18 @@
             }
             wireTeaserCta('free-tools-laic-cta', 'laic-start');
             wireTeaserCta('free-tools-zta-cta', 'zta-start');
+        })();
+
+        (function () {
+            var card = document.querySelector('.stack-diagram-card');
+            if (!card) return;
+            function updateFade() {
+                var hasMore = card.scrollLeft + card.clientWidth < card.scrollWidth - 2;
+                card.classList.toggle('has-more-right', hasMore);
+            }
+            card.addEventListener('scroll', updateFade);
+            window.addEventListener('resize', updateFade);
+            updateFade();
         })();
 
         (function () {
