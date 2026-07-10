@@ -196,6 +196,28 @@
         .zta-support-panel h4 { font-size: 1.02em; font-weight: 800; margin-bottom: 6px; }
         .zta-support-panel p { color: #4a4560; font-size: 0.9em; margin-bottom: 14px; }
 
+        #laic-print-area { display: none; }
+        @media print {
+            body * { visibility: hidden; }
+            #laic-print-area, #laic-print-area * { visibility: visible; }
+            #laic-print-area {
+                display: block; position: absolute; left: 0; top: 0; width: 100%;
+                padding: 24px; color: #14141a; font-family: system-ui, -apple-system, sans-serif;
+            }
+            #laic-print-area h1 { font-size: 22px; margin-bottom: 4px; }
+            #laic-print-area h2 { font-size: 15px; margin: 22px 0 10px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+            #laic-print-area .print-meta { color: #555; font-size: 12px; margin-bottom: 16px; line-height: 1.6; }
+            #laic-print-area pre {
+                background: #f4f4f4; border: 1px solid #ccc; padding: 10px; font-size: 11px;
+                white-space: pre-wrap; page-break-inside: avoid; border-radius: 4px;
+            }
+            #laic-print-area p { font-size: 12px; line-height: 1.5; margin: 4px 0; }
+            #laic-print-area .print-step { margin-bottom: 12px; page-break-inside: avoid; }
+            #laic-print-area .print-step-title { font-weight: 700; font-size: 12.5px; }
+            #laic-print-area .print-footer { margin-top: 30px; font-size: 11px; color: #555; border-top: 1px solid #ccc; padding-top: 10px; }
+            #laic-print-area svg { max-width: 100%; height: auto; }
+        }
+
         .zta-results h3 { font-size: 1.3em; font-weight: 800; margin-bottom: 6px; }
         .zta-results > p { color: #6a6478; margin-bottom: 26px; }
         .zta-pillar-row { display: grid; grid-template-columns: 160px 1fr 90px; gap: 14px; align-items: center; margin-bottom: 14px; }
@@ -1905,6 +1927,35 @@
                 return lines.join('\n');
             }
 
+            function buildPrintHtml(osKey, platform, model, buildListLines, diagramSvg, guideSteps, systemPrompt) {
+                var osLabel = osKey === 'mac' ? 'macOS' : 'Windows 11';
+                var html = '<h1>Local AI Build Guide</h1>';
+                html += '<div class="print-meta">Platform: ' + escapeXml(PLATFORM_LABELS[platform]) + ' &nbsp;|&nbsp; Model: ' + escapeXml(model.display) +
+                    ' &nbsp;|&nbsp; OS: ' + escapeXml(osLabel) + '<br>Prepared by M4Quick Studios — m4quickstudios.com</div>';
+
+                html += '<h2>Build List</h2>';
+                buildListLines.forEach(function (line) {
+                    html += '<div class="print-step"><span class="print-step-title">' + escapeXml(line.label) + ':</span> ' + escapeXml(line.detail) + '</div>';
+                });
+
+                html += '<h2>Setup Diagram</h2>' + diagramSvg;
+
+                html += '<h2>Step-by-Step Instructions</h2>';
+                guideSteps.forEach(function (s, i) {
+                    html += '<div class="print-step"><div class="print-step-title">' + (i + 1) + '. ' + escapeXml(s.title) + '</div>';
+                    s.lines.forEach(function (l) {
+                        html += l.type === 'code' ? ('<pre>' + escapeXml(l.text) + '</pre>') : ('<p>' + escapeXml(l.text) + '</p>');
+                    });
+                    html += '</div>';
+                });
+
+                html += '<h2>System Prompt</h2><pre>' + escapeXml(systemPrompt) + '</pre>';
+
+                html += '<div class="print-footer">Built with the free Local AI Build Configuration tool at m4quickstudios.com. Want a second pair of eyes, or want it deployed and secured for you? M4Quick Studios also offers Local AI Support Services if you’d rather have a person walk you through it.</div>';
+
+                return html;
+            }
+
             var current = 0;
             var answers = {};
             var answerOrder = [];
@@ -2087,21 +2138,23 @@
                     return lines.join('\n');
                 }
 
+                var buildListLines = [
+                    { label: 'Platform', detail: PLATFORM_LABELS[platform] },
+                    { label: 'Model', detail: model.display },
+                    { label: 'Hardware', detail: hwSpec },
+                    { label: 'Serving setup', detail: serving.name + ' — ' + serving.note }
+                ];
+                components.forEach(function (c) { buildListLines.push({ label: c.label, detail: c.detail }); });
+                if (memoryChoice !== 'none') buildListLines.push({ label: memory.label, detail: memory.detail });
+                buildListLines.push({ label: 'Data handling', detail: sensNote });
+                buildListLines.push({ label: 'Availability', detail: availNote });
+
                 var html = '<h3>Your Local AI Build List</h3><p>The exact products, the setup commands, a build diagram, and the system prompt — everything needed to build this yourself. Want it built, integrated, and secured instead? That’s what the button below is for.</p>';
 
                 html += '<div class="zta-spec-heading">Build list</div>';
-                html += '<div class="zta-focus"><strong>Platform</strong>' + PLATFORM_LABELS[platform] + '</div>';
-                html += '<div class="zta-focus"><strong>Model</strong>' + model.display + '</div>';
-                html += '<div class="zta-focus"><strong>Hardware</strong>' + hwSpec + '</div>';
-                html += '<div class="zta-focus"><strong>Serving setup</strong>' + serving.name + ' — ' + serving.note + '</div>';
-                components.forEach(function (c) {
-                    html += '<div class="zta-focus"><strong>' + c.label + '</strong>' + c.detail + '</div>';
+                buildListLines.forEach(function (line) {
+                    html += '<div class="zta-focus"><strong>' + line.label + '</strong>' + line.detail + '</div>';
                 });
-                if (memoryChoice !== 'none') {
-                    html += '<div class="zta-focus"><strong>' + memory.label + '</strong>' + memory.detail + '</div>';
-                }
-                html += '<div class="zta-focus"><strong>Data handling</strong>' + sensNote + '</div>';
-                html += '<div class="zta-focus"><strong>Availability</strong>' + availNote + '</div>';
 
                 html += '<div class="zta-spec-heading">Your setup, visually</div>';
                 html += '<div class="zta-diagram">' + diagramSvg + '</div>';
@@ -2117,7 +2170,10 @@
                     '<button type="button" class="zta-mode-btn' + (defaultOs === 'windows' ? ' active' : '') + '" data-os="windows" id="laic-os-windows">Windows 11</button>' +
                     '</div>';
                 html += '<div id="laic-guide-block">' + renderGuideHtml(guideSteps) + '</div>';
-                html += '<button type="button" class="btn btn-outline" id="laic-download-guide" style="margin-top:10px;">Download Setup Guide (.md)</button>';
+                html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">' +
+                    '<button type="button" class="btn btn-outline" id="laic-download-guide">Download Setup Guide (.md)</button>' +
+                    '<button type="button" class="btn btn-outline" id="laic-download-pdf">Download as PDF</button>' +
+                    '</div>';
 
                 if (installStep.shell) {
                     html += '<div class="zta-spec-heading">Full install script</div>';
@@ -2184,6 +2240,17 @@
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
+                });
+
+                document.getElementById('laic-download-pdf').addEventListener('click', function () {
+                    var printArea = document.getElementById('laic-print-area');
+                    if (!printArea) {
+                        printArea = document.createElement('div');
+                        printArea.id = 'laic-print-area';
+                        document.body.appendChild(printArea);
+                    }
+                    printArea.innerHTML = buildPrintHtml(currentOs, platform, model, buildListLines, diagramSvg, currentGuideSteps, systemPrompt);
+                    window.print();
                 });
 
                 if (installStep.shell) {
