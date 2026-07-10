@@ -1768,6 +1768,143 @@
                 return svg;
             }
 
+            function P(text) { return { type: 'p', text: text }; }
+            function CODE(text) { return { type: 'code', text: text }; }
+
+            function platformGuideSteps(osKey, platform, model) {
+                var isMac = osKey === 'mac';
+                var steps = [];
+                if (platform === 'ollama') {
+                    if (isMac) {
+                        steps.push({
+                            title: 'Install Ollama', lines: [
+                                P('Download the macOS app from ollama.com/download, open the .dmg, and drag Ollama into Applications. Open it once to finish setup.'),
+                                P('Already use Homebrew? This works too:'),
+                                CODE('brew install ollama')
+                            ]
+                        });
+                        steps.push({ title: 'Open Terminal', lines: [P('Press Cmd+Space, type “Terminal”, press Enter.')] });
+                    } else {
+                        steps.push({
+                            title: 'Install Ollama', lines: [
+                                P('Download OllamaSetup.exe from ollama.com/download and run it.'),
+                                P('Windows may show a “Windows protected your PC” warning — that’s normal for a new installer. Click “More info”, then “Run anyway.”')
+                            ]
+                        });
+                        steps.push({ title: 'Open PowerShell', lines: [P('Press the Windows key, type “PowerShell”, press Enter.')] });
+                    }
+                    steps.push({ title: 'Pull the model', lines: [P('This downloads it — a few minutes depending on your connection and the model size above.'), CODE('ollama pull ' + model.ollamaTag)] });
+                    steps.push({ title: 'Run it', lines: [P('You’re now chatting with it directly in ' + (isMac ? 'Terminal' : 'PowerShell') + '. Type a message and press Enter.'), CODE('ollama run ' + model.ollamaTag)] });
+                    steps.push({ title: 'Know the API address', lines: [P('Ollama also exposes an API at http://localhost:11434 — useful once you want to wire it into another app.')] });
+                } else if (platform === 'vllm') {
+                    if (isMac) {
+                        steps.push({
+                            title: 'A quick reality check first', lines: [
+                                P('vLLM’s speed comes from NVIDIA CUDA — Apple Silicon and Intel Macs don’t have that, so it would run CPU-only, which is slow and not really what vLLM is built for.'),
+                                P('Our honest recommendation: use Ollama or LM Studio on a Mac instead — same model, dramatically better performance. Switch your platform answer above for a Mac-appropriate build.')
+                            ]
+                        });
+                        steps.push({
+                            title: 'If you still want to proceed (CPU-only)', lines: [
+                                CODE('pip install vllm\nvllm serve ' + model.hfRepo + ' --host 0.0.0.0 --port 8000 --device cpu'),
+                                P('Expect noticeably slower responses than Ollama or LM Studio on the same machine.')
+                            ]
+                        });
+                    } else {
+                        steps.push({
+                            title: 'Install WSL2 (one-time)', lines: [
+                                P('vLLM needs a Linux environment. Open PowerShell as Administrator (right-click Start → “Terminal (Admin)”) and run:'),
+                                CODE('wsl --install -d Ubuntu-22.04'),
+                                P('Restart when prompted.')
+                            ]
+                        });
+                        steps.push({ title: 'Set up Ubuntu', lines: [P('Open “Ubuntu” from the Start menu and create a username/password when prompted.')] });
+                        steps.push({ title: 'Install vLLM inside Ubuntu', lines: [CODE('sudo apt update && sudo apt install -y python3-pip\npip install vllm')] });
+                        steps.push({ title: 'Start serving', lines: [CODE('vllm serve ' + model.hfRepo + ' --host 0.0.0.0 --port 8000')] });
+                        steps.push({
+                            title: 'Access it from Windows', lines: [
+                                P('WSL2 forwards localhost automatically — open http://localhost:8000 from a regular Windows browser or app.'),
+                                P('Note: this needs an NVIDIA GPU with WSL2 GPU passthrough (supported natively on Windows 11 with a recent NVIDIA driver). No NVIDIA GPU? Use Ollama or LM Studio instead.')
+                            ]
+                        });
+                    }
+                } else {
+                    steps.push({
+                        title: 'Install LM Studio', lines: [
+                            P('Download the ' + (isMac ? 'macOS' : 'Windows') + ' build from lmstudio.ai and ' + (isMac ? 'drag it into Applications.' : 'run the installer (Windows may show a SmartScreen warning — click “More info”, then “Run anyway.”)'))
+                        ]
+                    });
+                    steps.push({ title: 'Find your model', lines: [P('Open LM Studio, click the search icon, search for “' + model.hfRepo + '”, and click Download next to the recommended quantization.')] });
+                    steps.push({ title: 'Load it', lines: [P('Click the chat icon, select the model you just downloaded, click Load.')] });
+                    steps.push({ title: 'Start the local server', lines: [P('Click the “Local Server” tab (the ↔ icon), click “Start Server.” It’s now available at http://localhost:1234.')] });
+                }
+                return steps;
+            }
+
+            function buildFullGuideSteps(osKey, platform, model, memory) {
+                var steps = platformGuideSteps(osKey, platform, model);
+                if (memory.step) {
+                    var memLines = [P(memory.step.desc)];
+                    if (memory.step.command) memLines.push(CODE(memory.step.command));
+                    steps.push({ title: memory.step.title, lines: memLines });
+                }
+                steps.push({ title: 'Load the system prompt', lines: [P('Set the prompt below as the model’s system message — a Modelfile in Ollama, the system prompt field in LM Studio, or the system role in your API calls with vLLM.')] });
+                steps.push({ title: 'Keep it on your network', lines: [P('Don’t expose the server directly to the internet — keep it on your home or office network only.')] });
+                steps.push({ title: 'Try it out', lines: [P('Test it with a few real questions or tasks before relying on it for anything important.')] });
+                return steps;
+            }
+
+            function renderGuideHtml(steps) {
+                var html = '<ol class="process-list">';
+                steps.forEach(function (s) {
+                    html += '<li><strong>' + escapeXml(s.title) + '</strong>';
+                    s.lines.forEach(function (l) {
+                        if (l.type === 'code') {
+                            html += '<code class="zta-command">' + escapeXml(l.text) + '</code>';
+                        } else {
+                            html += '<span class="desc">' + escapeXml(l.text) + '</span>';
+                        }
+                    });
+                    html += '</li>';
+                });
+                html += '</ol>';
+                return html;
+            }
+
+            function renderGuideMarkdown(osKey, platform, model, steps, systemPrompt) {
+                var osLabel = osKey === 'mac' ? 'macOS' : 'Windows 11';
+                var lines = ['# Local AI Setup Guide — ' + osLabel, ''];
+                lines.push('Platform: ' + PLATFORM_LABELS[platform] + '  |  Model: ' + model.display);
+                lines.push('Prepared by M4Quick Studios — https://m4quickstudios.com');
+                lines.push('');
+                steps.forEach(function (s, i) {
+                    lines.push('## ' + (i + 1) + '. ' + s.title);
+                    lines.push('');
+                    s.lines.forEach(function (l) {
+                        if (l.type === 'code') {
+                            lines.push('```');
+                            lines.push(l.text);
+                            lines.push('```');
+                        } else {
+                            lines.push(l.text);
+                        }
+                        lines.push('');
+                    });
+                });
+                lines.push('---');
+                lines.push('');
+                lines.push('## System prompt');
+                lines.push('');
+                lines.push('```');
+                lines.push(systemPrompt);
+                lines.push('```');
+                lines.push('');
+                lines.push('---');
+                lines.push('');
+                lines.push('Built this and want a second pair of eyes, or want it deployed and secured for you? Reach out at https://m4quickstudios.com/#contact — M4Quick Studios also offers Local AI Support Services if you’d rather have a person walk you through it.');
+                return lines.join('\n');
+            }
+
             var current = 0;
             var answers = {};
             var answerOrder = [];
@@ -1970,17 +2107,22 @@
                 html += '<div class="zta-diagram">' + diagramSvg + '</div>';
                 html += '<button type="button" class="btn btn-outline" id="laic-download-diagram" style="margin-top:10px;">Download Diagram (.svg)</button>';
 
-                html += '<div class="zta-spec-heading">How you’d build this</div>';
-                html += '<ol class="process-list">';
-                steps.forEach(function (s) {
-                    html += '<li><strong>' + s.title + '</strong><span class="desc">' + s.desc + '</span>' + (s.command ? '<code class="zta-command">' + s.command.replace(/</g, '&lt;') + '</code>' : '') + '</li>';
-                });
-                html += '</ol>';
+                var defaultOs = navigator.platform && navigator.platform.indexOf('Mac') !== -1 ? 'mac' : 'windows';
+                var guideSteps = buildFullGuideSteps(defaultOs, platform, model, memory);
+
+                html += '<div class="zta-spec-heading">Step-by-step setup guide</div>';
+                html += '<p class="zta-spec-subnote">Copy-paste instructions for sitting down at a real machine and building this — take it with you as a document, or follow it right here.</p>';
+                html += '<div class="zta-mode-toggle" id="laic-os-toggle">' +
+                    '<button type="button" class="zta-mode-btn' + (defaultOs === 'mac' ? ' active' : '') + '" data-os="mac" id="laic-os-mac">macOS</button>' +
+                    '<button type="button" class="zta-mode-btn' + (defaultOs === 'windows' ? ' active' : '') + '" data-os="windows" id="laic-os-windows">Windows 11</button>' +
+                    '</div>';
+                html += '<div id="laic-guide-block">' + renderGuideHtml(guideSteps) + '</div>';
+                html += '<button type="button" class="btn btn-outline" id="laic-download-guide" style="margin-top:10px;">Download Setup Guide (.md)</button>';
 
                 if (installStep.shell) {
                     html += '<div class="zta-spec-heading">Full install script</div>';
                     html += '<p class="zta-spec-subnote">Automated runs straight through. Guided pauses and asks before each step.</p>';
-                    html += '<div class="zta-mode-toggle">' +
+                    html += '<div class="zta-mode-toggle" id="laic-script-toggle">' +
                         '<button type="button" class="zta-mode-btn active" data-mode="automated" id="laic-mode-automated">Automated</button>' +
                         '<button type="button" class="zta-mode-btn" data-mode="guided" id="laic-mode-guided">Guided</button>' +
                         '</div>';
@@ -2019,10 +2161,35 @@
                     URL.revokeObjectURL(url);
                 });
 
+                var currentOs = defaultOs;
+                var currentGuideSteps = guideSteps;
+                var guideBlock = document.getElementById('laic-guide-block');
+                var osButtons = [document.getElementById('laic-os-mac'), document.getElementById('laic-os-windows')];
+                osButtons.forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        osButtons.forEach(function (b) { b.classList.remove('active'); });
+                        btn.classList.add('active');
+                        currentOs = btn.dataset.os;
+                        currentGuideSteps = buildFullGuideSteps(currentOs, platform, model, memory);
+                        guideBlock.innerHTML = renderGuideHtml(currentGuideSteps);
+                    });
+                });
+                document.getElementById('laic-download-guide').addEventListener('click', function () {
+                    var blob = new Blob([renderGuideMarkdown(currentOs, platform, model, currentGuideSteps, systemPrompt)], { type: 'text/markdown' });
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'local-ai-setup-guide.md';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+
                 if (installStep.shell) {
                     var currentScriptMode = 'automated';
                     var scriptBlock = document.getElementById('laic-script-block');
-                    var modeButtons = document.querySelectorAll('.zta-mode-btn');
+                    var modeButtons = document.querySelectorAll('#laic-script-toggle .zta-mode-btn');
                     modeButtons.forEach(function (btn) {
                         btn.addEventListener('click', function () {
                             modeButtons.forEach(function (b) { b.classList.remove('active'); });
