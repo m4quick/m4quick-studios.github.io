@@ -968,6 +968,40 @@
             </div>
             <p class="block-desc" style="margin: 10px 0 0; font-size: 0.85em;">Source: <a href="https://netfoundry.io/docs/openziti/#deploy_an_overlay" target="_blank" rel="noopener">OpenZiti overlay deployment documentation</a>.</p>
 
+            <h3 class="subhead">Deploy It Yourself — the Real Steps</h3>
+            <p class="block-desc" style="margin-bottom:18px;">This is the actual sequence, not a simplified version — the same one we ran ourselves before writing a line of zt-mcp-gateway code. The identity and service names below (<code>hermes-orchestrator-agent</code>, <code>mcp-gateway-svc</code>) are the real ones from that verified test, not placeholders.</p>
+
+            <p class="zta-spec-heading">Step 1 — Stand up the controller and router</p>
+            <p class="block-desc" style="margin-bottom:6px;">The official Docker Compose quickstart stands up a controller (the control plane and built-in CA), an edge router reachable on port 3022 (3023 for WebSocket), and the Ziti Admin Console on port 8443 — zero cloud dependency.</p>
+            <code class="zta-command">git clone https://github.com/openziti/ziti.git
+cd ziti/quickstart/docker
+docker compose up -d</code>
+
+            <p class="zta-spec-heading" style="margin-top:26px;">Step 2 — Create and enroll an identity</p>
+            <p class="block-desc" style="margin-bottom:6px;">Every caller — human, service, or agent — needs its own identity before it can do anything. The controller issues a one-time token as a JWT (expires in 24 hours, single-use); enrolling it exchanges that token for a permanent, certificate-backed identity.</p>
+            <code class="zta-command">ziti edge create identity "hermes-orchestrator-agent" -o agent.jwt
+ziti edge enroll agent.jwt</code>
+
+            <p class="zta-spec-heading" style="margin-top:26px;">Step 3 — Define the service and who can reach it</p>
+            <p class="block-desc" style="margin-bottom:6px;">Deny-by-default is the whole point — nothing can reach the service until a policy explicitly grants it. A Dial policy says who can call in; a Bind policy says what's allowed to host the service.</p>
+            <code class="zta-command">ziti edge create service mcp-gateway-svc
+ziti edge create service-policy allow-dial Dial --identity-roles "@hermes-orchestrator-agent" --service-roles "@mcp-gateway-svc"
+ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gateway" --service-roles "@mcp-gateway-svc"</code>
+
+            <p class="zta-spec-heading" style="margin-top:26px;">Step 4 — Verify before you trust it</p>
+            <p class="block-desc" style="margin-bottom:6px;">Don't take the policy's word for it. The policy advisor shows exactly which identities can dial or bind which services, and whether a router actually connects them.</p>
+            <code class="zta-command">ziti edge policy-advisor services -q</code>
+
+            <p class="zta-spec-heading" style="margin-top:26px;">Step 5 — Point zt-mcp-gateway at the network</p>
+            <p class="block-desc" style="margin-bottom:6px;">This is the MCP-Mesh-specific piece — the third serving mode we added to the fork alongside zrok and Agora, so the gateway rides directly on your own OpenZiti network instead of a third-party tunnel.</p>
+            <code class="zta-command">mcp-bridge --network ziti \
+  --ziti-identity-file agent.json \
+  --ziti-service mcp-gateway-svc</code>
+
+            <div class="agent-zt-note" style="margin-top:22px;">
+                <strong>Known gap, stated plainly:</strong> the setup above is a real, working overlay — but the Docker Compose quickstart is dev/test infrastructure, not a production deployment. A real install needs its own decision on where the controller and routers actually run, sized to your environment and traffic. That sizing and placement work is what we handle as part of a build.
+            </div>
+
             <div class="section-cta">
                 <p>MCP-Mesh ships as part of a local AI build, not as self-serve software — the gateway is set up and tuned to your environment, not just installed.</p>
                 <a class="btn btn-dark" href="#contact" id="mcp-mesh-cta">Ask About MCP-Mesh</a>
