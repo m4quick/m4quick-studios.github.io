@@ -80,8 +80,8 @@
         .stack-diagram-wrap { margin: -12px 0 44px; }
         .stack-diagram-title { font-size: 1.15em; font-weight: 800; margin-bottom: 6px; }
         .stack-diagram-desc { color: #6a6478; max-width: 620px; font-size: 0.94em; margin-bottom: 20px; }
-        .stack-diagram-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 20px; padding: 24px; overflow-x: auto; overflow-y: visible; box-shadow: 0 4px 20px rgba(20,20,26,0.06); position: relative; }
-        .stack-diagram-card svg { display: block; min-width: 480px; }
+        .stack-diagram-card { background: #fff; border: 1px solid #e6e3ee; border-radius: 20px; padding: 24px; overflow-x: auto; overflow-y: visible; box-shadow: 0 4px 20px rgba(20,20,26,0.06); position: relative; -webkit-overflow-scrolling: touch; -webkit-transform: translateZ(0); transform: translateZ(0); }
+        .stack-diagram-card svg { display: block; min-width: 480px; -webkit-transform: translateZ(0); transform: translateZ(0); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
         .stack-diagram-card:after {
             content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 36px;
             background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.96));
