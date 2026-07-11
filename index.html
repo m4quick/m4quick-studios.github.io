@@ -312,6 +312,18 @@
         .mesh-status { display: inline-block; font-size: 0.72em; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin: 2px 0 14px; }
         .mesh-status.shipped { background: #eefde0; color: #2f6b0a; }
         .mesh-status.roadmap { background: #f4f3f7; color: #6a6478; }
+        .overlay-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 22px 0 8px; }
+        .overlay-col { border-radius: 16px; padding: 22px 24px; border: 1px solid #e6e3ee; }
+        .overlay-col.before { background: #fdeceb; }
+        .overlay-col.after { background: #eefde0; }
+        .overlay-col h4 { margin: 0 0 14px; font-size: 1.05em; font-weight: 800; }
+        .overlay-col.before h4 { color: #b3261e; }
+        .overlay-col.after h4 { color: #2f6b0a; }
+        .overlay-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+        .overlay-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92em; line-height: 1.45; color: #4a4458; }
+        .overlay-list li:before { flex: none; font-weight: 800; width: 16px; }
+        .overlay-col.before .overlay-list li:before { content: "\2715"; color: #b3261e; }
+        .overlay-col.after .overlay-list li:before { content: "\2713"; color: #2f6b0a; }
 
         /* ---------- pentest (dark ops) ---------- */
         .pentest-section {
@@ -929,6 +941,32 @@
                     <div class="price-note">Researched and scoped — no code written yet</div>
                 </div>
             </div>
+
+            <h3 class="subhead">What Changes Once the Overlay Is Deployed</h3>
+            <p class="block-desc" style="margin-bottom:8px;">We deploy OpenZiti as the Zero Trust security layer by default — the same identity and access-control model shown above, built on a mature, self-hosted overlay network rather than something built from scratch. If you already run an enterprise Zero Trust platform like Zscaler or AWS, this integrates with it rather than replacing it; the requirements below apply the same way no matter which platform actually enforces them.</p>
+            <div class="overlay-compare">
+                <div class="overlay-col before">
+                    <h4>Before — Traditional Exposure</h4>
+                    <ul class="overlay-list">
+                        <li>Services need open inbound ports to be reachable at all</li>
+                        <li>Reachability requires a public IP or port-forwarding</li>
+                        <li>Anything that finds the IP can attempt a connection — services are discoverable by internet scanners</li>
+                        <li>DNS resolves service names to real, attackable IP addresses</li>
+                        <li>East-west traffic inside the network is often allow-by-default</li>
+                    </ul>
+                </div>
+                <div class="overlay-col after">
+                    <h4>After — Overlay Deployed</h4>
+                    <ul class="overlay-list">
+                        <li>Zero inbound ports — nothing exposed to scan or exploit from outside</li>
+                        <li>No public IP exposure — services go "dark," invisible to reconnaissance</li>
+                        <li>Only a cryptographically verified identity can even attempt a connection</li>
+                        <li>Private DNS resolves service names to secure overlay tunnels, not real IPs</li>
+                        <li>East-west traffic is deny-by-default at both the network and OS firewall layers</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="block-desc" style="margin: 10px 0 0; font-size: 0.85em;">Source: <a href="https://netfoundry.io/docs/openziti/#deploy_an_overlay" target="_blank" rel="noopener">OpenZiti overlay deployment documentation</a>.</p>
 
             <div class="section-cta">
                 <p>MCP-Mesh ships as part of a local AI build, not as self-serve software — the gateway is set up and tuned to your environment, not just installed.</p>
@@ -2829,7 +2867,7 @@
                 },
                 gateway: {
                     title: 'Zero Trust Gateway — zt-mcp-gateway',
-                    body: "The shipped component of our MCP-Mesh product family — a fork of the Apache-2.0-licensed openziti/mcp-gateway. Every caller gets a real X.509 identity from a self-hosted certificate authority, with zero cloud dependency. Verified against the actual binary: an authorized identity completes a real handshake and shows up in the gateway's own logs; an unauthorized identity is rejected at the network layer before it ever reaches the application, with no log trace of the attempt. Entra ID second-factor login and tamper-evident audit logging are scoped but not yet built."
+                    body: "The shipped component of our MCP-Mesh product family — a fork of the Apache-2.0-licensed openziti/mcp-gateway. Every caller gets a real X.509 identity from a self-hosted certificate authority, with zero cloud dependency. Verified against the actual binary: an authorized identity completes a real handshake and shows up in the gateway's own logs; an unauthorized identity is rejected at the network layer before it ever reaches the application, with no log trace of the attempt. Entra ID second-factor login and tamper-evident audit logging are scoped but not yet built. OpenZiti is what we deploy by default, but the requirements it enforces are the same ones an enterprise Zero Trust platform like Zscaler or AWS would enforce — if you already run one, this integrates with it rather than replacing it."
                 },
                 mcpRight: {
                     title: 'MCP Servers — Real Integrations',
