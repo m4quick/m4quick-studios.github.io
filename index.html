@@ -942,8 +942,8 @@
                 </div>
             </div>
 
-            <h3 class="subhead">What Changes Once the Overlay Is Deployed</h3>
-            <p class="block-desc" style="margin-bottom:8px;">We deploy OpenZiti as the Zero Trust security layer by default — the same identity and access-control model shown above, built on a mature, self-hosted overlay network rather than something built from scratch. If you already run an enterprise Zero Trust platform like Zscaler or AWS, this integrates with it rather than replacing it; the requirements below apply the same way no matter which platform actually enforces them.</p>
+            <h3 class="subhead">What Changes Once Zero Trust Is Deployed</h3>
+            <p class="block-desc" style="margin-bottom:8px;">This describes the Zero Trust security layer itself, not any one vendor's implementation of it — the requirements below apply the same way no matter which platform actually enforces them. If you already run an enterprise Zero Trust platform like Zscaler or AWS, this integrates with it rather than replacing it.</p>
             <div class="overlay-compare">
                 <div class="overlay-col before">
                     <h4>Before — Traditional Exposure</h4>
@@ -969,7 +969,7 @@
             <p class="block-desc" style="margin: 10px 0 0; font-size: 0.85em;">Source: <a href="https://netfoundry.io/docs/openziti/#deploy_an_overlay" target="_blank" rel="noopener">OpenZiti overlay deployment documentation</a>.</p>
 
             <h3 class="subhead">Deploy It Yourself — the Real Steps</h3>
-            <p class="block-desc" style="margin-bottom:18px;">This is the actual sequence, not a simplified version — the same one we ran ourselves before writing a line of zt-mcp-gateway code. The identity and service names below (<code>hermes-orchestrator-agent</code>, <code>mcp-gateway-svc</code>) are the real ones from that verified test, not placeholders.</p>
+            <p class="block-desc" style="margin-bottom:18px;">This is the actual sequence, not a simplified version — the same one we ran ourselves before writing a line of zt-mcp-gateway code. The identity and service names below (<code>hermes-orchestrator-agent</code>, <code>mcp-gateway-svc</code>) are the real ones from that verified test, not placeholders. This is today's implementation, built on OpenZiti — the underlying pattern (identity, dial/bind policy, verification before the app ever sees a request) is what matters, and the specific commands below are ours to swap out if a better fit for a given customer's environment comes along.</p>
 
             <p class="zta-spec-heading">Step 1 — Stand up the controller and router</p>
             <p class="block-desc" style="margin-bottom:6px;">The official Docker Compose quickstart stands up a controller (the control plane and built-in CA), an edge router reachable on port 3022 (3023 for WebSocket), and the Ziti Admin Console on port 8443 — zero cloud dependency.</p>
