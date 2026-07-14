@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Small Business Box — Private AI on a Mac you own | M4Quick Studios</title>
+<meta name="description" content="A Mac Studio sized to run your business's private AI — team chat, answers from your documents, and tool integrations. Backed by Apple's warranty program for fast, professional hardware support.">
+<style>
+  :root{
+    --ink:#17151f; --muted:#615c73; --faint:#8b8698;
+    --accent:#6a34d6; --accent-ink:#5726c0; --accent-soft:#f4f0fd; --accent-line:#e4dbf8;
+    --green:#0f9d58; --green-soft:#eefaf2; --green-line:#c7ecd5;
+    --bg:#fbfbfd; --surface:#ffffff; --line:#ececf1; --hairline:#f2f1f6;
+    --hero1:#211836; --hero2:#140f24;
+    --r-sm:12px; --r:16px; --r-lg:22px;
+    --sh-sm:0 1px 2px rgba(23,21,31,.04), 0 1px 3px rgba(23,21,31,.05);
+    --sh-md:0 2px 6px rgba(23,21,31,.04), 0 14px 34px rgba(23,21,31,.07);
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px;}
+  a{color:inherit;}
+  svg{display:block;}
+  .ic{width:22px;height:22px;stroke:currentColor;stroke-width:1.75;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+  /* top bar */
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:20px 0;}
+  .brand{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.74rem;color:var(--accent);}
+  .back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-weight:600;font-size:.86rem;transition:color .2s var(--ease);}
+  .back:hover{color:var(--accent);}
+  .back .ic{width:16px;height:16px;}
+
+  /* eyebrow */
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+  .eyebrow::before{content:"";width:18px;height:1.5px;background:var(--accent);border-radius:2px;}
+
+  /* hero */
+  header.hero{position:relative;overflow:hidden;background:linear-gradient(150deg,var(--hero1),var(--hero2));color:#fff;border-radius:var(--r-lg);padding:56px 48px;margin-bottom:64px;box-shadow:var(--sh-md);}
+  header.hero::after{content:"";position:absolute;top:-40%;right:-10%;width:420px;height:420px;background:radial-gradient(circle,rgba(122,76,214,.4),transparent 62%);pointer-events:none;}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center;}
+  .hero .eyebrow{color:#c7b6f2;}
+  .hero .eyebrow::before{background:#c7b6f2;}
+  .hero h1{font-size:2.85rem;line-height:1.08;letter-spacing:-.022em;font-weight:800;margin-bottom:18px;}
+  .hero h1 .accent{color:#bda4f2;}
+  .hero .lead{font-size:1.12rem;line-height:1.62;color:#cfc9de;max-width:520px;margin-bottom:28px;}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap;}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:650;font-size:.95rem;padding:13px 22px;border-radius:var(--r-sm);text-decoration:none;transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .18s var(--ease);border:1px solid transparent;}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(106,52,214,.35);}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(106,52,214,.42);}
+  .btn-ghost{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.18);}
+  .btn-ghost:hover{background:rgba(255,255,255,.14);}
+  .btn .ic{width:18px;height:18px;stroke-width:2;}
+
+  /* hero spec plate */
+  .plate{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:24px;backdrop-filter:blur(6px);}
+  .plate-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+  .plate-dev{flex:none;width:52px;height:52px;border-radius:13px;background:linear-gradient(160deg,#3a2c5e,#241a3d);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:#c7b6f2;}
+  .plate-dev .ic{width:26px;height:26px;}
+  .plate-name{font-weight:750;font-size:1.02rem;color:#fff;line-height:1.25;}
+  .plate-sub{font-size:.8rem;color:#a99fc4;}
+  .plate-list{list-style:none;display:flex;flex-direction:column;gap:11px;}
+  .plate-list li{display:flex;justify-content:space-between;gap:12px;font-size:.86rem;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.09);}
+  .plate-list li:last-child{border-bottom:none;padding-bottom:0;}
+  .plate-list .k{color:#a99fc4;}
+  .plate-list .v{color:#fff;font-weight:600;text-align:right;}
+
+  /* sections */
+  section{margin-bottom:64px;}
+  h2{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;font-weight:800;margin-bottom:14px;}
+  .desc{color:var(--muted);font-size:1.06rem;line-height:1.65;max-width:680px;margin-bottom:28px;}
+  .desc a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent-line);}
+  .desc a:hover{border-color:var(--accent);}
+
+  /* warranty highlight */
+  .warranty{position:relative;background:var(--surface);border:1px solid var(--accent-line);border-radius:var(--r-lg);padding:40px;box-shadow:var(--sh-md);}
+  .warranty::before{content:"";position:absolute;left:0;top:26px;bottom:26px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),#9a6bec);}
+  .warranty h2{margin-bottom:12px;}
+  .warranty blockquote{margin:20px 0 26px;padding:18px 22px;background:var(--accent-soft);border-radius:var(--r);color:var(--ink);font-size:1.05rem;line-height:1.6;}
+  .warranty blockquote .mark{color:var(--accent);font-weight:800;font-size:1.3em;line-height:0;vertical-align:-.15em;margin-right:4px;}
+  .wcards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .wcard{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:22px;}
+  .wcard .badge{width:40px;height:40px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:13px;}
+  .wcard h4{font-size:1rem;font-weight:700;margin-bottom:5px;letter-spacing:-.01em;}
+  .wcard p{color:var(--muted);font-size:.92rem;line-height:1.55;}
+
+  /* tiers */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .tier{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;box-shadow:var(--sh-sm);transition:transform .2s var(--ease),box-shadow .2s var(--ease);}
+  .tier:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
+  .tier .badge{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:5px 11px;border-radius:100px;margin-bottom:14px;}
+  .tier h3{font-size:1.2rem;font-weight:750;letter-spacing:-.01em;margin-bottom:12px;}
+  .meter{display:flex;gap:5px;margin-bottom:14px;}
+  .meter i{height:6px;flex:1;border-radius:3px;background:var(--accent-line);}
+  .tier.t1 .meter i:nth-child(-n+1),.tier.t2 .meter i:nth-child(-n+2),.tier.t3 .meter i:nth-child(-n+3){background:var(--accent);}
+  .tier p{color:var(--muted);font-size:.95rem;line-height:1.58;}
+
+  .note{color:var(--muted);font-size:.98rem;margin-top:20px;}
+  .note a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent-line);}
+
+  /* what it runs */
+  .runs{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .run{display:flex;gap:15px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh-sm);}
+  .run .badge{flex:none;width:42px;height:42px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;}
+  .run h4{font-size:1.04rem;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;}
+  .run p{color:var(--muted);font-size:.93rem;line-height:1.55;}
+
+  .private{display:flex;gap:15px;align-items:flex-start;background:var(--green-soft);border:1px solid var(--green-line);border-radius:var(--r);padding:22px 24px;margin-top:16px;}
+  .private .badge{flex:none;width:42px;height:42px;border-radius:11px;background:#fff;color:var(--green);display:flex;align-items:center;justify-content:center;border:1px solid var(--green-line);}
+  .private h3{color:var(--green);font-size:1.05rem;font-weight:750;margin-bottom:3px;}
+  .private p{color:#356a49;font-size:.95rem;line-height:1.55;}
+
+  /* offer */
+  .offer{background:linear-gradient(150deg,var(--hero1),var(--hero2));color:#fff;border-radius:var(--r-lg);padding:48px 40px;text-align:center;box-shadow:var(--sh-md);}
+  .offer h2{color:#fff;margin-bottom:12px;}
+  .offer p{color:#cfc9de;font-size:1.08rem;line-height:1.62;max-width:600px;margin:0 auto 22px;}
+  .offer .fine{color:#948dab;font-size:.88rem;margin-top:18px;}
+
+  footer{padding:14px 0 48px;color:var(--muted);font-size:.9rem;}
+  footer b{color:var(--ink);}
+  .disclaim{font-size:.78rem;line-height:1.55;color:var(--faint);margin-top:12px;max-width:760px;}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr;gap:32px;}
+    .wcards,.tiers{grid-template-columns:1fr;}
+    .runs{grid-template-columns:1fr;}
+    .hero h1{font-size:2.2rem;}
+    header.hero,.offer{padding:36px 26px;}
+    .warranty{padding:28px 24px;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <span class="brand">M4Quick Studios</span>
+      <a class="back" href="/"><svg class="ic" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back to main site</a>
+    </div>
+
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">The main small-business product</span>
+          <h1>The Small Business Box — <span class="accent">private AI you own</span>, backed like enterprise gear.</h1>
+          <p class="lead">A Mac Studio, sized with exactly the memory and storage your business needs, running your own private AI right in your office. Your whole team uses it, your data never leaves the building, and the hardware is covered by Apple's warranty program.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="/#contact">Talk to me about a box <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="btn btn-ghost" href="/#free-tools">Size it free</a>
+          </div>
+        </div>
+        <div class="plate">
+          <div class="plate-top">
+            <div class="plate-dev"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="12" cy="16" r="1.4"/><path d="M8 8h8"/></svg></div>
+            <div><div class="plate-name">The Small Business Box</div><div class="plate-sub">Mac Studio · private AI, on-site</div></div>
+          </div>
+          <ul class="plate-list">
+            <li><span class="k">Memory</span><span class="v">Sized to your workload</span></li>
+            <li><span class="k">Storage</span><span class="v">Your documents + models</span></li>
+            <li><span class="k">Coverage</span><span class="v">Apple warranty-backed</span></li>
+            <li><span class="k">Your data</span><span class="v">Never leaves the office</span></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <span class="eyebrow">What it is</span>
+      <h2>One box. Your business's private AI. Nothing in the cloud.</h2>
+      <p class="desc">The Small Business Box is a Mac Studio, configured for your workload and pre-loaded with your own private AI: team chat, answers drawn from your own documents, and connections to the tools you already run. It sits in your office and it's yours — no monthly AI bills, no per-seat fees, no data leaving the building.</p>
+    </section>
+
+    <section>
+      <div class="warranty">
+        <span class="eyebrow">Backed by Apple</span>
+        <h2>Enterprise hardware support — without the enterprise contract.</h2>
+        <p class="desc" style="margin-bottom:4px;">The biggest worry with "one box in your office" is: what if it breaks? So every Small Business Box is a genuine Mac Studio, covered under Apple's warranty and AppleCare program. If hardware ever fails, Apple repairs or replaces it — quickly and professionally, through their nationwide service network.</p>
+        <blockquote><span class="mark">&ldquo;</span>This is the same fast, dependable hardware support I used to rely on from HP and IBM for enterprise clients — now from Apple, at small-business scale and cost.</blockquote>
+        <div class="wcards">
+          <div class="wcard"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div><h4>Backed by Apple, not a freelancer</h4><p>Your hardware guarantee comes from Apple's global service network — you're not betting the business on one person.</p></div>
+          <div class="wcard"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg></div><h4>Fast repair or replacement</h4><p>If something fails, it's handled quickly and professionally through Apple — minimal downtime for your team.</p></div>
+          <div class="wcard"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg></div><h4>Coverage you can extend</h4><p>AppleCare extends the warranty for years of protection — predictable, with no surprise repair bills.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Sized to you</span>
+      <h2>However much power your business needs.</h2>
+      <p class="desc">Memory decides how capable the assistant is and how many people can use it at once; storage holds your documents and models. We size the box to your business — here's the general shape:</p>
+      <div class="tiers">
+        <div class="tier t1">
+          <span class="badge">Starter</span>
+          <h3>Small team</h3>
+          <div class="meter"><i></i><i></i><i></i></div>
+          <p>Team chat and answers from your documents for a small staff. A great first step to prove it out.</p>
+        </div>
+        <div class="tier t2">
+          <span class="badge">Standard</span>
+          <h3>Growing business</h3>
+          <div class="meter"><i></i><i></i><i></i></div>
+          <p>Larger, sharper models, more people at once, and connections into several of your tools.</p>
+        </div>
+        <div class="tier t3">
+          <span class="badge">Heavy</span>
+          <h3>Busy / data-heavy</h3>
+          <div class="meter"><i></i><i></i><i></i></div>
+          <p>Bigger models, many concurrent users, and heavier document and automation workloads.</p>
+        </div>
+      </div>
+      <p class="note">Not sure which fits? The free <a href="/#free-tools">AI Builder Tool</a> recommends a size from your use case in a couple of minutes — or we scope it together.</p>
+    </section>
+
+    <section>
+      <span class="eyebrow">What it runs</span>
+      <h2>Everything your team needs from AI — privately.</h2>
+      <div class="runs">
+        <div class="run"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l.9-5.4A8 8 0 1 1 21 12z"/></svg></div><div><h4>Private team chat</h4><p>Everyone can use it — ask anything, draft emails and quotes, look things up. It runs on one box, so it answers in turn during busy spells. No per-seat fees.</p></div></div>
+        <div class="run"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 3v5h5M8 13h8M8 17h6"/></svg></div><div><h4>Answers from your documents</h4><p>Load your policies, pricing, and procedures — it answers from your material, so new hires stop interrupting a manager.</p></div></div>
+        <div class="run"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></div><div><h4>Connected to your tools</h4><p>Your CRM, scheduling, email, calendar — it can actually do things, not just chat.</p></div></div>
+        <div class="run"><div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 7-7"/><path d="M17 8h4v4"/></svg></div><div><h4>Grows with you</h4><p>Start small, add capacity and capabilities as you grow — and it keeps improving over time.</p></div></div>
+      </div>
+      <div class="private">
+        <div class="badge"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <div><h3>Private by default</h3><p>Customer records, employee data, financials — all of it stays on the box in your office. No cloud account, no third party holding your business's data.</p></div>
+      </div>
+    </section>
+
+    <div class="offer">
+      <h2>Let's size one for your business.</h2>
+      <p>We agree on the ROI target we're aiming for, I set up a box for a short trial, and your team uses it. If it's not tracking toward your number, it goes away — no commitment.</p>
+      <a class="btn btn-primary" href="/#contact">Talk to me about a box <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p class="fine">Genuine Mac Studio · Apple warranty-backed · no monthly fees · your data never leaves the building.</p>
+    </div>
+
+    <footer>
+      <b>M4Quick Studios</b> — private AI on hardware you own.
+      <div class="disclaim">Mac, Mac Studio, and AppleCare are trademarks of Apple Inc. M4Quick Studios is an independent provider and is not affiliated with or endorsed by Apple. Hardware is covered under Apple's standard warranty and any AppleCare plan purchased.</div>
+    </footer>
+  </div>
+</body>
+</html>

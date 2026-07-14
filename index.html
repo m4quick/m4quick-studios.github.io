@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="M4Quick Studios - AI-augmented cybersecurity consulting, penetration testing, architecture documentation, and IT automation tools from 20+ years of enterprise experience.">
-    <title>M4Quick Studios | Security Consulting, Pentesting & IT Tools</title>
+    <meta name="description" content="M4Quick Studios — private AI appliances: real AI (RAG, agents, automation) running entirely on Apple Silicon hardware you own. No cloud; your data never leaves the building.">
+    <title>M4Quick Studios | Private AI Appliances — Real AI on Hardware You Own</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -34,42 +34,46 @@
 
         /* ---------- hero ---------- */
         header.hero {
-            background: #1d1533;
+            position: relative; overflow: hidden;
+            background: linear-gradient(150deg,#211836,#140f24);
             color: #fff;
             margin: 0 20px;
             border-radius: 28px;
-            padding: 90px 60px;
+            padding: 84px 58px;
             display: grid;
-            grid-template-columns: 1.3fr 1fr;
-            gap: 40px;
+            grid-template-columns: 1.25fr 0.95fr;
+            gap: 44px;
             align-items: center;
         }
+        header.hero::after { content:""; position:absolute; top:-35%; right:-8%; width:460px; height:460px; background:radial-gradient(circle,rgba(122,76,214,.4),transparent 62%); pointer-events:none; }
+        header.hero > * { position: relative; z-index: 1; }
         .eyebrow-pill {
-            display: inline-block;
-            background: #a3ff3c;
-            color: #14141a;
-            font-size: 0.78em;
-            font-weight: 800;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(199,182,242,.14);
+            color: #c7b6f2;
+            border: 1px solid rgba(199,182,242,.24);
+            font-size: 0.76em;
+            font-weight: 700;
             padding: 6px 14px;
             border-radius: 100px;
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
+            letter-spacing: 0.4px;
+            margin-bottom: 22px;
         }
         header.hero h1 { font-size: 2.7em; font-weight: 800; line-height: 1.12; letter-spacing: -1px; }
         header.hero p.lead { margin-top: 20px; font-size: 1.1em; color: #c9c3dd; max-width: 480px; }
         .cta-group { margin-top: 34px; display: flex; gap: 14px; flex-wrap: wrap; }
-        .btn { padding: 15px 28px; border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 0.95em; border: none; cursor: pointer; display: inline-block; text-align: center; }
-        .btn-primary { background: #a3ff3c; color: #14141a; }
-        .btn-primary:hover { background: #8ee62f; }
-        .btn-ghost { border: 1px solid #4a4266; color: #fff; background: transparent; }
-        .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+        .btn { padding: 14px 24px; border-radius: 13px; text-decoration: none; font-weight: 650; font-size: 0.95em; border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-align: center; transition: transform .18s cubic-bezier(.2,.7,.2,1), box-shadow .18s, background .18s; }
+        .btn-primary { background: #6a34d6; color: #fff; box-shadow: 0 6px 18px rgba(106,52,214,.35); }
+        .btn-primary:hover { background: #5c2ac0; transform: translateY(-1px); box-shadow: 0 10px 24px rgba(106,52,214,.42); }
+        .btn-ghost { border: 1px solid rgba(255,255,255,.2); color: #fff; background: rgba(255,255,255,.06); }
+        .btn-ghost:hover { background: rgba(255,255,255,.13); }
         .btn-dark { background: #14141a; color: #fff; }
         .btn-dark:hover { background: #2a2438; }
         .btn-outline { background: transparent; color: #14141a; border: 1px solid #d8d4e4; }
         .btn-outline:hover { border-color: #6a34d6; background: #f4f1fb; }
-        .stat-card { background: #2a2145; border-radius: 20px; padding: 28px; }
-        .stat-card .n { font-size: 2.2em; font-weight: 800; color: #a3ff3c; }
-        .stat-card .l { color: #c9c3dd; font-size: 0.88em; margin-top: 4px; }
+        .stat-card { background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 22px 24px; }
+        .stat-card .n { font-size: 1.9em; font-weight: 800; color: #bda4f2; }
+        .stat-card .l { color: #a99fc4; font-size: 0.86em; margin-top: 4px; }
         .stat-card + .stat-card { margin-top: 16px; }
 
         /* ---------- light section shared ---------- */
@@ -91,7 +95,7 @@
         .stack-diagram-hint { font-size: 0.82em; color: #6a6478; margin: 10px 0 0; display: flex; align-items: center; gap: 6px; }
         .stack-diagram-hint svg { display: inline-block; width: 14px; height: 14px; min-width: 0; flex: none; }
         .sd-hot { cursor: pointer; }
-        .sd-hot:hover { outline: 2px solid #a3ff3c; outline-offset: 3px; }
+        .sd-hot:hover { outline: 2px solid #6a34d6; outline-offset: 3px; }
         .sd-hot:focus { outline: none; }
         .sd-hot:focus-visible { outline: 2px solid #6a34d6; outline-offset: 3px; }
         .sd-tooltip {
@@ -127,8 +131,10 @@
         }
         .sd-modal-close:hover { background: #e6e3ee; }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(20,20,26,0.06); display: flex; flex-direction: column; }
-        .card .dot { width: 38px; height: 38px; border-radius: 10px; background: #a3ff3c; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; flex-shrink: 0; }
+        .card { background: #fff; border: 1px solid #ececf1; border-radius: 16px; padding: 28px; box-shadow: 0 1px 2px rgba(23,21,31,.04), 0 1px 3px rgba(23,21,31,.05); display: flex; flex-direction: column; transition: transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 2px 6px rgba(23,21,31,.04), 0 14px 34px rgba(23,21,31,.07); }
+        .card .dot { width: 42px; height: 42px; border-radius: 11px; background: #f4f0fd; color: #6a34d6; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .card .dot svg { width: 21px; height: 21px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .card h3 { font-size: 1.15em; margin-bottom: 10px; }
         .card p { color: #6a6478; font-size: 0.92em; line-height: 1.6; }
         .card-features { list-style: none; margin: 14px 0; }
@@ -189,7 +195,7 @@
         .zta-intro p { color: #6a6478; margin-bottom: 22px; }
 
         .zta-progress-track { background: #e6e3ee; border-radius: 100px; height: 6px; overflow: hidden; margin-bottom: 8px; }
-        .zta-progress-fill { background: #a3ff3c; height: 100%; border-radius: 100px; transition: width 0.3s ease; width: 20%; }
+        .zta-progress-fill { background: #6a34d6; height: 100%; border-radius: 100px; transition: width 0.3s ease; width: 20%; }
         .zta-step-label { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.72em; letter-spacing: 0.05em; text-transform: uppercase; color: #6a34d6; margin-bottom: 24px; }
 
         .zta-question h3 { font-size: 1.25em; font-weight: 800; margin-bottom: 22px; max-width: 620px; }
@@ -219,7 +225,7 @@
 
         .zta-command {
             display: block; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.82em;
-            background: #14141a; color: #a3ff3c; padding: 10px 14px; border-radius: 8px;
+            background: #201a30; color: #c7b6f2; padding: 10px 14px; border-radius: 8px;
             margin: 8px 0 0; overflow-x: auto; white-space: pre;
         }
         .zta-results .process-list { margin-top: 14px; margin-bottom: 8px; }
@@ -439,31 +445,29 @@
     <nav class="site-nav">
         <a class="logo" href="#">M4Quick Studios</a>
         <div class="navlinks">
-            <a href="#local-ai">Local AI</a>
-            <a href="#mcp-mesh">MCP-Mesh</a>
-            <a href="#zero-trust-packages">Zero Trust</a>
-            <a href="#cybersecurity-consulting">Consulting</a>
-            <a href="#pentest">Pentest</a>
-            <a href="#architecture-docs">Docs</a>
+            <a href="#free-tools">Free tools</a>
+            <a href="#local-ai">The appliance</a>
+            <a href="#ai-examples">What it does</a>
+            <a href="#partner">Partner</a>
+            <a href="#how-i-work">How I work</a>
             <a href="#about">About</a>
-            <a href="#products">Products</a>
-            <a href="#contact" class="cta">Contact</a>
+            <a href="#contact" class="cta">Talk to me</a>
         </div>
     </nav>
 
     <header class="hero">
         <div>
-            <div class="eyebrow-pill">AI-augmented · Enterprise-grade</div>
-            <h1>Security clarity, real testing, and documentation — without the enterprise price tag.</h1>
-            <p class="lead">Zero Trust, identity, cloud, and offensive security — twenty years of hands-on enterprise experience, delivered at AI speed.</p>
+            <div class="eyebrow-pill">Private AI · On hardware you own</div>
+            <h1>Real AI, running entirely on a box in your office.</h1>
+            <p class="lead">RAG over your documents, agents, and automation — on a single Apple Silicon machine you own. No cloud, no per-token bills, and your data never leaves the building. Specced, built, and handed over running.</p>
             <div class="cta-group">
-                <a class="btn btn-primary" href="#contact">Book a discovery call</a>
-                <a class="btn btn-ghost" href="#products">See what I offer</a>
+                <a class="btn btn-primary" href="box.html">The Small Business Box →</a>
+                <a class="btn btn-ghost" href="#free-tools">Spec my build — free</a>
             </div>
         </div>
         <div>
-            <div class="stat-card"><div class="n">20+</div><div class="l">Years enterprise IT &amp; security</div></div>
-            <div class="stat-card"><div class="n">1–2wk</div><div class="l">Turnaround on a Quick Assessment</div></div>
+            <div class="stat-card"><div class="n">$0/mo</div><div class="l">No cloud or per-token bills — it runs local</div></div>
+            <div class="stat-card"><div class="n">20+ yrs</div><div class="l">Hands-on enterprise IT &amp; AI</div></div>
         </div>
     </header>
 
@@ -471,27 +475,27 @@
         <!-- ===== Free Tools Teaser ===== -->
         <section class="block" id="free-tools">
             <div class="eyebrow">Start here — free, no email required</div>
-            <h2 class="block-title">Two free tools. Real answers in under 5 minutes.</h2>
-            <p class="block-desc">Answer a few quick questions and get a real recommendation back immediately — a build configuration or a maturity score, not a lead-gen form in disguise.</p>
+            <h2 class="block-title">Start free. Spec your build in under 5 minutes.</h2>
+            <p class="block-desc">Answer a few quick questions and get a real private-AI build recommendation back immediately — model, components, and the box to run it on. Not a lead-gen form in disguise.</p>
             <div class="cards-grid">
                 <div class="card">
                     <h3>AI Builder Tool</h3>
-                    <p>Tell us your use case, hardware, team size, and data sensitivity — get a recommended model size, components, and serving setup back instantly.</p>
+                    <p>Tell us your use case, data sensitivity, and team size — get a recommended private-AI build back instantly: model size, components, and the box to run it on.</p>
                     <a class="btn btn-primary" href="#laic" id="free-tools-laic-cta">Get My Build Configuration</a>
                 </div>
                 <div class="card">
-                    <h3>Zero Trust Assessment Tool</h3>
-                    <p>Five plain-language questions, one per CISA pillar — see which pillars are weak and get a package recommendation.</p>
-                    <a class="btn btn-primary" href="#zta" id="free-tools-zta-cta">Take the Free Assessment</a>
+                    <h3>Prefer to just talk?</h3>
+                    <p>Tell me your use case and I'll spec the right private-AI build with you — the model, the components, and the box to run it on.</p>
+                    <a class="btn btn-primary" href="#contact">Talk to me</a>
                 </div>
             </div>
         </section>
 
         <!-- ===== Local AI Specialist ===== -->
         <section class="block" id="local-ai">
-            <div class="eyebrow">Private AI Infrastructure — Nothing Leaves Your Servers</div>
-            <h2 class="block-title">Your own AI stack, running entirely on your infrastructure.</h2>
-            <p class="block-desc">Scoped and built on your own servers — self-hosted models, your data, your network. Built from running this exact kind of stack in production, not a theoretical integration.</p>
+            <div class="eyebrow">The Appliance — Everything On One Box You Own</div>
+            <h2 class="block-title">A private AI appliance, on a single Apple Silicon machine.</h2>
+            <p class="block-desc">Self-hosted models, your data, your network — the whole stack on one machine that sits in your office. It starts on a single Apple Silicon box (the affordable, prove-it-in-your-office tier) and scales to more boxes or bigger iron when you outgrow it. Built from running this exact stack every day, not a theoretical integration.</p>
 
             <div class="stack-diagram-wrap">
                 <h3 class="stack-diagram-title">What's inside a full local AI build</h3>
@@ -537,7 +541,7 @@
                         <text x="120" y="288" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#6a6478">DDR5-6400+ (ideal)</text>
                         </g>
                         <g class="sd-hot" tabindex="0" role="button" aria-label="AI model quantization gauge" data-key="model">
-                        <rect x="250" y="160" width="180" height="130" rx="16" fill="url(#sdChipGlow)" stroke="#a3ff3c" stroke-width="1.5"/>
+                        <rect x="250" y="160" width="180" height="130" rx="16" fill="url(#sdChipGlow)" stroke="#6a34d6" stroke-width="1.5"/>
                         <text x="340" y="192" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#ffffff">AI model</text>
                         <text x="340" y="210" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#ffffff" opacity="0.85">on-device memory</text>
                         <rect x="260" y="232" width="48" height="22" rx="6" fill="#ffffff" opacity="0.22"/>
@@ -696,7 +700,7 @@
 
             <div class="cards-grid">
                 <div class="card">
-                    <div class="dot">🖥️</div>
+                    <div class="dot"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg></div>
                     <h3>Self-Hosted LLM Deployment</h3>
                     <p>A private model running on your own hardware, sized to what you actually have.</p>
                     <ul class="card-features">
@@ -708,7 +712,7 @@
                     <a class="btn btn-dark" href="#contact">Scope My LLM Deployment</a>
                 </div>
                 <div class="card">
-                    <div class="dot">🗂️</div>
+                    <div class="dot"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
                     <h3>Local Memory &amp; RAG</h3>
                     <p>Search over your own documents and data — indexed and queried entirely on your infrastructure.</p>
                     <ul class="card-features">
@@ -720,7 +724,7 @@
                     <a class="btn btn-dark" href="#contact">Scope My Local RAG Setup</a>
                 </div>
                 <div class="card">
-                    <div class="dot">🤖</div>
+                    <div class="dot"><svg viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9.5" cy="13" r="1"/><circle cx="14.5" cy="13" r="1"/></svg></div>
                     <h3>Agent &amp; Automation Tooling</h3>
                     <p>On-prem agents and automation, built the same way we build and run our own.</p>
                     <ul class="card-features">
@@ -732,7 +736,7 @@
                     <a class="btn btn-dark" href="#contact">Scope My Agent Build</a>
                 </div>
                 <div class="card">
-                    <div class="dot">📡</div>
+                    <div class="dot"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
                     <h3>Local Orchestration &amp; Monitoring</h3>
                     <p>Keep the whole stack observable and maintained without depending on any cloud dashboard.</p>
                     <ul class="card-features">
@@ -802,670 +806,133 @@
             </div>
         </section>
 
-        <!-- ===== Zero Trust Packages ===== -->
-        <section class="block" id="zero-trust-packages">
-            <div class="eyebrow">Prepackaged · Not Offered by Compliance-Template Vendors</div>
-            <h2 class="block-title">Zero Trust, packaged to fit your organization.</h2>
-            <p class="block-desc">Built on the same CSA-endorsed structure behind the industry's Zero Trust certification — NIST SP 800-207 architecture, the CISA Zero Trust Maturity Model's 5 pillars, and CSA's Software-Defined Perimeter spec. Pick your org size to jump to the right package.</p>
+        <!-- ===== Examples: tested local AI solutions ===== -->
+        <section class="block" id="ai-examples">
+            <div class="eyebrow">Examples · Local AI solutions we build</div>
+            <h2 class="block-title">Ontology-driven agents: the governance layer enterprise AI is missing.</h2>
+            <p class="block-desc">RAG retrieves the right <em>text</em>. MCP lets an agent <em>act</em>. An <strong>ontology layer</strong> gives it governed <em>meaning</em> — a semantic model of your business's concepts, relationships, and rules. The agent maps every request to your real definitions, enforces your constraints, records its assumptions, and asks a question instead of guessing when knowledge is missing.</p>
 
-            <div class="size-selector" id="size-selector">
-                <button class="size-btn" data-target="zt-starter">1–10 users</button>
-                <button class="size-btn" data-target="zt-foundation">11–100 users</button>
-                <button class="size-btn" data-target="zt-complete">101–500 users</button>
-                <button class="size-btn" data-target="zt-enterprise">500+ users</button>
+            <div class="stack-diagram-wrap">
+                <h3 class="stack-diagram-title">How an ontology-driven agent is wired</h3>
+                <p class="stack-diagram-desc">A reasoning agent that grounds meaning in an ontology, acts through your enterprise tools, and delegates to specialist agents — so its output is explainable and governed, not just fluent.</p>
+                <div class="stack-diagram-card">
+                    <svg width="100%" viewBox="0 0 760 610" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ontoTitle ontoDesc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+                        <title id="ontoTitle">Ontology-driven agent architecture</title>
+                        <desc id="ontoDesc">An Ontology Agent with seven functions — intent interpreter, semantic mapper, rule and constraint evaluator, gap detector, question generator, assumption recorder, and orchestrator — sitting on three pillars: an ontology / knowledge graph (classes, properties, rules, taxonomies), enterprise tools (API calls, search, validation, ticketing, workflow, forms), and specialist agents (compliance, product, customer, data steward, risk).</desc>
+                        <defs>
+                            <marker id="oaArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#a98fe0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+                        </defs>
+
+                        <!-- Ontology Agent core -->
+                        <rect x="210" y="16" width="340" height="262" rx="14" fill="#fff" stroke="#6a34d6" stroke-width="1.5"/>
+                        <path d="M224,16 H536 A14,14 0 0 1 550,30 V58 H210 V30 A14,14 0 0 1 224,16 Z" fill="#1d1533"/>
+                        <text x="380" y="42" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Ontology Agent</text>
+                        <text x="380" y="78" text-anchor="middle" fill="#6a6478" font-size="10.5">the reasoning &amp; governance layer</text>
+                        <g>
+                            <circle cx="232" cy="100" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="103.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">1</text><text x="250" y="104" font-size="12.5" fill="#14141a">Intent Interpreter</text>
+                            <circle cx="232" cy="124" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="127.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">2</text><text x="250" y="128" font-size="12.5" fill="#14141a">Semantic Mapper</text>
+                            <circle cx="232" cy="148" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="151.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">3</text><text x="250" y="152" font-size="12.5" fill="#14141a">Rule / Constraint Evaluator</text>
+                            <circle cx="232" cy="172" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="175.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">4</text><text x="250" y="176" font-size="12.5" fill="#14141a">Gap Detector</text>
+                            <circle cx="232" cy="196" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="199.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">5</text><text x="250" y="200" font-size="12.5" fill="#14141a">Question Generator</text>
+                            <circle cx="232" cy="220" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="223.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">6</text><text x="250" y="224" font-size="12.5" fill="#14141a">Assumption Recorder</text>
+                            <circle cx="232" cy="244" r="9" fill="#f3eefe" stroke="#6a34d6" stroke-width="1"/><text x="232" y="247.5" text-anchor="middle" font-size="10" font-weight="700" fill="#6a34d6">7</text><text x="250" y="248" font-size="12.5" fill="#14141a">Orchestrator</text>
+                        </g>
+
+                        <!-- connectors -->
+                        <path d="M380,278 V306" fill="none" stroke="#c9b8f0" stroke-width="1.5"/>
+                        <path d="M132,306 H628" fill="none" stroke="#c9b8f0" stroke-width="1.5"/>
+                        <path d="M132,306 V350" fill="none" stroke="#c9b8f0" stroke-width="1.5" marker-end="url(#oaArrow)"/>
+                        <path d="M380,306 V350" fill="none" stroke="#c9b8f0" stroke-width="1.5" marker-end="url(#oaArrow)"/>
+                        <path d="M628,306 V350" fill="none" stroke="#c9b8f0" stroke-width="1.5" marker-end="url(#oaArrow)"/>
+                        <text x="132" y="328" text-anchor="middle" font-size="10" fill="#6a6478">grounds meaning in</text>
+                        <text x="380" y="328" text-anchor="middle" font-size="10" fill="#6a6478">acts through</text>
+                        <text x="628" y="328" text-anchor="middle" font-size="10" fill="#6a6478">delegates to</text>
+
+                        <!-- Pillar 1: Ontology / Knowledge Graph -->
+                        <rect x="20" y="354" width="224" height="236" rx="12" fill="#fff" stroke="#d9ccf5" stroke-width="1.5"/>
+                        <path d="M32,354 H232 A12,12 0 0 1 244,366 V400 H20 V366 A12,12 0 0 1 32,354 Z" fill="#6a34d6"/>
+                        <text x="132" y="378" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Ontology /</text>
+                        <text x="132" y="393" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Knowledge Graph</text>
+                        <circle cx="38" cy="424" r="3.2" fill="#6a34d6"/><text x="50" y="428" font-size="12.5" fill="#14141a">Classes</text>
+                        <circle cx="38" cy="450" r="3.2" fill="#6a34d6"/><text x="50" y="454" font-size="12.5" fill="#14141a">Properties</text>
+                        <circle cx="38" cy="476" r="3.2" fill="#6a34d6"/><text x="50" y="480" font-size="12.5" fill="#14141a">Rules</text>
+                        <circle cx="38" cy="502" r="3.2" fill="#6a34d6"/><text x="50" y="506" font-size="12.5" fill="#14141a">Taxonomies</text>
+
+                        <!-- Pillar 2: Enterprise Tools -->
+                        <rect x="268" y="354" width="224" height="236" rx="12" fill="#fff" stroke="#b6e3ef" stroke-width="1.5"/>
+                        <path d="M280,354 H480 A12,12 0 0 1 492,366 V400 H268 V366 A12,12 0 0 1 280,354 Z" fill="#0891b2"/>
+                        <text x="380" y="384" text-anchor="middle" fill="#fff" font-size="13.5" font-weight="700">Enterprise Tools</text>
+                        <circle cx="286" cy="424" r="3.2" fill="#0891b2"/><text x="298" y="428" font-size="12.5" fill="#14141a">API calls</text>
+                        <circle cx="286" cy="450" r="3.2" fill="#0891b2"/><text x="298" y="454" font-size="12.5" fill="#14141a">Search</text>
+                        <circle cx="286" cy="476" r="3.2" fill="#0891b2"/><text x="298" y="480" font-size="12.5" fill="#14141a">Validation</text>
+                        <circle cx="286" cy="502" r="3.2" fill="#0891b2"/><text x="298" y="506" font-size="12.5" fill="#14141a">Ticketing</text>
+                        <circle cx="286" cy="528" r="3.2" fill="#0891b2"/><text x="298" y="532" font-size="12.5" fill="#14141a">Workflow</text>
+                        <circle cx="286" cy="554" r="3.2" fill="#0891b2"/><text x="298" y="558" font-size="12.5" fill="#14141a">Forms</text>
+
+                        <!-- Pillar 3: Specialist Agents -->
+                        <rect x="516" y="354" width="224" height="236" rx="12" fill="#fff" stroke="#bfe8cd" stroke-width="1.5"/>
+                        <path d="M528,354 H728 A12,12 0 0 1 740,366 V400 H516 V366 A12,12 0 0 1 528,354 Z" fill="#16a34a"/>
+                        <text x="628" y="384" text-anchor="middle" fill="#fff" font-size="13.5" font-weight="700">Specialist Agents</text>
+                        <circle cx="534" cy="424" r="3.2" fill="#16a34a"/><text x="546" y="428" font-size="12.5" fill="#14141a">Compliance</text>
+                        <circle cx="534" cy="450" r="3.2" fill="#16a34a"/><text x="546" y="454" font-size="12.5" fill="#14141a">Product</text>
+                        <circle cx="534" cy="476" r="3.2" fill="#16a34a"/><text x="546" y="480" font-size="12.5" fill="#14141a">Customer</text>
+                        <circle cx="534" cy="502" r="3.2" fill="#16a34a"/><text x="546" y="506" font-size="12.5" fill="#14141a">Data Steward</text>
+                        <circle cx="534" cy="528" r="3.2" fill="#16a34a"/><text x="546" y="532" font-size="12.5" fill="#14141a">Risk</text>
+                    </svg>
+                </div>
             </div>
 
+            <div class="cards-grid" style="margin-top:28px;">
+                <div class="card">
+                    <h3>Why it matters</h3>
+                    <p>The same term means different things across CRM, billing, and support. An ontology pins one definition, so the agent reasons over <em>your</em> concepts — not a guess pulled from raw text.</p>
+                </div>
+                <div class="card">
+                    <h3>Governed &amp; explainable</h3>
+                    <p>Every action traces back to an ontology concept and an explicit rule. When knowledge is missing, the Gap Detector raises a question and the Assumption Recorder logs what it assumed — an audit trail by design.</p>
+                </div>
+                <div class="card">
+                    <h3>How we'd build it</h3>
+                    <p>The knowledge graph and rule layer wire into your agents via MCP, on your own infrastructure — the same local-AI stack above, with a semantic control layer on top.</p>
+                </div>
+            </div>
+
+            <p class="block-desc" style="margin-top:22px; font-size:0.85em; color:#6a6478;">Our take on the ontology-driven agent pattern — an emerging approach in enterprise AI. Further reading: Nayan Paul, <a href="https://medium.com/@nayan.j.paul/ontology-driven-agents-the-missing-layer-for-enterprise-ai-6d4b9182ee2b" target="_blank" rel="noopener" style="color:#6a34d6;">"Ontology-Driven Agents: The Missing Layer for Enterprise AI."</a> M4Quick Studios is independent and unaffiliated.</p>
+        </section>
+
+        <!-- ===== Partner / complementary positioning ===== -->
+        <section class="block" id="partner">
+            <div class="eyebrow">For AI teams, consultancies &amp; MSPs</div>
+            <h2 class="block-title">The on-prem piece, when the cloud isn't an option.</h2>
+            <p class="block-desc">Most great AI work runs in the cloud — and some of it can't. When a client in a regulated or privacy-sensitive space says <em>"this data can't leave our building,"</em> that's where I come in. I build the private, on-premise piece — a self-contained AI appliance on hardware they own — and hand it back running. I'm not trying to own the engagement; I'm the specialist you bring in for the part that has to stay local.</p>
             <div class="cards-grid">
-                <div class="card zt-package" id="zt-starter">
-                    <div class="size-badge">1–10 users · Micro</div>
-                    <div class="dot">🔰</div>
-                    <h3>Zero Trust Starter</h3>
-                    <p>You don't need an enterprise security program — you need the two things that stop most breaches at this size.</p>
-                    <ul class="card-features">
-                        <li>Policy Set: Identity + Devices pillars only</li>
-                        <li>Quick-reference maturity checklist</li>
-                        <li>Traditional → Initial maturity, the realistic jump at this size</li>
-                    </ul>
-                    <div class="ai-note"><strong>Scope:</strong> Intentionally lightweight — no Procedures or Architecture tier yet.</div>
-                    <a class="btn btn-dark" href="#contact">Start with Zero Trust Starter</a>
-                </div>
-
-                <div class="card zt-package" id="zt-foundation">
-                    <div class="size-badge">11–100 users · Small Business</div>
-                    <div class="dot">🛡️</div>
-                    <h3>Zero Trust Foundation</h3>
-                    <p>Full coverage across all 5 CISA pillars — sized for a company running its own IT without a dedicated security lead.</p>
-                    <ul class="card-features">
-                        <li>Policy Set + Procedures, all 5 pillars</li>
-                        <li>Identity, Devices, Networks, Applications &amp; Workloads, Data</li>
-                        <li>Zero Trust Maturity Scorecard (Traditional → Advanced)</li>
-                    </ul>
-                    <div class="ai-note"><strong>Need more?</strong> Ties directly into Zero Trust Readiness &amp; Roadmaps consulting for anything that needs a human.</div>
-                    <a class="btn btn-dark" href="#contact">Start with Zero Trust Foundation</a>
-                </div>
-
-                <div class="card zt-package" id="zt-complete">
-                    <div class="size-badge">101–500 users · Mid-Market</div>
-                    <div class="dot">🏗️</div>
-                    <h3>Zero Trust Complete</h3>
-                    <p>Everything in Foundation, plus the cross-cutting capabilities and architecture diagrams mapped to your environment.</p>
-                    <ul class="card-features">
-                        <li>Full ladder: Policy, Procedures, Scorecard, Architecture Diagrams</li>
-                        <li>All 5 pillars + 3 cross-cutting capabilities (Visibility &amp; Analytics, Automation &amp; Orchestration, Governance)</li>
-                        <li>Maturity scored through Optimal</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> architecture diagrams generated from your current environment inputs.</div>
-                    <a class="btn btn-dark" href="#contact">Start with Zero Trust Complete</a>
-                </div>
-
-                <div class="card zt-package enterprise" id="zt-enterprise">
-                    <div class="size-badge">500+ users · Enterprise</div>
-                    <div class="dot">🏛️</div>
-                    <h3>Zero Trust Enterprise</h3>
-                    <p>The Complete package plus CSA's Software-Defined Perimeter technical architecture — for real network-level enforcement, not just policy.</p>
-                    <ul class="card-features">
-                        <li>Everything in Complete</li>
-                        <li>SDP architecture specification and implementation guidance</li>
-                        <li>Custom framework mapping for multi-standard environments</li>
-                    </ul>
-                    <div class="ai-note"><strong>Where this hands off:</strong> start here, then talk to us — this tier is where the package naturally leads into a scoped consulting engagement.</div>
-                    <a class="btn btn-dark" href="#contact">Talk to Us About Enterprise</a>
-                </div>
-            </div>
-
-            <div class="zta" id="zta">
-                <div class="zta-intro" id="zta-intro">
-                    <h3>Not sure where your gaps actually are?</h3>
-                    <p>Answer 5 quick questions about how your organization handles identity, devices, networks, applications, and data — takes about 2 minutes, no email required to see your results.</p>
-                    <button class="btn btn-dark" id="zta-start" type="button">Take the Zero Trust Assessment</button>
-                </div>
-
-                <div class="zta-quiz" id="zta-quiz" hidden>
-                    <div class="zta-progress-track"><div class="zta-progress-fill" id="zta-progress-fill"></div></div>
-                    <div class="zta-step-label" id="zta-step-label">Question 1 of 5</div>
-                    <div class="zta-question" id="zta-question"></div>
-                    <button class="zta-back" id="zta-back" type="button" hidden>&larr; Back</button>
-                </div>
-
-                <div class="zta-results" id="zta-results" hidden></div>
+                <div class="card"><h3>Complementary, not competitive</h3><p>You keep the client and the roadmap. I deliver the on-prem AI capability that would otherwise stall the project.</p></div>
+                <div class="card"><h3>Regulated-industry fit</h3><p>Finance, insurance, healthcare, legal — anywhere data residency, air-gaps, or "no cloud" rules apply.</p></div>
+                <div class="card"><h3>Scoped &amp; handed over</h3><p>Specced, built, tested, and delivered running — with the box, the models, and the docs. No lock-in to me.</p></div>
             </div>
         </section>
 
-        <!-- ===== MCP-Mesh ===== -->
-        <section class="block" id="mcp-mesh">
-            <div class="eyebrow">MCP-Mesh — Modular Agent Risk Reduction</div>
-            <h2 class="block-title">Two ways an AI agent can go wrong. Two separate products to fix them.</h2>
-            <p class="block-desc">Every AI agent that can call tools has two separate, unrelated failure modes: it might call the wrong thing, or the wrong agent might get to call anything at all. MCP-Mesh treats these as two products, not one, because they break at two different points in the request pipeline — a customer with only one of the two problems shouldn't have to buy a bundle to fix it.</p>
-
-            <div class="agent-zt-note">
-                <strong>Where each piece sits:</strong> Malformed-call correction happens before a request is even valid MCP. Access control happens after — deciding whether a well-formed request from a given identity is allowed to reach the tool at all. The dashed node in the stack diagram above marks the part of the pipeline that isn't built yet; everything solid has been verified against a real binary.
-                <div class="agent-zt-sources">Pipeline: raw model output &rarr; call-fidelity layer &rarr; valid MCP request &rarr; zt-mcp-gateway &rarr; the tool</div>
-            </div>
-
+        <!-- ===== How I work (90-day ROI) ===== -->
+        <section class="block" id="how-i-work">
+            <div class="eyebrow">How I work</div>
+            <h2 class="block-title">Scoped to a number. Tracked the whole way.</h2>
+            <p class="block-desc">Before I build anything, we agree on what a win looks like for your business — one concrete number: hours saved a week, faster customer response, fewer errors, quicker onboarding. Then it's tracked from day one, so it's a measured decision, not a leap of faith.</p>
             <div class="cards-grid">
-                <div class="card">
-                    <div class="dot">&#128274;</div>
-                    <h3>zt-mcp-gateway</h3>
-                    <span class="mesh-status shipped">Shipped &amp; Verified</span>
-                    <p>Cryptographic identity and access control for MCP tool calls. Every caller is certificate-verified before it reaches a tool.</p>
-                    <ul class="card-features">
-                        <li>Self-hosted OpenZiti network, own certificate authority — identity never leaves your infrastructure</li>
-                        <li>Verified live: an authorized identity completes a real handshake and appears in the gateway's logs</li>
-                        <li>An unauthorized identity is rejected at the network layer — never reaches the app, no log trace</li>
-                        <li>Runs alongside your existing setup — no need to give up any transport you already use</li>
-                    </ul>
-                    <div class="price-note">Fork of the Apache-2.0-licensed openziti/mcp-gateway</div>
-                </div>
-                <div class="card">
-                    <div class="dot">&#129513;</div>
-                    <h3>Call-Fidelity Layer</h3>
-                    <span class="mesh-status roadmap">Roadmap</span>
-                    <p>Corrects malformed tool calls before they leave the agent — a different failure mode than access control.</p>
-                    <ul class="card-features">
-                        <li>Targets a real problem: several local models fail to format tool calls correctly, on any serving engine</li>
-                        <li>Confirmed on qwen2.5-coder and devstral — reproduced on Ollama, llama.cpp, and MLX</li>
-                        <li>Sits upstream of the gateway — before a request is even valid MCP</li>
-                    </ul>
-                    <div class="price-note">Researched and scoped — no code written yet</div>
-                </div>
-            </div>
-
-            <h3 class="subhead">What Changes Once Zero Trust Is Deployed</h3>
-            <p class="block-desc" style="margin-bottom:8px;">This describes the Zero Trust security layer itself, not any one vendor's implementation of it — the requirements below apply the same way no matter which platform actually enforces them. If you already run an enterprise Zero Trust platform like Zscaler or AWS, this integrates with it rather than replacing it.</p>
-            <div class="overlay-compare">
-                <div class="overlay-col before">
-                    <h4>Before — Traditional Exposure</h4>
-                    <ul class="overlay-list">
-                        <li>Services need open inbound ports to be reachable at all</li>
-                        <li>Reachability requires a public IP or port-forwarding</li>
-                        <li>Anything that finds the IP can attempt a connection — services are discoverable by internet scanners</li>
-                        <li>DNS resolves service names to real, attackable IP addresses</li>
-                        <li>East-west traffic inside the network is often allow-by-default</li>
-                    </ul>
-                </div>
-                <div class="overlay-col after">
-                    <h4>After — Overlay Deployed</h4>
-                    <ul class="overlay-list">
-                        <li>Zero inbound ports — nothing exposed to scan or exploit from outside</li>
-                        <li>No public IP exposure — services go "dark," invisible to reconnaissance</li>
-                        <li>Only a cryptographically verified identity can even attempt a connection</li>
-                        <li>Private DNS resolves service names to secure overlay tunnels, not real IPs</li>
-                        <li>East-west traffic is deny-by-default at both the network and OS firewall layers</li>
-                    </ul>
-                </div>
-            </div>
-            <p class="block-desc" style="margin: 10px 0 0; font-size: 0.85em;">Source: <a href="https://netfoundry.io/docs/openziti/#deploy_an_overlay" target="_blank" rel="noopener">OpenZiti overlay deployment documentation</a>.</p>
-
-            <h3 class="subhead">Deploy It Yourself — the Real Steps</h3>
-            <p class="block-desc" style="margin-bottom:18px;">This is the actual sequence, not a simplified version — the same one we ran ourselves before writing a line of zt-mcp-gateway code. The identity and service names below (<code>hermes-orchestrator-agent</code>, <code>mcp-gateway-svc</code>) are the real ones from that verified test, not placeholders. This is today's implementation, built on OpenZiti — the underlying pattern (identity, dial/bind policy, verification before the app ever sees a request) is what matters, and the specific commands below are ours to swap out if a better fit for a given customer's environment comes along.</p>
-
-            <p class="zta-spec-heading">Step 1 — Stand up the controller and router</p>
-            <p class="block-desc" style="margin-bottom:6px;">The official Docker Compose quickstart stands up a controller (the control plane and built-in CA), an edge router reachable on port 3022 (3023 for WebSocket), and the Ziti Admin Console on port 8443 — zero cloud dependency.</p>
-            <code class="zta-command">git clone https://github.com/openziti/ziti.git
-cd ziti/quickstart/docker
-docker compose up -d</code>
-
-            <p class="zta-spec-heading" style="margin-top:26px;">Step 2 — Create and enroll an identity</p>
-            <p class="block-desc" style="margin-bottom:6px;">Every caller — human, service, or agent — needs its own identity before it can do anything. The controller issues a one-time token as a JWT (expires in 24 hours, single-use); enrolling it exchanges that token for a permanent, certificate-backed identity.</p>
-            <code class="zta-command">ziti edge create identity "hermes-orchestrator-agent" -o agent.jwt
-ziti edge enroll agent.jwt</code>
-
-            <p class="zta-spec-heading" style="margin-top:26px;">Step 3 — Define the service and who can reach it</p>
-            <p class="block-desc" style="margin-bottom:6px;">Deny-by-default is the whole point — nothing can reach the service until a policy explicitly grants it. A Dial policy says who can call in; a Bind policy says what's allowed to host the service.</p>
-            <code class="zta-command">ziti edge create service mcp-gateway-svc
-ziti edge create service-policy allow-dial Dial --identity-roles "@hermes-orchestrator-agent" --service-roles "@mcp-gateway-svc"
-ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gateway" --service-roles "@mcp-gateway-svc"</code>
-
-            <p class="zta-spec-heading" style="margin-top:26px;">Step 4 — Verify before you trust it</p>
-            <p class="block-desc" style="margin-bottom:6px;">Don't take the policy's word for it. The policy advisor shows exactly which identities can dial or bind which services, and whether a router actually connects them.</p>
-            <code class="zta-command">ziti edge policy-advisor services -q</code>
-
-            <p class="zta-spec-heading" style="margin-top:26px;">Step 5 — Point zt-mcp-gateway at the network</p>
-            <p class="block-desc" style="margin-bottom:6px;">This is the MCP-Mesh-specific piece — the third serving mode we added to the fork alongside zrok and Agora, so the gateway rides directly on your own OpenZiti network instead of a third-party tunnel.</p>
-            <code class="zta-command">mcp-bridge --network ziti \
-  --ziti-identity-file agent.json \
-  --ziti-service mcp-gateway-svc</code>
-
-            <div class="agent-zt-note" style="margin-top:22px;">
-                <strong>Known gap, stated plainly:</strong> the setup above is a real, working overlay — but the Docker Compose quickstart is dev/test infrastructure, not a production deployment. A real install needs its own decision on where the controller and routers actually run, sized to your environment and traffic. That sizing and placement work is what we handle as part of a build.
-            </div>
-
-            <div class="section-cta">
-                <p>MCP-Mesh ships as part of a local AI build, not as self-serve software — the gateway is set up and tuned to your environment, not just installed.</p>
-                <a class="btn btn-dark" href="#contact" id="mcp-mesh-cta">Ask About MCP-Mesh</a>
+                <div class="card"><h3>Day 0 — scoped up front</h3><p>One clear ROI target, tied to your numbers, agreed before a dollar goes into building.</p></div>
+                <div class="card"><h3>Ongoing — tracked continuously</h3><p>You see progress toward that target every week — not a slide deck at the end of the quarter.</p></div>
+                <div class="card"><h3>Day 90 — on track, or honest</h3><p>By 90 days it's clearly paying off — or you knew long before, and we adjust or stop. No sunk-cost theater.</p></div>
             </div>
         </section>
 
-        <!-- ===== Agent Zero Trust Assessment ===== -->
-        <section class="block" id="agent-zero-trust">
-            <div class="eyebrow">The Frontier — No Official Standard Exists Yet</div>
-            <h2 class="block-title">Agent Zero Trust: securing the AI agents you've already deployed.</h2>
-            <p class="block-desc">NIST launched an AI Agent Standards Initiative in February 2026, but its first formal deliverable isn't due until Q4 2026 — there's no finalized "NIST SP 800-207 for agents" to buy against yet. That doesn't mean the risk waits. Most organizations running AI agents today have no distinct agent identity, no enforced tool-permission scoping, and no audit trail of what their agents actually did.</p>
-
-            <div class="agent-zt-note">
-                <strong>Where this comes from:</strong> With no single finalized standard yet, we follow the frameworks that already exist — NIST's AI Agent Standards Initiative, the Cloud Security Alliance's Agentic Trust Framework, MITRE ATLAS's cataloged agent-specific attack techniques (tool invocation abuse, agent-as-command-and-control, prompt injection), Microsoft's Zero Trust for AI and Entra Agent ID framework, and the Model Context Protocol's authorization mechanics — each in the areas it actually covers. Nobody yet publishes one finished agent maturity scale, so we synthesize their combined direction into the practical scorecard below. It's presented as our working synthesis, not an official standard, and it will be revised as NIST's Interoperability Profile and other guidance matures.
-                <div class="agent-zt-sources">Grounded in: NIST AI Agent Standards Initiative (Feb 2026) · Cloud Security Alliance Agentic Trust Framework (Feb 2026) · MITRE ATLAS · Microsoft Zero Trust for AI / Entra Agent ID · Model Context Protocol authorization spec</div>
-            </div>
-
-            <h3 class="subhead">The Real Frameworks, Mapped Side by Side</h3>
-            <p class="block-desc" style="margin-bottom:16px;">We didn't invent a maturity model — these are the actual frameworks in play today, mapped against each other so the overlap is visible and so is what nobody's covering yet.</p>
-            <div class="maturity-matrix-wrap">
-                <table class="maturity-matrix">
-                    <thead>
-                        <tr>
-                            <th class="pillar-col">Framework</th>
-                            <th>Agent Identity</th>
-                            <th>Tool &amp; Permission Scoping</th>
-                            <th>Authorization &amp; Access</th>
-                            <th>Prompt Injection &amp; Input Defense</th>
-                            <th>Audit &amp; Observability</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">NIST AI Agent Standards Initiative</th>
-                            <td class="cov-pending" colspan="5">Direction-setting only — first formal deliverable isn't due until Q4 2026. Nothing concrete to map in any column yet.</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">MITRE ATLAS</th>
-                            <td class="cov-none">Not an identity framework — assigns no identity, verifies none</td>
-                            <td class="cov-partial">Catalogs tool-invocation abuse &amp; multi-agent trust exploitation as attack techniques — informs risk, enforces nothing</td>
-                            <td class="cov-none">No authorization mechanism of its own</td>
-                            <td class="cov-strong">Core strength — 2026 update added dedicated agentic techniques for prompt injection &amp; multi-agent trust attacks</td>
-                            <td class="cov-none">By design, threat-side only: "no audit-trail control, no inventory mechanism, no enforcement of its own"</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">CSA Agentic Trust Framework</th>
-                            <td class="cov-strong">Core focus — full identity chain per agent: who owns it, its purpose, its claimed capabilities</td>
-                            <td class="cov-strong">Calls for dynamic, intent-based access that adapts to agent actions in real time, not static grants</td>
-                            <td class="cov-partial">Treats agents as principals under existing identity governance — a governance model, not an auth protocol itself</td>
-                            <td class="cov-none">Identity-governance framework, not an input-defense catalog</td>
-                            <td class="cov-partial">Calls for continuous behavioral verification, not just initial auth — no concrete logging spec of its own</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Microsoft Zero Trust for AI / Entra Agent ID</th>
-                            <td class="cov-strong">Agent Registry + a managed identity per agent — reached GA in April 2026</td>
-                            <td class="cov-partial">Scoped Access Packages with human-sponsor approval — real scoping, not yet dynamic per task step</td>
-                            <td class="cov-strong">Conditional Access evaluates every agent authorization request in real time</td>
-                            <td class="cov-none">Identity/access-focused, not an input-defense layer — Prompt Shields is a separate product</td>
-                            <td class="cov-strong">Every agent tool call and data lookup logged to Microsoft Sentinel</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">MCP Authorization Spec</th>
-                            <td class="cov-none">Authorizes clients &amp; tokens, not agent identity itself</td>
-                            <td class="cov-partial">OAuth scopes support least-privilege access — but authorization is optional in MCP, so many servers ship with none at all</td>
-                            <td class="cov-strong">Its entire purpose — OAuth 2.1, PKCE, token audience validation, step-up auth for runtime privilege changes</td>
-                            <td class="cov-none">Different layer entirely — the spec is silent on input handling</td>
-                            <td class="cov-none">Spec doesn't mandate logging or audit trails</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="maturity-legend">
-                <span><span class="swatch" style="background:#a3ff3c;"></span>Strong — this is the framework's core job</span>
-                <span><span class="swatch" style="background:#c9b6ec;"></span>Partial — touches it, doesn't enforce it</span>
-                <span><span class="swatch" style="background:#c7c3d1;"></span>Out of scope — not what this framework is for</span>
-                <span><span class="swatch" style="background:#f0cd7e;"></span>Pending — direction set, nothing finalized</span>
-            </div>
-            <p class="block-desc" style="margin: 4px 0 40px; font-size:0.92em;">The overlap is real: CSA and Entra Agent ID both push hard on Agent Identity, and Entra Agent ID and the MCP spec independently solve Authorization &amp; Access — use the overlapping ones together rather than picking just one. The gap is real too: nobody currently owns Audit &amp; Observability as a hard standard, and only ATLAS treats Prompt Injection as a first-class control area. Our assessments follow all five of these — never claiming credit for ground they already cover.</p>
-
-            <h3 class="subhead">How We Score an Environment (Our Synthesis, Not a Standard)</h3>
-            <p class="block-desc" style="margin-bottom:16px;">Since none of the frameworks above ship a finished maturity scale of their own, this is the rubric we assess against — built by combining their coverage into one practical scorecard.</p>
-            <div class="maturity-matrix-wrap">
-                <table class="maturity-matrix">
-                    <thead>
-                        <tr>
-                            <th class="pillar-col">Pillar</th>
-                            <th>Stage 0 · Ungoverned</th>
-                            <th>Stage 1 · Aware</th>
-                            <th>Stage 2 · Managed</th>
-                            <th>Stage 3 · Adaptive</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Agent Identity</th>
-                            <td class="stage-0">Agents run under shared human or service-account credentials</td>
-                            <td class="stage-1">Some agents have distinct identities, inconsistently applied</td>
-                            <td class="stage-2">Every agent has a distinct, verifiable identity of its own</td>
-                            <td class="stage-3">Agent identity is automatically provisioned and continuously verified</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Tool &amp; Permission Scoping</th>
-                            <td class="stage-0">Agents have broad, standing access to tools and APIs</td>
-                            <td class="stage-1">Tool access is documented but not enforced</td>
-                            <td class="stage-2">Tool access is scoped per-agent, least-privilege by default</td>
-                            <td class="stage-3">Tool permissions adjust dynamically per task or plan step</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Authorization &amp; Access</th>
-                            <td class="stage-0">No formal authorization flow — credentials pulled from the environment</td>
-                            <td class="stage-1">Some tools use OAuth-based auth, inconsistently applied</td>
-                            <td class="stage-2">OAuth-based authorization enforced across agent-to-tool calls</td>
-                            <td class="stage-3">Centralized, continuously re-verified authorization across all agents</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Prompt Injection &amp; Input Defense</th>
-                            <td class="stage-0">No defenses against injected instructions, direct or indirect</td>
-                            <td class="stage-1">Basic input filtering on some agents</td>
-                            <td class="stage-2">Defense-in-depth: input handling, tool isolation, memory controls</td>
-                            <td class="stage-3">Runtime monitoring actively detects and blocks injection attempts</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Audit &amp; Observability</th>
-                            <td class="stage-0">No visibility into what agents actually did</td>
-                            <td class="stage-1">Logs exist but aren't reviewed</td>
-                            <td class="stage-2">Agent tool calls and decisions are logged and reviewed</td>
-                            <td class="stage-3">Full decision-chain observability with automated anomaly alerts</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="maturity-legend">
-                <span><span class="swatch" style="background:#f4a8a2;"></span>Stage 0 — Ungoverned</span>
-                <span><span class="swatch" style="background:#f0cd7e;"></span>Stage 1 — Aware</span>
-                <span><span class="swatch" style="background:#c9b6ec;"></span>Stage 2 — Managed</span>
-                <span><span class="swatch" style="background:#a3ff3c;"></span>Stage 3 — Adaptive</span>
-            </div>
-
-            <h3 class="subhead">What the Assessment Includes</h3>
-            <p class="block-desc" style="margin-bottom:20px;">This is scoped as an advisory engagement, not a document purchase — there isn't yet a mature, stable control catalog to sell as templates the way there is for traditional Zero Trust.</p>
-            <ul class="card-features" style="max-width:640px; font-size:1em; margin-bottom:30px;">
-                <li>Inventory of every AI agent and tool integration currently running, and what each can actually access</li>
-                <li>MCP / tool-integration audit — flagging STDIO (no built-in auth) vs. proper OAuth-based authorization</li>
-                <li>Agent identity check — distinct identity per agent, or everything sharing one credential</li>
-                <li>Access policy review — explicit deny-by-default, or relying on default-allow</li>
-                <li>Scored against the 5-pillar model above, with a plain-language roadmap for closing the biggest gaps first</li>
-            </ul>
-
-            <div class="section-cta">
-                <p>Pricing is scoped after a discovery call — this space moves month to month, so scope gets confirmed against current guidance, not a fixed catalog.</p>
-                <a class="btn btn-dark" href="#contact" id="agent-zt-cta">Book an Agent Zero Trust Assessment</a>
-            </div>
-        </section>
-
-        <!-- ===== Cybersecurity Consulting (light/advisory) ===== -->
-        <section class="block" id="cybersecurity-consulting">
-            <div class="eyebrow">AI-Augmented Cybersecurity Consulting</div>
-            <h2 class="block-title">Turn complex security problems into clear, actionable outcomes—fast.</h2>
-            <p class="block-desc">Zero Trust, SIEM, identity, and compliance experience — amplified by AI — to deliver rapid, high-quality security assessments, roadmaps, and documentation for organizations that need clarity and direction without hiring a full-time security leader.</p>
-
+        <!-- ===== Built to grow with you ===== -->
+        <section class="block" id="growth">
+            <div class="eyebrow">Built to grow with you</div>
+            <h2 class="block-title">For owners who want to grow — not just trim a cost.</h2>
+            <p class="block-desc">The best use of this isn't shaving a few dollars — it's leverage: handle more customers, onboard faster, and free your team for the work that actually grows the business. And it's built to grow right alongside you.</p>
             <div class="cards-grid">
-                <div class="card">
-                    <div class="dot">🛡️</div>
-                    <h3>Zero Trust Readiness &amp; Roadmaps</h3>
-                    <p>Assess current security posture and produce a practical Zero Trust roadmap.</p>
-                    <ul class="card-features">
-                        <li>Current-state assessment summary</li>
-                        <li>ZTA maturity scorecard</li>
-                        <li>3–6 month roadmap</li>
-                        <li>12–18 month strategic plan</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> report drafting, maturity model structuring, diagrams &amp; timelines.</div>
-                    <a class="btn btn-dark" href="#contact">Start a Zero Trust Assessment</a>
-                </div>
-                <div class="card">
-                    <div class="dot">📊</div>
-                    <h3>SIEM &amp; Logging Strategy</h3>
-                    <p>Evaluate SIEM/logging posture and define tuning, integration, and use-case priorities.</p>
-                    <ul class="card-features">
-                        <li>SIEM/logging inventory</li>
-                        <li>Gap analysis</li>
-                        <li>Priority use-case list (alerts, dashboards)</li>
-                        <li>Integration recommendations</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> summarizing logs/use-cases, documentation, standard templates.</div>
-                    <a class="btn btn-dark" href="#contact">Review My SIEM Strategy</a>
-                </div>
-                <div class="card">
-                    <div class="dot">🔑</div>
-                    <h3>Identity &amp; Access Governance Review</h3>
-                    <p>Review identity systems and access governance for risk and modernization needs.</p>
-                    <ul class="card-features">
-                        <li>Identity architecture overview</li>
-                        <li>Risk and gap summary</li>
-                        <li>Recommended improvements</li>
-                        <li>High-level modernization plan</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> architecture descriptions, risk summaries, modernization narratives.</div>
-                    <a class="btn btn-dark" href="#contact">Review My Identity Setup</a>
-                </div>
-                <div class="card">
-                    <div class="dot">📋</div>
-                    <h3>Security Policy &amp; Compliance Gap Assessment</h3>
-                    <p>Rapid review of existing policies and controls against best practices.</p>
-                    <ul class="card-features">
-                        <li>Policy inventory</li>
-                        <li>Gap analysis</li>
-                        <li>Recommended policy updates</li>
-                        <li>Prioritized action list</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> framework comparison, gap reports, drafted policy language.</div>
-                    <a class="btn btn-dark" href="#contact">Assess My Policies</a>
-                </div>
-            </div>
-
-            <h3 class="subhead">Engagement Models</h3>
-            <div class="engagement-models">
-                <div class="engagement-card">
-                    <div class="scope-label">1–2 weeks</div>
-                    <h4>Quick Assessment</h4>
-                    <p><strong>Scope:</strong> One focused area — Zero Trust, SIEM, identity, or policies.</p>
-                    <p><strong>Output:</strong> 10–20 page report + executive summary.</p>
-                    <p><strong>Ideal for:</strong> Small/mid-market companies needing direction.</p>
-                </div>
-                <div class="engagement-card">
-                    <div class="scope-label">1–3 months</div>
-                    <h4>Focused Advisory</h4>
-                    <p><strong>Scope:</strong> Ongoing guidance on implementation and prioritization.</p>
-                    <p><strong>Output:</strong> Regular check-ins, updated roadmaps, decision support.</p>
-                    <p><strong>Ideal for:</strong> Teams with internal engineers but no senior security leader.</p>
-                </div>
-                <div class="engagement-card">
-                    <div class="scope-label">Part-time / retainer</div>
-                    <h4>Fractional Security Architect</h4>
-                    <p><strong>Scope:</strong> Part-time leadership across multiple security domains.</p>
-                    <p><strong>Output:</strong> Strategy, architecture, and oversight.</p>
-                    <p><strong>Ideal for:</strong> Organizations in active modernization.</p>
-                </div>
-            </div>
-
-            <h3 class="subhead">How It Works</h3>
-            <ol class="process-list">
-                <li><strong>Discovery call</strong><span class="desc">30–60 minute conversation to understand your environment and priorities.</span></li>
-                <li><strong>Intake questionnaire</strong><span class="desc">Systems, tools, and pain points, gathered up front.</span></li>
-                <li><strong>AI-assisted analysis</strong><span class="desc">Hands-on expertise combined with AI tooling to move fast without cutting corners.</span></li>
-                <li><strong>Deliverables &amp; review session</strong><span class="desc">Walkthrough of findings, roadmap, and recommendations.</span></li>
-                <li><strong>Optional ongoing advisory</strong><span class="desc">Continued support as you implement.</span></li>
-            </ol>
-
-            <div class="section-cta">
-                <p>Pricing is scoped to engagement — quoted after the discovery call.</p>
-                <a class="btn btn-dark" href="#contact">Book a Discovery Call</a>
-            </div>
-        </section>
-    </div>
-
-    <!-- ===== Pentest / Offensive Security (Dark Ops) ===== -->
-    <section class="pentest-section" id="pentest">
-        <div class="kicker-mono">offensive security / penetration testing</div>
-        <h2>The other side of what I do — think like the attacker before one finds you.</h2>
-        <p class="lead">Practical, scoped penetration testing built on the same identity, cloud, and network expertise behind the consulting side — with AI-accelerated reporting so you get clear, prioritized findings instead of a 200-page PDF nobody reads.</p>
-
-        <div class="pentest-grid">
-            <div class="pentest-card">
-                <span class="tag">INTERNAL / ACTIVE DIRECTORY</span>
-                <h3>Internal &amp; AD Penetration Testing</h3>
-                <p>Simulate an attacker who already has a foothold inside the network — hardening gaps, lateral movement paths, and privilege escalation.</p>
-                <ul class="card-features">
-                    <li>Attack path narrative</li>
-                    <li>Privilege escalation findings</li>
-                    <li>Prioritized remediation list</li>
-                    <li>Executive summary</li>
-                </ul>
-                <div class="ai-note"><strong>AI-assisted:</strong> correlating findings, drafting attack-path narratives and remediation write-ups.</div>
-            </div>
-            <div class="pentest-card">
-                <span class="tag">CLOUD / IDENTITY</span>
-                <h3>Cloud &amp; Identity Security Testing</h3>
-                <p>Test Conditional Access, identity federation, and Azure/M365 tenant configuration for exploitable gaps.</p>
-                <ul class="card-features">
-                    <li>Tenant misconfiguration report</li>
-                    <li>Identity attack surface summary</li>
-                    <li>Hardening recommendations</li>
-                </ul>
-                <div class="ai-note"><strong>AI-assisted:</strong> configuration diffing against best practices, findings drafting.</div>
-            </div>
-            <div class="pentest-card">
-                <span class="tag">HUMAN RISK</span>
-                <h3>Phishing &amp; Social Engineering Simulations</h3>
-                <p>Test human risk with realistic, controlled phishing campaigns — safely, and with clear reporting.</p>
-                <ul class="card-features">
-                    <li>Campaign results &amp; click/report rates</li>
-                    <li>Targeted awareness recommendations</li>
-                </ul>
-                <div class="ai-note"><strong>AI-assisted:</strong> campaign template drafting, results analysis, awareness content.</div>
-            </div>
-            <div class="pentest-card">
-                <span class="tag">EXTERNAL / PERIMETER</span>
-                <h3>External Network &amp; Perimeter Testing</h3>
-                <p>Test what's exposed to the internet — external attack surface, exposed services, and common exploitation paths.</p>
-                <ul class="card-features">
-                    <li>External attack surface map</li>
-                    <li>Findings by severity</li>
-                    <li>Remediation priorities</li>
-                </ul>
-                <div class="ai-note"><strong>AI-assisted:</strong> attack surface correlation, report drafting.</div>
-            </div>
-        </div>
-
-        <h3 class="subhead" style="color:#fff;">Engagement Models</h3>
-        <div class="engagement-models">
-            <div class="pentest-engagement">
-                <div class="scope-label">1–2 weeks</div>
-                <h4>Point-in-Time Assessment</h4>
-                <p><strong>Scope:</strong> One track — internal, cloud, phishing, or external.</p>
-                <p><strong>Output:</strong> Findings report + executive summary.</p>
-            </div>
-            <div class="pentest-engagement">
-                <div class="scope-label">2–4 weeks</div>
-                <h4>Combined Assessment</h4>
-                <p><strong>Scope:</strong> Multiple tracks combined — e.g. external + internal, or cloud + phishing.</p>
-                <p><strong>Output:</strong> Full-picture report across tracks.</p>
-            </div>
-            <div class="pentest-engagement">
-                <div class="scope-label">Quarterly / annual</div>
-                <h4>Ongoing / Periodic Testing</h4>
-                <p><strong>Scope:</strong> Recurring cadence to continuously validate defenses.</p>
-                <p><strong>Output:</strong> Trend tracking across engagements.</p>
-            </div>
-        </div>
-
-        <h3 class="subhead" style="color:#fff;">Report Options</h3>
-        <p style="color:#8b98a8; max-width:600px; margin-bottom:8px;">Every engagement includes a base report — pick the format(s) that match who's going to read it.</p>
-        <div class="engagement-models">
-            <div class="pentest-engagement">
-                <div class="scope-label">Board-ready</div>
-                <h4>Executive Summary Only</h4>
-                <p>High-level findings and business risk, framed for leadership — no technical detail.</p>
-                <p><strong>Best for:</strong> Board/leadership reporting.</p>
-            </div>
-            <div class="pentest-engagement">
-                <div class="scope-label">Engineering-ready</div>
-                <h4>Full Technical Report</h4>
-                <p>Detailed findings, evidence, reproduction steps, and prioritized remediation guidance.</p>
-                <p><strong>Best for:</strong> The team doing the actual fixing.</p>
-            </div>
-            <div class="pentest-engagement">
-                <div class="scope-label">Audit-ready</div>
-                <h4>Compliance-Mapped Report</h4>
-                <p>Findings mapped to common frameworks on request (e.g. NIST CSF, ISO 27001, PCI-DSS, SOC 2).</p>
-                <p><strong>Best for:</strong> Audit and compliance evidence.</p>
-            </div>
-            <div class="pentest-engagement">
-                <div class="scope-label">Validation</div>
-                <h4>Executive + Retest Report</h4>
-                <p>Exec summary and full technical report, plus a follow-up retest report confirming fixes.</p>
-                <p><strong>Best for:</strong> Proving remediation actually worked.</p>
-            </div>
-        </div>
-
-        <h3 class="subhead" style="color:#fff;">How It Works</h3>
-        <ol class="pentest-process">
-            <li><strong>Scoping call &amp; rules of engagement</strong><span class="desc">Define objectives, systems in scope, and authorization before anything starts.</span></li>
-            <li><strong>Recon &amp; planning</strong><span class="desc">Map the attack surface ahead of active testing.</span></li>
-            <li><strong>Testing execution</strong><span class="desc">Hands-on testing strictly within the agreed scope and rules of engagement.</span></li>
-            <li><strong>Findings &amp; reporting</strong><span class="desc">AI-assisted drafting, human-verified, prioritized by real-world risk.</span></li>
-            <li><strong>Debrief &amp; optional retest</strong><span class="desc">Walkthrough of findings plus an optional validation retest after fixes.</span></li>
-        </ol>
-
-        <div class="rules-note"><strong>$</strong> All testing performed under a signed authorization and defined rules of engagement. No scope creep, no surprises.</div>
-
-        <div class="section-cta">
-            <p style="color:#8b98a8;">Pricing is scoped after the discovery call — based on target count and track(s) selected.</p>
-            <a class="btn btn-mint" href="#contact">Book a Scoping Call</a>
-        </div>
-    </section>
-
-    <div class="container">
-        <!-- ===== Architecture Documentation ===== -->
-        <section class="block" id="architecture-docs">
-            <div class="eyebrow">AI-Generated Architecture Documentation Packages</div>
-            <h2 class="block-title">Enterprise-grade architecture documentation—without an enterprise-grade budget.</h2>
-            <p class="block-desc">Structured, high-quality architecture documentation — diagrams, flows, and modernization plans — accelerated by AI, for organizations that lack dedicated architects but need clarity and documentation.</p>
-
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="dot">🗺️</div>
-                    <h3>Current-State Architecture Package</h3>
-                    <p>Document how systems actually work today.</p>
-                    <ul class="card-features">
-                        <li>System inventory</li>
-                        <li>High-level architecture diagram</li>
-                        <li>Data flow overview</li>
-                        <li>Authentication/authorization flow summary</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> descriptions, component organization, diagrams from structured inputs.</div>
-                    <a class="btn btn-dark" href="#contact">Document My Current State</a>
-                </div>
-                <div class="card">
-                    <div class="dot">🚀</div>
-                    <h3>Modernization Roadmap Package</h3>
-                    <p>Define how to move from legacy to modern infrastructure.</p>
-                    <ul class="card-features">
-                        <li>Current-state summary</li>
-                        <li>Target-state vision</li>
-                        <li>Gap analysis</li>
-                        <li>Phased roadmap (waves, milestones)</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> roadmap structuring, narrative generation, visuals.</div>
-                    <a class="btn btn-dark" href="#contact">Plan My Modernization</a>
-                </div>
-                <div class="card">
-                    <div class="dot">🔐</div>
-                    <h3>Identity &amp; Access Architecture Package</h3>
-                    <p>Document identity flows, directories, and access patterns.</p>
-                    <ul class="card-features">
-                        <li>Identity system overview</li>
-                        <li>Authentication flows</li>
-                        <li>Role/permission model summary</li>
-                        <li>Risk and improvement notes</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> flow descriptions, pattern summaries, diagrams.</div>
-                    <a class="btn btn-dark" href="#contact">Document My Identity Architecture</a>
-                </div>
-                <div class="card">
-                    <div class="dot">🏗️</div>
-                    <h3>Infrastructure &amp; Datacenter Architecture Package</h3>
-                    <p>Document datacenter/server cluster layouts and dependencies.</p>
-                    <ul class="card-features">
-                        <li>Physical/logical layout</li>
-                        <li>Network overview</li>
-                        <li>Dependency mapping</li>
-                        <li>DR/BCP summary</li>
-                    </ul>
-                    <div class="ai-note"><strong>AI-assisted:</strong> input organization, diagrams, DR narratives.</div>
-                    <a class="btn btn-dark" href="#contact">Document My Infrastructure</a>
-                </div>
-            </div>
-
-            <h3 class="subhead">Engagement Models</h3>
-            <div class="engagement-models">
-                <div class="engagement-card">
-                    <div class="scope-label">Single package</div>
-                    <h4>Single Package Engagement</h4>
-                    <p><strong>Scope:</strong> One architecture package — e.g. current-state or identity.</p>
-                    <p><strong>Output:</strong> Documentation bundle (PDF + diagrams).</p>
-                    <p><strong>Ideal for:</strong> Teams needing clarity for a project or audit.</p>
-                </div>
-                <div class="engagement-card">
-                    <div class="scope-label">2–3 packages</div>
-                    <h4>Multi-Package Engagement</h4>
-                    <p><strong>Scope:</strong> Multiple packages — e.g. current-state + modernization + identity.</p>
-                    <p><strong>Output:</strong> Cohesive architecture documentation set.</p>
-                    <p><strong>Ideal for:</strong> Organizations preparing for modernization or vendor engagement.</p>
-                </div>
-                <div class="engagement-card">
-                    <div class="scope-label">Retainer</div>
-                    <h4>Ongoing Architecture Documentation Support</h4>
-                    <p><strong>Scope:</strong> Continuous updates as systems evolve.</p>
-                    <p><strong>Output:</strong> Versioned documentation, updated diagrams.</p>
-                    <p><strong>Ideal for:</strong> Growing companies without an in-house architect.</p>
-                </div>
-            </div>
-
-            <h3 class="subhead">How It Works</h3>
-            <ol class="process-list">
-                <li><strong>Intake</strong><span class="desc">Systems list, existing diagrams, and any prior documentation.</span></li>
-                <li><strong>Working session</strong><span class="desc">Questions to clarify flows and fill in gaps.</span></li>
-                <li><strong>AI-assisted drafting</strong><span class="desc">First-pass documentation generated, then refined and corrected by hand.</span></li>
-                <li><strong>Delivery</strong><span class="desc">Final PDF plus editable source files.</span></li>
-                <li><strong>Optional update cycle</strong><span class="desc">Keep documentation current as systems change.</span></li>
-            </ol>
-
-            <div class="section-cta">
-                <p>Pricing depends on scope — quoted after intake.</p>
-                <a class="btn btn-dark" href="#contact">Request a Documentation Package</a>
+                <div class="card"><h3>Start small, scale as you grow</h3><p>Begin on a single box that fits today. Add capabilities and capacity when you're ready — never a rip-and-replace.</p></div>
+                <div class="card"><h3>Leverage, not just savings</h3><p>Do more with the team you have. The win is capacity and speed — measured as growth, which is exactly what we track.</p></div>
+                <div class="card"><h3>It keeps improving</h3><p>Your appliance isn't frozen the day it ships. It learns your business and gets sharper over time — the same self-improving approach I build into everything.</p></div>
             </div>
         </section>
 
@@ -1552,7 +1019,7 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
             <p class="block-desc">Built from actual implementations at Fortune 500 companies and large enterprises — not available yet, but you can get notified the moment they ship.</p>
             <div class="cards-grid">
                 <div class="card">
-                    <div class="dot">☁️</div>
+                    <div class="dot"><svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1.5A3.5 3.5 0 0 1 18 18z"/></svg></div>
                     <h3>Azure &amp; Microsoft 365 Toolkit</h3>
                     <p>Organized by deployment type — not random scripts. Get exactly what you need for your environment.</p>
                     <ul class="card-features">
@@ -1568,7 +1035,7 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
                     <a class="btn btn-dark" href="#newsletter">Get Notified at Launch</a>
                 </div>
                 <div class="card">
-                    <div class="dot">🤖</div>
+                    <div class="dot"><svg viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9.5" cy="13" r="1"/><circle cx="14.5" cy="13" r="1"/></svg></div>
                     <h3>AI-Powered System Monitor</h3>
                     <p>Smart monitoring that doesn't just alert — it analyzes and guides you through fixes.</p>
                     <ul class="card-features">
@@ -1714,6 +1181,7 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
             var progressFill = document.getElementById('zta-progress-fill');
             var stepLabel = document.getElementById('zta-step-label');
             var questionEl = document.getElementById('zta-question');
+            if (!introEl || !startBtn || !quizEl) { return; }
 
             function renderQuestion() {
                 var q = QUESTIONS[current];
@@ -1775,7 +1243,7 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
                 if (ztSelectedSizeTarget && sizeLabels[ztSelectedSizeTarget]) {
                     html += '<div class="zta-results-cta">' +
                         '<button type="button" class="btn btn-dark" id="zta-see-package">See My Package: ' + sizeLabels[ztSelectedSizeTarget] + '</button>' +
-                        '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="zta-get-proposal">Get My Personalized Proposal</a>' +
+                        '<a class="btn" style="background:#6a34d6;color:#fff;" href="#contact" id="zta-get-proposal">Get My Personalized Proposal</a>' +
                         '</div>';
                 } else {
                     html += '<div class="zta-size-prompt">' +
@@ -1788,7 +1256,7 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
                         '</div>' +
                         '</div>' +
                         '<div class="zta-results-cta">' +
-                        '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="zta-get-proposal">Get My Personalized Proposal</a>' +
+                        '<a class="btn" style="background:#6a34d6;color:#fff;" href="#contact" id="zta-get-proposal">Get My Personalized Proposal</a>' +
                         '</div>';
                 }
 
@@ -2234,8 +1702,8 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
                     if (i < boxes.length - 1) {
                         var arrowX1 = x + boxW, arrowX2 = x + boxW + gap;
                         var arrowY = y + boxH / 2;
-                        svg += '<line x1="' + arrowX1 + '" y1="' + arrowY + '" x2="' + (arrowX2 - 8) + '" y2="' + arrowY + '" stroke="#a3ff3c" stroke-width="3"/>';
-                        svg += '<polygon points="' + (arrowX2 - 8) + ',' + (arrowY - 6) + ' ' + arrowX2 + ',' + arrowY + ' ' + (arrowX2 - 8) + ',' + (arrowY + 6) + '" fill="#a3ff3c"/>';
+                        svg += '<line x1="' + arrowX1 + '" y1="' + arrowY + '" x2="' + (arrowX2 - 8) + '" y2="' + arrowY + '" stroke="#6a34d6" stroke-width="3"/>';
+                        svg += '<polygon points="' + (arrowX2 - 8) + ',' + (arrowY - 6) + ' ' + arrowX2 + ',' + arrowY + ' ' + (arrowX2 - 8) + ',' + (arrowY + 6) + '" fill="#6a34d6"/>';
                     }
                 });
                 svg += '</svg>';
@@ -2644,7 +2112,7 @@ ziti edge create service-policy allow-bind Bind --identity-roles "@zt-mcp-gatewa
 
                 html += '<div class="zta-results-cta">' +
                     '<button type="button" class="btn btn-outline" id="laic-copy-spec">Copy Build Kit</button>' +
-                    '<a class="btn" style="background:#a3ff3c;color:#14141a;" href="#contact" id="laic-get-proposal">Want This Built For You? Request Assistance</a>' +
+                    '<a class="btn" style="background:#6a34d6;color:#fff;" href="#contact" id="laic-get-proposal">Want This Built For You? Request Assistance</a>' +
                     '</div>';
 
                 html += '<div class="zta-support-panel">' +
