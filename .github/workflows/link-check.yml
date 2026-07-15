@@ -1,0 +1,29 @@
+name: Links & buttons
+
+# Runs on every push and PR to catch dead buttons/links before they reach prod.
+# Prod source lives in Gitea and mirrors to GitHub; this runs on the GitHub side.
+# Actions must be enabled on the mirrored GitHub repo for this to fire.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buttons & in-page links (blocking)
+        run: python3 tests/check_links.py
+
+      - name: External links (lychee, non-blocking)
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: "--no-progress --include-fragments --exclude medium.com index.html box.html"
+          fail: true
