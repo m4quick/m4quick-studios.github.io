@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Personal AI Projects — private, zero-trust AI</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15);
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .wrap{max-width:900px;margin:0 auto;}
+  .head{margin-bottom:26px;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--evergreen);margin:0 0 10px;}
+  h1{font-family:var(--serif);font-size:34px;line-height:1.12;font-weight:600;letter-spacing:-.01em;margin:0 0 10px;text-wrap:balance;}
+  .lede{font-size:15.5px;color:var(--ink-2);max-width:62ch;margin:0;}
+
+  .grouplbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:26px 0 12px;}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media (max-width:620px){.grid{grid-template-columns:1fr;}}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:18px 19px 19px;transition:border-color .15s,transform .1s,box-shadow .15s;}
+  a.card:hover{border-color:var(--evergreen-line);box-shadow:var(--shadow);transform:translateY(-1px);}
+  a.card.feature{grid-column:1 / -1;border-color:var(--evergreen-line);background:var(--evergreen-soft);}
+  a.card .tag{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--evergreen);}
+  a.card h3{font-family:var(--serif);font-size:18px;font-weight:600;margin:5px 0 5px;}
+  a.card p{font-size:13px;color:var(--ink-2);margin:0;}
+  a.card .go{font-size:12px;font-weight:700;color:var(--evergreen);margin-top:10px;display:inline-block;}
+
+  .foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--ink-3);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .foot .principle{color:var(--gold);font-weight:700;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <p class="eyebrow">Personal AI Projects · internal preview</p>
+    <h1>Private, zero-trust AI — build it, verify it, own it.</h1>
+    <p class="lede">The whole platform in one place: the full flow, the vendor comparisons, the build options, and how to give it memory of your documents. Click through to test each piece.</p>
+  </div>
+
+  <div class="grouplbl">Start here</div>
+  <div class="grid">
+    <a class="card feature" href="complete-tool.html">
+      <span class="tag">The complete tool</span>
+      <h3>The full flow, one page</h3>
+      <p>Why not the vendors → the package → pick your build → build &amp; verify. The self-serve journey a visitor follows end to end.</p>
+      <span class="go">Open the tool →</span>
+    </a>
+  </div>
+
+  <div class="grouplbl">Why open instead of the vendors</div>
+  <div class="grid">
+    <a class="card" href="microsoft-vs-private.html">
+      <span class="tag">Comparison</span><h3>Microsoft ↔ private</h3>
+      <p>Microsoft's "Zero Trust for AI" model, layer by layer, next to the free, local version.</p>
+      <span class="go">Compare →</span>
+    </a>
+    <a class="card" href="zscaler-vs-ziti.html">
+      <span class="tag">Comparison</span><h3>Zscaler ↔ Ziti</h3>
+      <p>Commercial ZTNA vs the self-hosted, free equivalent — with an honest caveat.</p>
+      <span class="go">Compare →</span>
+    </a>
+  </div>
+
+  <div class="grouplbl">The offer &amp; the build</div>
+  <div class="grid">
+    <a class="card" href="open-zta-package.html">
+      <span class="tag">Offer</span><h3>The open package</h3>
+      <p>Build it, verify it, own it — and the "pay only to keep it improving" model.</p>
+      <span class="go">See the package →</span>
+    </a>
+    <a class="card" href="build-picker.html">
+      <span class="tag">Configurator</span><h3>Pick your build</h3>
+      <p>Four zero-trust architectures — solo, secure phone, small team, air-gapped.</p>
+      <span class="go">Pick a build →</span>
+    </a>
+    <a class="card" href="how-its-designed.html">
+      <span class="tag">Security</span><h3>How it's protected</h3>
+      <p>The layers of control, the isolation levels, and an honest what-it-does/doesn't.</p>
+      <span class="go">See the design →</span>
+    </a>
+    <a class="card" href="builder-memory-step.html">
+      <span class="tag">Memory · RAG</span><h3>Give it memory</h3>
+      <p>Point it at your files — simple by default, extensible for advanced users.</p>
+      <span class="go">Try the step →</span>
+    </a>
+  </div>
+
+  <div class="foot">
+    <span>Private, zero-trust AI — yours to build, verify, and own.</span>
+    <span class="principle">Simple by default · extensible by design</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How it's designed / protected</title>
+</head>
+<body>
+<title>How it's designed — Private AI, Managed</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13);
+    --core:rgba(20,97,74,.16);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --core:rgba(79,184,148,.20);
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--core:rgba(20,97,74,.16);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--core:rgba(79,184,148,.20);}
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .sheet{max-width:820px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden;}
+  .band{height:5px;background:var(--evergreen);}
+  .pad{padding:34px 40px 40px;}
+  @media (max-width:560px){.pad{padding:26px 22px 30px;}}
+
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--evergreen);margin:0 0 12px;}
+  h2.title{font-family:var(--serif);font-size:29px;line-height:1.14;font-weight:600;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance;}
+  .lede{font-size:15px;color:var(--ink-2);max-width:62ch;margin:0;}
+
+  .rule{border:0;border-top:1px solid var(--hair);margin:30px 0;}
+  .h3{font-family:var(--serif);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink-3);text-transform:uppercase;margin:0 0 18px;}
+
+  /* ---- layers diagram: protection wrapping the data ---- */
+  .layers{border:1px solid var(--evergreen-line);border-radius:12px;padding:14px 14px 16px;}
+  .layer{border:1px dashed var(--evergreen-line);border-radius:11px;padding:12px 14px;}
+  .layer + .layer, .layers > .layer > .layer{margin-top:0;}
+  .layer .cap{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:11px;}
+  .layer .cap .role{font-size:13.5px;font-weight:700;color:var(--ink);}
+  .layer .cap .tech{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--evergreen);background:var(--evergreen-soft);border-radius:20px;padding:2px 9px;}
+  .layer .cap .say{font-size:12.5px;color:var(--ink-2);}
+  .core{background:var(--core);border:1px solid var(--evergreen-line);border-radius:9px;border-style:solid;padding:16px 16px;text-align:center;}
+  .core .k{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .core .v{font-size:12.5px;color:var(--ink-2);margin:0;}
+  .wrapline{font-size:11.5px;color:var(--ink-3);text-align:center;margin:12px 0 0;font-style:italic;}
+
+  /* ---- three control cards ---- */
+  .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:620px){.controls{grid-template-columns:1fr;}}
+  .ctrl{border:1px solid var(--line);border-radius:9px;padding:15px 15px 16px;background:var(--sheet);}
+  .ctrl .q{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--ink);margin:0 0 6px;}
+  .ctrl p{font-size:12.5px;color:var(--ink-2);margin:0 0 9px;}
+  .ctrl .tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--evergreen);}
+
+  /* ---- isolation selector ---- */
+  .seg{display:flex;gap:6px;background:var(--evergreen-soft);border-radius:10px;padding:5px;flex-wrap:wrap;}
+  .seg button{flex:1;min-width:130px;font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--ink-2);background:transparent;border:0;border-radius:7px;padding:9px 10px;cursor:pointer;position:relative;transition:background .15s,color .15s;}
+  .seg button .rec{display:block;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);margin-top:2px;}
+  .seg button[aria-selected="true"]{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.10);}
+  .seg button:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
+
+  .detail{border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;padding:18px 20px 20px;margin-top:-1px;}
+  .detail .head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
+  .detail .head .name{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);}
+  .detail .head .for{font-size:12px;color:var(--ink-3);}
+  .detail .note{font-size:12.5px;color:var(--ink-2);margin:0 0 14px;max-width:60ch;}
+  .spec{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 22px;}
+  @media (max-width:560px){.spec{grid-template-columns:1fr;}}
+  .spec .row .l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px;}
+  .spec .row .d{font-size:13px;color:var(--ink);}
+
+  /* ---- honest bounds ---- */
+  .bounds{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  @media (max-width:620px){.bounds{grid-template-columns:1fr;}}
+  .bounds .col{padding:16px 18px 18px;}
+  .bounds .col.does{background:var(--evergreen-soft);border-right:1px solid var(--hair);}
+  .bounds h4{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin:0 0 10px;}
+  .bounds .does h4{color:var(--evergreen);}
+  .bounds .not h4{color:var(--gold);}
+  .bounds ul{margin:0;padding:0;list-style:none;}
+  .bounds li{font-size:12.5px;color:var(--ink-2);padding:4px 0 4px 18px;position:relative;}
+  .bounds .does li::before{content:"\2713";position:absolute;left:0;top:3px;color:var(--evergreen);font-weight:700;font-size:11px;}
+  .bounds .not li::before{content:"\2014";position:absolute;left:0;top:3px;color:var(--gold);font-weight:700;font-size:11px;}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="sheet">
+  <div class="band"></div>
+  <div class="pad">
+    <p class="eyebrow">How it's designed · How it's protected</p>
+    <h2 class="title">Built so your files never leave — and only the people you enroll can reach it.</h2>
+    <p class="lede">The security isn't a product you bolt on. It's how the system is put together: your documents sit at the center, and every layer around them decides who can get near, what the AI may do, and leaves a record you can show anyone.</p>
+
+    <hr class="rule">
+    <p class="h3">The layers around your documents</p>
+    <div class="layers">
+      <div class="layer">
+        <div class="cap"><span class="role">Your office</span><span class="tech">On-prem · no cloud</span><span class="say">Nothing is sent out. Full audit trail kept locally.</span></div>
+        <div class="layer">
+          <div class="cap"><span class="role">Dark access</span><span class="tech">Zero Trust</span><span class="say">Only devices you enroll can even see it — everything else on your network is blind to it.</span></div>
+          <div class="layer">
+            <div class="cap"><span class="role">Agent guardrails</span><span class="tech">Governed</span><span class="say">The AI only performs the tasks you approve — nothing more.</span></div>
+            <div class="layer">
+              <div class="cap"><span class="role">Local private model</span><span class="tech">Your Mac Studio</span><span class="say">Runs entirely on the appliance in your office — works offline.</span></div>
+              <div class="core">
+                <p class="k">Your documents &amp; matters</p>
+                <p class="v">Never leave the building.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="wrapline">Each layer wraps the one inside it — defense in depth, not a single lock.</p>
+    </div>
+
+    <hr class="rule">
+    <p class="h3">In plain terms, it answers three questions</p>
+    <div class="controls">
+      <div class="ctrl">
+        <p class="q">Who can reach it?</p>
+        <p>Only the devices you enroll. A stranger — or a compromised laptop on the same network — can't even find it.</p>
+        <span class="tag">Identity &amp; device trust</span>
+      </div>
+      <div class="ctrl">
+        <p class="q">What can it do?</p>
+        <p>Only the tasks you've approved. The AI works inside guardrails you set, scoped to each role.</p>
+        <span class="tag">Agent governance</span>
+      </div>
+      <div class="ctrl">
+        <p class="q">Can you prove it?</p>
+        <p>Every access and action is written to a plain-English record you can hand to a partner, client, or auditor.</p>
+        <span class="tag">Audit trail</span>
+      </div>
+    </div>
+
+    <hr class="rule">
+    <p class="h3">Choose how locked-down it runs</p>
+    <div class="seg" role="tablist" aria-label="Isolation level">
+      <button role="tab" aria-selected="true" id="tab-1" data-k="1">Dark on LAN<span class="rec">Recommended</span></button>
+      <button role="tab" aria-selected="false" id="tab-2" data-k="2">Isolated + Scheduled</button>
+      <button role="tab" aria-selected="false" id="tab-3" data-k="3">Vault / Air-gapped</button>
+    </div>
+    <div class="detail" id="detail" role="tabpanel" aria-labelledby="tab-1"></div>
+
+    <hr class="rule">
+    <p class="h3">What this does — and doesn't</p>
+    <div class="bounds">
+      <div class="col does">
+        <h4>What it does</h4>
+        <ul>
+          <li>Shrinks the attack surface to near-zero — no open doors on your network</li>
+          <li>Least-privilege access — people reach only what they should</li>
+          <li>A full, plain-English record of every access</li>
+          <li>Your documents never leave the building</li>
+        </ul>
+      </div>
+      <div class="col not">
+        <h4>What it doesn't (said plainly)</h4>
+        <ul>
+          <li>It's protection, not magic — it runs on macOS; a device already compromised is still compromised</li>
+          <li>Zero Trust controls who can connect; the guardrails control what the AI does — you need both, and you have both</li>
+          <li>Maximum isolation (Vault) trades remote convenience for on-site updates</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var LEVELS = {
+    "1": {
+      name: "Dark on LAN", forWhom: "Most firms",
+      note: "Full protection while staying easy to run. Only enrolled devices can see the system; everything else on your network is blind to it. We keep it current over a dark, logged tunnel that never touches your files.",
+      spec: [
+        ["Connectivity", "On your office network · no internet"],
+        ["Updates", "Managed remotely over a dark, logged tunnel"],
+        ["Who can use it", "Your whole team, from enrolled devices"],
+        ["Audit", "Continuous"]
+      ]
+    },
+    "2": {
+      name: "Isolated + Scheduled", forWhom: "Heavier compliance",
+      note: "The appliance sits on its own isolated segment with tighter change control. Updates happen only in scheduled windows you approve, so nothing changes unannounced.",
+      spec: [
+        ["Connectivity", "Network-isolated segment · no internet"],
+        ["Updates", "Controlled, scheduled change windows"],
+        ["Who can use it", "Your team, from enrolled devices"],
+        ["Audit", "Continuous"]
+      ]
+    },
+    "3": {
+      name: "Vault / Air-gapped", forWhom: "The highest-stakes matters",
+      note: "Off every network entirely — the only way to remove network attack surface completely. Updates arrive on signed, encrypted media, hand-carried and verified on the box. Support is on-site. Maximum isolation, in exchange for remote convenience.",
+      spec: [
+        ["Connectivity", "Off all networks"],
+        ["Updates", "Signed, encrypted media · hand-carried &amp; verified"],
+        ["Who can use it", "At the machine, or a tightly controlled local group"],
+        ["Audit", "Point-in-time (exported)"]
+      ]
+    }
+  };
+  var detail = document.getElementById("detail");
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.seg button'));
+  function render(k){
+    var L = LEVELS[k];
+    var rows = L.spec.map(function(s){
+      return '<div class="row"><div class="l">'+s[0]+'</div><div class="d">'+s[1]+'</div></div>';
+    }).join("");
+    detail.innerHTML =
+      '<div class="head"><span class="name">'+L.name+'</span><span class="for">Best for: '+L.forWhom+'</span></div>'+
+      '<p class="note">'+L.note+'</p>'+
+      '<div class="spec">'+rows+'</div>';
+  }
+  function select(btn){
+    tabs.forEach(function(t){ t.setAttribute("aria-selected", t===btn ? "true":"false"); });
+    detail.setAttribute("aria-labelledby", btn.id);
+    render(btn.getAttribute("data-k"));
+  }
+  tabs.forEach(function(btn, i){
+    btn.addEventListener("click", function(){ select(btn); });
+    btn.addEventListener("keydown", function(e){
+      if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
+        e.preventDefault();
+        var n = e.key==="ArrowRight" ? (i+1)%tabs.length : (i-1+tabs.length)%tabs.length;
+        tabs[n].focus(); select(tabs[n]);
+      }
+    });
+  });
+  render("1");
+</script>
+
+</body>
+</html>
