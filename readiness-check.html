@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free AI Readiness Check — is your AI use insurance-ready?</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13);
+    --red:#b3402f; --amber:#a8791f;
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+    --mono:SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --red:#e07a68; --amber:#d0a54e;
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--red:#b3402f;--amber:#a8791f;}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--red:#e07a68;--amber:#d0a54e;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .sheet{max-width:720px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden;}
+  .band{height:5px;background:var(--evergreen);}
+  .pad{padding:32px 38px 38px;}
+  @media (max-width:560px){.pad{padding:24px 20px 28px;}}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;}
+  h1{font-family:var(--serif);font-size:27px;line-height:1.15;font-weight:600;margin:0 0 8px;text-wrap:balance;}
+  .lede{font-size:14.5px;color:var(--ink-2);max-width:60ch;margin:0 0 6px;}
+
+  .q{margin-top:22px;}
+  .q .lbl{font-size:14px;font-weight:700;margin-bottom:9px;}
+  .q .hint{font-size:11.5px;color:var(--ink-3);font-weight:400;}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;}
+  .opt{font-size:12.5px;color:var(--ink-2);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 11px;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:7px;}
+  .opt input{accent-color:var(--evergreen);margin:0;}
+  .opt.on{border-color:var(--evergreen);background:var(--evergreen-soft);color:var(--ink);}
+  input[type=text]{width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+
+  .go{margin-top:26px;font-family:var(--sans);font-size:15px;font-weight:700;color:#fff;background:var(--evergreen);border:0;border-radius:9px;padding:13px 22px;cursor:pointer;}
+  .go:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
+
+  /* report */
+  .report{display:none;margin-top:6px;}
+  .report.show{display:block;}
+  .score{display:flex;align-items:center;gap:16px;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin-bottom:20px;flex-wrap:wrap;}
+  .dial{font-family:var(--serif);font-size:34px;font-weight:700;line-height:1;}
+  .score .rlabel{font-size:15px;font-weight:800;letter-spacing:.02em;}
+  .score .rsub{font-size:12.5px;color:var(--ink-2);}
+  .bar{flex:1 1 100%;height:8px;border-radius:20px;background:var(--hair);overflow:hidden;margin-top:4px;}
+  .bar > i{display:block;height:100%;border-radius:20px;}
+  .lvl-red{color:var(--red);} .lvl-amber{color:var(--amber);} .lvl-green{color:var(--evergreen);}
+  .fill-red{background:var(--red);} .fill-amber{background:var(--amber);} .fill-green{background:var(--evergreen);}
+
+  .rh{font-family:var(--serif);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink-3);text-transform:uppercase;margin:22px 0 10px;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{font-size:12px;color:var(--ink);background:var(--evergreen-soft);border:1px solid var(--evergreen-line);border-radius:20px;padding:4px 11px;}
+  .chip.warn{background:var(--gold-soft);border-color:var(--gold);color:var(--gold);font-weight:700;}
+  .gaps{margin:0;padding:0;list-style:none;}
+  .gaps li{font-size:13px;color:var(--ink-2);padding:6px 0 6px 22px;position:relative;border-bottom:1px solid var(--hair);}
+  .gaps li:last-child{border-bottom:0;}
+  .gaps li::before{content:"!";position:absolute;left:0;top:6px;width:15px;height:15px;border-radius:50%;background:var(--gold-soft);color:var(--gold);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .gaps li.ok::before{content:"\2713";background:var(--evergreen-soft);color:var(--evergreen);}
+  .policy{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:12px;color:var(--ink);white-space:pre-wrap;line-height:1.55;max-height:340px;overflow:auto;}
+  .copy{margin-top:8px;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--evergreen);background:transparent;border:1px solid var(--evergreen-line);border-radius:7px;padding:7px 12px;cursor:pointer;}
+  .dcls{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  @media (max-width:520px){.dcls{grid-template-columns:1fr;}}
+  .dcl{border:1px solid var(--line);border-radius:8px;padding:11px 13px;}
+  .dcl .t{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
+  .dcl .d{font-size:12px;color:var(--ink-2);margin-top:3px;}
+  .cta{margin-top:24px;background:var(--evergreen-soft);border-radius:10px;padding:17px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  .cta p{margin:0;font-size:13.5px;color:var(--ink);flex:1;min-width:220px;}
+  .cta .btn{font-family:var(--sans);font-size:13px;font-weight:700;color:#fff;background:var(--evergreen);border:0;border-radius:8px;padding:11px 17px;cursor:pointer;}
+  .foot{margin-top:16px;font-size:11px;color:var(--ink-3);}
+  .bench p{font-size:13px;color:var(--ink-2);margin:0 0 6px;} .bench .bsub{font-size:12px;color:var(--ink-3);} .bench b{color:var(--ink);font-weight:700;}
+  .risks{display:grid;grid-template-columns:1fr 1fr;gap:8px;} @media(max-width:520px){.risks{grid-template-columns:1fr;}}
+  .risk{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:8px;padding:9px 12px;}
+  .rdot,.iqd{width:9px;height:9px;border-radius:50%;flex:none;} .rdot.g,.iqd.g{background:var(--evergreen);} .rdot.a,.iqd.a{background:var(--amber);} .rdot.r,.iqd.r{background:var(--red);}
+  .rname{flex:1;font-size:12.5px;color:var(--ink);} .rlvl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;} .rlvl.g{color:var(--evergreen);}.rlvl.a{color:var(--amber);}.rlvl.r{color:var(--red);}
+  .iq{margin:0;padding:0;list-style:none;} .iq li{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid var(--hair);} .iq li:last-child{border-bottom:0;}
+  .iq .iqt{flex:1;} .iq .key{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);border-radius:20px;padding:1px 7px;flex:none;}
+  .iqsrc{font-size:11px;color:var(--ink-3);margin:9px 2px 0;line-height:1.45;} .iqsrc a{color:var(--evergreen);} .iqsrc b{color:var(--ink-2);}
+  .road{margin:0;padding:0;list-style:none;} .rd{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--hair);} .rd:last-child{border-bottom:0;}
+  .rd .rn{font-family:var(--serif);font-size:12px;font-weight:800;color:#fff;background:var(--evergreen);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px;}
+  .rd.locked .rn{background:var(--ink-3);} .rd b{font-size:13px;} .rd .rs{display:block;font-size:11.5px;color:var(--ink-2);margin-top:2px;}
+  .rd .lk{font-size:10px;font-weight:800;color:var(--gold);background:var(--gold-soft);border-radius:20px;padding:1px 8px;margin-left:6px;white-space:nowrap;}
+  .tready{background:var(--gold-soft);border-radius:9px;padding:12px 15px;font-size:13.5px;color:var(--ink);margin-top:12px;} .tready b{font-weight:700;}
+  .polintro{font-size:13px;color:var(--ink-2);margin:0 0 12px;max-width:64ch;} .polintro b{color:var(--ink);font-weight:700;}
+  .polfoot{font-size:11.5px;color:var(--ink-3);margin:9px 0 0;font-style:italic;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="band"></div>
+  <div class="pad">
+    <p class="eyebrow">Free · 2 minutes · no email required to see your score</p>
+    <h1>Is your AI use insurance-ready?</h1>
+    <p class="lede">81% of cyber insurers now ask about AI governance at renewal — and "no policy" can mean higher premiums or denied coverage. Answer a few questions and get your readiness score, your gaps, and a starter AI policy you can use today.</p>
+
+    <div id="form">
+      <div class="q">
+        <div class="lbl">Company name <span class="hint">(optional — personalizes your policy)</span></div>
+        <input type="text" id="company" placeholder="Your company" autocomplete="organization">
+      </div>
+
+      <div class="q" data-q="tools">
+        <div class="lbl">Which AI tools does your team use? <span class="hint">select all that apply</span></div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="ChatGPT">ChatGPT / OpenAI</label>
+          <label class="opt"><input type="checkbox" value="Claude">Claude</label>
+          <label class="opt"><input type="checkbox" value="Gemini">Gemini / Google</label>
+          <label class="opt"><input type="checkbox" value="Copilot">Microsoft Copilot</label>
+          <label class="opt"><input type="checkbox" value="A private / local AI">A private / local AI</label>
+          <label class="opt" data-shadow="1"><input type="checkbox" value="Personal accounts">Staff use their own accounts</label>
+          <label class="opt" data-shadow="1"><input type="checkbox" value="Not sure">Not sure who uses what</label>
+        </div>
+      </div>
+
+      <div class="q" data-q="policy">
+        <div class="lbl">Do you have a written AI acceptable-use policy?</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="policy" value="yes">Yes, current</label>
+          <label class="opt"><input type="radio" name="policy" value="draft">A draft / informal</label>
+          <label class="opt"><input type="radio" name="policy" value="no">No</label>
+        </div>
+      </div>
+
+      <div class="q" data-q="data">
+        <div class="lbl">What sensitive data could end up in an AI tool? <span class="hint">select all that apply</span></div>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" value="Client / customer data">Client / customer data</label>
+          <label class="opt"><input type="checkbox" value="Financial records">Financial records</label>
+          <label class="opt"><input type="checkbox" value="Health information">Health information</label>
+          <label class="opt"><input type="checkbox" value="Legal / privileged">Legal / privileged</label>
+          <label class="opt"><input type="checkbox" value="Employee personal info">Employee PII</label>
+          <label class="opt"><input type="checkbox" value="Source code / IP">Source code / IP</label>
+          <label class="opt"><input type="checkbox" value="None of these">None of these</label>
+        </div>
+      </div>
+
+      <div class="q" data-q="review">
+        <div class="lbl">Is there a human review step before important AI output is used or sent?</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="review" value="always">Yes, always</label>
+          <label class="opt"><input type="radio" name="review" value="sometimes">Sometimes</label>
+          <label class="opt"><input type="radio" name="review" value="no">No</label>
+        </div>
+      </div>
+
+      <div class="q" data-q="inv">
+        <div class="lbl">Do you know who on your team uses AI, and for what?</div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="inv" value="yes">Yes, tracked</label>
+          <label class="opt"><input type="radio" name="inv" value="rough">Roughly</label>
+          <label class="opt"><input type="radio" name="inv" value="no">No</label>
+        </div>
+      </div>
+
+      <div class="q" data-q="reg">
+        <div class="lbl">Are you in a regulated field or handle regulated data? <span class="hint">legal, healthcare, finance</span></div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="reg" value="yes">Yes</label>
+          <label class="opt"><input type="radio" name="reg" value="no">No</label>
+        </div>
+      </div>
+
+      <div class="q" id="reg-detail" style="display:none;">
+        <div class="lbl">Which apply to you? <span class="hint">select all that apply</span></div>
+        <div class="opts" data-q="regbodies">
+          <label class="opt"><input type="checkbox" value="HIPAA">HIPAA (health)</label>
+          <label class="opt"><input type="checkbox" value="PCI-DSS">PCI-DSS (card payments)</label>
+          <label class="opt"><input type="checkbox" value="SOC 2">SOC 2</label>
+          <label class="opt"><input type="checkbox" value="GDPR / UK GDPR">GDPR / UK GDPR</label>
+          <label class="opt"><input type="checkbox" value="EU AI Act">EU AI Act</label>
+          <label class="opt"><input type="checkbox" value="State AI / privacy laws">State AI / privacy (CO, CCPA)</label>
+          <label class="opt"><input type="checkbox" value="Financial (FINRA / SEC / GLBA)">Financial (FINRA / SEC / GLBA)</label>
+          <label class="opt"><input type="checkbox" value="Professional / bar rules">Professional / bar rules</label>
+          <label class="opt"><input type="checkbox" value="Other">Other</label>
+        </div>
+      </div>
+
+      <button class="go" id="go" type="button">Get my readiness report →</button>
+    </div>
+
+    <div class="report" id="report">
+      <div class="score" id="score">
+        <div class="dial" id="dial">–</div>
+        <div>
+          <div class="rlabel" id="rlabel"></div>
+          <div class="rsub" id="rsub"></div>
+        </div>
+        <div class="bar"><i id="barfill"></i></div>
+      </div>
+
+      <div class="rh">How you compare</div>
+      <div class="bench" id="bench"></div>
+
+      <div class="rh">Your AI inventory</div>
+      <div class="chips" id="inventory"></div>
+
+      <div class="rh" id="reg-rh" style="display:none;">Regulations that apply to you</div>
+      <div class="chips" id="regchips" style="display:none;"></div>
+
+      <div class="rh">Risk snapshot</div>
+      <div class="risks" id="risks"></div>
+
+      <div class="rh">What your cyber insurer will ask at renewal</div>
+      <ul class="iq" id="iq"></ul>
+      <p class="iqsrc">Based on 2026 cyber-insurance renewal questionnaires and the <a href="https://content.naic.org/insurance-topics/artificial-intelligence" target="_blank" rel="noopener">NAIC Model Bulletin on AI</a> (adopted by 23 states + D.C.). Carriers now reduce AI-related coverage — and can <b>deny claims</b> — when the AI governance you attested to on the application can't be produced.</p>
+
+      <div class="rh">Where you stand</div>
+      <ul class="gaps" id="gaps"></ul>
+
+      <div class="rh">Your priority roadmap</div>
+      <ul class="road" id="road"></ul>
+      <div class="tready" id="tready"></div>
+
+      <div class="rh">Your starter AI policy — ready to use today</div>
+      <p class="polintro">This is a <b>real, usable AI acceptable-use policy</b> — generated from your answers, not a blank template. It's the <b>#1 document cyber insurers ask for</b> at renewal, and the thing most businesses simply don't have. It's structured on the <b>NIST AI Risk Management Framework</b>, so it holds up with insurers and auditors. <b>Copy it, fill in any [brackets], date it, and share it with your team</b> — that one step alone moves you toward insurance-ready.</p>
+      <div class="policy" id="policy"></div>
+      <button class="copy" id="copy" type="button">Copy this policy</button>
+      <p class="polfoot">Want it done right? The Governed plan turns this starter into a maintained, board-ready policy that updates as the rules change — so you're not rewriting it next year.</p>
+
+      <div class="rh">Data you should never put in public AI</div>
+      <div class="dcls" id="dcls"></div>
+
+      <div class="cta">
+        <p><b>This is exactly what the Governed plan sets up and keeps current for you</b> — the policy, the inventory, the data rules, and the audit trail insurers want. Want it done for you?</p>
+        <a class="btn" href="index.html#contact" style="text-decoration:none;">Book a 20-min fit call</a>
+      </div>
+      <p class="foot">Educational, not legal advice. Your answers stay in your browser until you choose to share them.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // reflect selected state on labels
+  document.querySelectorAll('.opt input').forEach(function(inp){
+    function sync(){
+      if(inp.type==='radio'){
+        var name=inp.name;
+        document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){ r.closest('.opt').classList.toggle('on', r.checked); });
+      } else { inp.closest('.opt').classList.toggle('on', inp.checked); }
+    }
+    inp.addEventListener('change', sync);
+  });
+
+  // show the "which regulations apply?" follow-up only when regulated = Yes
+  document.querySelectorAll('input[name="reg"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      document.getElementById('reg-detail').style.display = (this.value==='yes' && this.checked) ? 'block' : 'none';
+    });
+  });
+
+  function vals(q){ return Array.prototype.map.call(document.querySelectorAll('[data-q="'+q+'"] input:checked'), function(i){return i.value;}); }
+  function radio(name){ var el=document.querySelector('input[name="'+name+'"]:checked'); return el?el.value:''; }
+
+  document.getElementById('go').addEventListener('click', function(){
+    var tools=vals('tools'), data=vals('data'), policy=radio('policy'), review=radio('review'), inv=radio('inv'), reg=radio('reg');
+    var company=(document.getElementById('company').value||'Your company').trim();
+    var shadow = tools.indexOf('Personal accounts')>=0 || tools.indexOf('Not sure')>=0;
+    var sensit = data.filter(function(d){return d!=='None of these';});
+    var regBodies = reg==='yes' ? vals('regbodies') : [];
+
+    // ---- score ----
+    var s=25;
+    s += policy==='yes'?30:(policy==='draft'?10:0);
+    s += review==='always'?15:(review==='sometimes'?7:0);
+    s += inv==='yes'?15:(inv==='rough'?7:0);
+    s += shadow?0:15;
+    s = Math.max(0, Math.min(100, s));
+    var lvl = s>=70?'green':(s>=40?'amber':'red');
+    var label = s>=70?'Insurance-ready':(s>=40?'Partly ready':'Not ready yet');
+    var sub = s>=70?'Solid footing — tighten the gaps below and keep it current.'
+            : s>=40?'You have some pieces — a few gaps could cost you at renewal.'
+            : 'Real exposure. The fixes below are fast and mostly free.';
+    if(reg==='yes' && s<70) sub += ' As a regulated business, the bar is higher for you.';
+
+    document.getElementById('dial').textContent=s;
+    document.getElementById('dial').className='dial lvl-'+lvl;
+    document.getElementById('rlabel').textContent=label;
+    document.getElementById('rlabel').className='rlabel lvl-'+lvl;
+    document.getElementById('rsub').textContent=sub;
+    var bf=document.getElementById('barfill'); bf.style.width=s+'%'; bf.className='fill-'+lvl;
+
+    // ---- inventory ----
+    var inhtml = tools.filter(function(t){return t!=='Not sure'&&t!=='Personal accounts';}).map(function(t){return '<span class="chip">'+t+'</span>';}).join('');
+    if(shadow) inhtml += '<span class="chip warn">⚠ Shadow AI — unmanaged / personal use detected</span>';
+    if(!inhtml) inhtml='<span class="chip warn">No approved tools listed — start by naming what\'s allowed</span>';
+    document.getElementById('inventory').innerHTML=inhtml;
+
+    // ---- regulatory scope ----
+    var regrh=document.getElementById('reg-rh'), rc=document.getElementById('regchips');
+    if(regBodies.length){
+      regrh.style.display='block'; rc.style.display='flex';
+      rc.innerHTML=regBodies.map(function(x){return '<span class="chip">'+x+'</span>';}).join('');
+    } else { regrh.style.display='none'; rc.style.display='none'; }
+
+    // ---- gaps ----
+    var g=[];
+    g.push(policy==='yes'?{ok:1,t:'Written AI policy — in place.'}
+      :{ok:0,t:'No written AI policy. This is the #1 thing cyber insurers ask for at renewal — a dated, staff-accessible policy.'});
+    g.push(review==='always'?{ok:1,t:'Human review of important AI output — in place.'}
+      :{ok:0,t:'AI output isn\'t consistently reviewed by a person before it\'s used or sent.'});
+    g.push(inv==='yes'?{ok:1,t:'You track who uses AI and how.'}
+      :{ok:0,t:'No clear inventory of who uses AI and for what — insurers and auditors expect one.'});
+    if(shadow) g.push({ok:0,t:'Shadow AI: staff using personal / unapproved tools means data can leak where you can\'t see it.'});
+    if(sensit.length) g.push({ok:0,t:'Sensitive data ('+sensit.slice(0,3).join(', ')+(sensit.length>3?'…':'')+') could reach public AI without rules to stop it.'});
+    if(regBodies.length) g.push({ok:0,t:'You\'re subject to '+regBodies.slice(0,3).join(', ')+(regBodies.length>3?'…':'')+'. Each needs your AI use mapped to it — the Regulated plan builds a NIST/ISO-aligned pack for these.'});
+    document.getElementById('gaps').innerHTML=g.map(function(x){return '<li class="'+(x.ok?'ok':'')+'">'+x.t+'</li>';}).join('');
+
+    // ---- starter policy ----
+    var d=new Date(); var dateStr=(d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();
+    var approved = tools.filter(function(t){return t!=='Not sure'&&t!=='Personal accounts';});
+    var prohibited = sensit.length?sensit:['client data','financial records','anything confidential'];
+    var pol =
+company+' — AI Acceptable Use Policy (starter)\n'+
+'Effective '+dateStr+' · aligned with the NIST AI Risk Management Framework\n'+
+'\n'+
+'1. Approved tools. Team members may use these AI tools for work:\n'+
+'   '+(approved.length?approved.join(', '):'[list your approved tools]')+'.\n'+
+'   Any other AI tool must be approved before use.\n'+
+'\n'+
+'2. Data you must never enter into AI tools:\n'+
+'   '+prohibited.join(', ')+'.\n'+
+'   When in doubt, do not paste it in.\n'+
+'\n'+
+'3. Human review. A person must review AI output before it is sent to a\n'+
+'   client, published, or used to make a decision.\n'+
+'\n'+
+'4. Accounts. Use company-provided AI accounts, not personal ones, so usage\n'+
+'   can be overseen and logged.\n'+
+'\n'+
+'5. Ownership. This policy is dated, reviewed each quarter, and shared with\n'+
+'   all staff. Report any AI-related incident to management immediately.\n';
+    document.getElementById('policy').textContent=pol;
+
+    // ---- data classification ----
+    var restricted=[], caution=[];
+    sensit.forEach(function(x){
+      if(['Health information','Legal / privileged','Financial records','Client / customer data'].indexOf(x)>=0) restricted.push(x);
+      else caution.push(x);
+    });
+    var dcls='';
+    dcls+='<div class="dcl"><div class="t lvl-red">Restricted — never in public AI</div><div class="d">'+(restricted.length?restricted.join(', '):'None selected')+'</div></div>';
+    dcls+='<div class="dcl"><div class="t lvl-amber">Handle with care</div><div class="d">'+(caution.length?caution.join(', '):'None selected')+'</div></div>';
+    document.getElementById('dcls').innerHTML=dcls;
+
+    // ===== 1. peer benchmark =====
+    var ahead = Math.max(5, Math.min(95, Math.round(s*0.8)));
+    var benchLine = policy==='yes'
+      ? 'You have a written AI policy — that already puts you ahead of the <b>77% of small businesses that don’t.</b>'
+      : 'You’re among the <b>77% of small businesses with no written AI policy</b> — the group insurers flag first.';
+    document.getElementById('bench').innerHTML =
+      '<p>'+benchLine+'</p><p class="bsub">Roughly <b>'+ahead+'%</b> readiness vs. firms your size. For context: only <b>29%</b> have a real governance plan, and <b>81%</b> of cyber insurers now ask about this at renewal.</p>';
+
+    // ===== 2. insurer's questions (R/A/G, sorted worst-first, weighted) =====
+    var approvedCount = tools.filter(function(t){return t!=='Not sure'&&t!=='Personal accounts';}).length;
+    // w:2 = heavily weighted ("Key"), w:1 = standard
+    var iq=[
+      {q:'Do you have a written AI acceptable-use policy?', rag: policy==='yes'?'g':(policy==='draft'?'a':'r'), w:2},
+      {q:'What data categories are prohibited in AI tools?', rag: policy==='yes'?'g':(policy==='draft'?'a':'r'), w:2},
+      {q:'Are personal / unapproved AI accounts prohibited?', rag: shadow?'r':'g', w:2},
+      {q:'Which AI tools are sanctioned for staff?', rag:(approvedCount && !shadow)?'g':(shadow?'r':'a'), w:1},
+      {q:'Is AI output reviewed by a person before use?', rag: review==='always'?'g':(review==='sometimes'?'a':'r'), w:1},
+      {q:'Do you keep an inventory of AI tools in use?', rag: inv==='yes'?'g':(inv==='rough'?'a':'r'), w:1},
+      {q:'Is there AI oversight / incident response?', rag:(policy==='yes'&&inv==='yes')?'g':(policy==='no'?'r':'a'), w:1}
+    ];
+    var ragRank={r:0,a:1,g:2};
+    iq.sort(function(a,b){ return (ragRank[a.rag]*10 - a.w) - (ragRank[b.rag]*10 - b.w); }); // red→amber→green, heavier first
+    document.getElementById('iq').innerHTML = iq.map(function(q){
+      return '<li><span class="iqd '+q.rag+'"></span><span class="iqt">'+q.q+'</span>'+(q.w>=2?'<span class="key">Key</span>':'')+'</li>';
+    }).join('');
+
+    // ===== 3. risk snapshot =====
+    function lvlName(x){ return x==='r'?'High':(x==='a'?'Medium':'Low'); }
+    var risks=[
+      ['Shadow-AI exposure', shadow?'r':'g'],
+      ['Data-leak risk', (sensit.length && (policy!=='yes'||shadow||review==='no'))?'r':((sensit.length&&policy==='draft')?'a':'g')],
+      ['Insurance / coverage risk', policy==='no'?'r':((policy==='draft'||inv==='no')?'a':'g')]
+    ];
+    if(reg==='yes') risks.push(['Compliance risk', s<70?'r':'a']);
+    document.getElementById('risks').innerHTML = risks.map(function(x){
+      return '<div class="risk"><span class="rdot '+x[1]+'"></span><span class="rname">'+x[0]+'</span><span class="rlvl '+x[1]+'">'+lvlName(x[1])+'</span></div>';
+    }).join('');
+
+    // ===== 4. priority roadmap (#1 started, rest locked) =====
+    var road=[{done:1,t:'Put a written AI policy in place',s:'✓ Started — your starter policy is above. The Governed plan customizes and maintains it.'}];
+    if(shadow) road.push({t:'Shut down shadow AI',s:'Move staff to approved, overseen accounts.'});
+    if(review!=='always') road.push({t:'Add a human-review checkpoint',s:'Before AI output is sent or used.'});
+    if(inv!=='yes') road.push({t:'Build a live AI inventory',s:'Know who uses what — tracked over time.'});
+    if(sensit.length) road.push({t:'Implement data classification',s:'Enforce what can’t touch public AI.'});
+    if(reg==='yes') road.push({t:'Map to your regulations',s:'A NIST / ISO-aligned compliance pack.'});
+    road=road.slice(0,3);
+    document.getElementById('road').innerHTML = road.map(function(r0,i){
+      var head = r0.done ? '<b>'+r0.t+'</b>' : '<b>'+r0.t+'</b> <span class="lk">🔒 Governed plan</span>';
+      return '<li class="rd '+(r0.done?'done':'locked')+'"><span class="rn">'+(i+1)+'</span><div>'+head+'<span class="rs">'+r0.s+'</span></div></li>';
+    }).join('');
+
+    // ===== 5. time-to-ready =====
+    var wk = s>=70?'1–2':(s>=40?'2–4':'3–6');
+    document.getElementById('tready').innerHTML = 'You could be <b>insurance-ready in ~'+wk+' weeks</b> with the fixes above — most are fast, and the Governed plan does them for you.';
+
+    document.getElementById('form').style.display='none';
+    var r=document.getElementById('report'); r.classList.add('show');
+    r.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  document.getElementById('copy').addEventListener('click', function(){
+    var t=document.getElementById('policy').textContent;
+    navigator.clipboard.writeText(t).then(function(){ var b=document.getElementById('copy'); b.textContent='Copied ✓'; setTimeout(function(){b.textContent='Copy policy';},1600); }, function(){});
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Govern &amp; Secure Your On-Prem AI — the offer</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15);
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .sheet{max-width:860px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden;}
+  .band{height:5px;background:var(--evergreen);}
+  .pad{padding:34px 40px 40px;}
+  @media (max-width:560px){.pad{padding:26px 22px 30px;}}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--evergreen);margin:0 0 12px;}
+  h1{font-family:var(--serif);font-size:31px;line-height:1.13;font-weight:600;letter-spacing:-.01em;margin:0 0 10px;text-wrap:balance;}
+  .lede{font-size:15.5px;color:var(--ink-2);max-width:62ch;margin:0;}
+  .wedge{margin:24px 0 4px;font-size:14px;color:var(--ink);border-left:3px solid var(--gold);padding:3px 0 3px 16px;max-width:66ch;}
+  .wedge b{font-weight:700;}
+  .rule{border:0;border-top:1px solid var(--hair);margin:28px 0;}
+  .h2{font-family:var(--serif);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink-3);text-transform:uppercase;margin:0 0 16px;}
+  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:680px){.pillars{grid-template-columns:1fr 1fr;}}
+  @media (max-width:420px){.pillars{grid-template-columns:1fr;}}
+  .pillar h3{font-size:14.5px;font-weight:700;margin:0 0 4px;}
+  .pillar p{font-size:12.5px;color:var(--ink-2);margin:0;}
+  .pillar .k{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--evergreen);}
+
+  .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  @media (max-width:760px){.tiers{grid-template-columns:1fr 1fr;} .tier{border-bottom:1px solid var(--hair);}}
+  @media (max-width:460px){.tiers{grid-template-columns:1fr;}}
+  .tier{padding:16px 15px 16px;border-right:1px solid var(--hair);display:flex;flex-direction:column;}
+  .tier:last-child{border-right:0;}
+  .tier.feature{background:var(--evergreen-soft);}
+  .tier .name{font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-3);}
+  .tier .tag{float:right;font-size:8.5px;font-weight:800;color:#fff;background:var(--evergreen);border-radius:20px;padding:2px 7px;letter-spacing:.03em;}
+  .tier .tag.free{background:var(--gold);}
+  .tier .price{font-family:var(--serif);font-size:23px;font-weight:600;margin:9px 0 2px;letter-spacing:-.01em;}
+  .tier .price small{font-size:11px;color:var(--ink-3);font-family:var(--sans);font-weight:500;}
+  .tier .setup{font-size:10.5px;color:var(--ink-3);margin-bottom:10px;min-height:14px;}
+  .tier ul{margin:0;padding:0;list-style:none;flex:1;}
+  .tier li{font-size:11.5px;color:var(--ink-2);padding:3px 0 3px 15px;position:relative;}
+  .tier li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--evergreen);}
+  .tier .incl{margin-top:12px;font-family:var(--sans);font-size:11px;font-weight:700;color:var(--evergreen);background:transparent;border:1px solid var(--evergreen-line);border-radius:7px;padding:6px 8px;cursor:pointer;width:100%;transition:background .12s;}
+  .tier .incl:hover{background:var(--evergreen-soft);}
+  .tier .incl:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
+  .illus{font-size:11px;color:var(--ink-3);font-style:italic;margin-top:10px;}
+
+  .cta{margin-top:28px;display:flex;align-items:center;gap:15px;flex-wrap:wrap;background:var(--evergreen-soft);border-radius:10px;padding:18px 22px;}
+  .cta .free{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);border-radius:20px;padding:4px 11px;flex:none;}
+  .cta .txt{font-size:14px;color:var(--ink);flex:1;min-width:220px;} .cta .txt b{font-weight:700;}
+  .cta .btn{font-family:var(--sans);font-size:13px;font-weight:700;color:#fff;background:var(--evergreen);border:0;border-radius:8px;padding:11px 18px;cursor:pointer;white-space:nowrap;}
+
+  /* modal */
+  .backdrop{position:fixed;inset:0;background:rgba(15,14,10,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+  .backdrop.open{display:flex;}
+  .modal{background:var(--sheet);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);max-width:520px;width:100%;max-height:86vh;overflow-y:auto;}
+  .modal .mtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:20px 22px 6px;}
+  .modal .mtop .mname{font-family:var(--serif);font-size:20px;font-weight:600;}
+  .modal .mtop .mprice{font-size:12.5px;color:var(--ink-3);margin-top:2px;}
+  .modal .close{background:transparent;border:0;font-size:22px;line-height:1;color:var(--ink-3);cursor:pointer;padding:2px 6px;}
+  .modal .close:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
+  .modal .prev{font-size:12px;color:var(--gold);font-weight:700;padding:0 22px 4px;}
+  .modal .grp{padding:12px 22px 0;}
+  .modal .grp:last-child{padding-bottom:22px;}
+  .modal .grp .gl{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--evergreen);margin-bottom:7px;}
+  .modal .grp ul{margin:0;padding:0;list-style:none;}
+  .modal .grp li{font-size:13px;color:var(--ink-2);padding:4px 0 4px 20px;position:relative;}
+  .modal .grp li::before{content:"\2713";position:absolute;left:0;top:4px;color:var(--evergreen);font-weight:700;font-size:11px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="band"></div>
+  <div class="pad">
+    <p class="eyebrow">The layer that makes on-prem AI safe</p>
+    <h1>Run private AI that's safe, compliant, and yours to reach — anywhere.</h1>
+    <p class="lede">On-prem AI is back for good reasons: cost, privacy, and control. We add the layer your business actually needs on top of it — <b>governed</b>, <b>insurance-ready</b>, and <b>securely reachable</b>. We don't sell you a box; we make the AI you run trustworthy.</p>
+
+    <p class="wedge"><b>Why now:</b> 81% of cyber insurers now ask about AI governance at renewal — no written policy can mean higher premiums or denied coverage. Add shadow-AI data leaks and client compliance demands, and "we'll deal with it later" is the expensive option.</p>
+
+    <hr class="rule">
+    <p class="h2">What you get — four layers</p>
+    <div class="pillars">
+      <div class="pillar"><span class="k">Governed</span><h3>Insurance-ready</h3><p>AI inventory, acceptable-use policy, data classification, and a plain-English audit trail.</p></div>
+      <div class="pillar"><span class="k">Secure</span><h3>Zero-trust access</h3><p>Only your enrolled people and devices can reach it. No open ports. Reach it anywhere, safely.</p></div>
+      <div class="pillar"><span class="k">Private</span><h3>On your hardware</h3><p>Sensitive work runs locally — it never leaves the building for a public AI service.</p></div>
+      <div class="pillar"><span class="k">Kept current</span><h3>As rules change</h3><p>We keep the guardrails and policies updated as models and regulations move.</p></div>
+    </div>
+
+    <hr class="rule">
+    <p class="h2">Plans</p>
+    <div class="tiers">
+      <div class="tier">
+        <span class="name">Readiness Check <span class="tag free">Free</span></span>
+        <div class="price">$0</div>
+        <div class="setup">Self-serve · no obligation</div>
+        <ul>
+          <li>AI inventory (surfaces shadow AI)</li>
+          <li>Starter acceptable-use policy</li>
+          <li>Data-classification map</li>
+          <li>"Insurance-ready?" gap report</li>
+        </ul>
+        <button class="incl" data-tier="readiness" type="button">What's included →</button>
+      </div>
+      <div class="tier">
+        <span class="name">Governed</span>
+        <div class="price">$299<small>/mo</small></div>
+        <div class="setup">+ one-time setup</div>
+        <ul>
+          <li>Govern &amp; secure the AI you already use</li>
+          <li>Policy, data classification, audit trail</li>
+          <li>Insurance-ready documentation</li>
+          <li>Updates as rules change</li>
+        </ul>
+        <button class="incl" data-tier="governed" type="button">What's included →</button>
+      </div>
+      <div class="tier feature">
+        <span class="name">Governed + Private AI <span class="tag">Most firms</span></span>
+        <div class="price">$799<small>/mo</small></div>
+        <div class="setup">+ appliance &amp; setup</div>
+        <ul>
+          <li>Everything in Governed</li>
+          <li>Private AI on your hardware</li>
+          <li>Zero-trust secure access</li>
+          <li>Managed + quarterly review</li>
+        </ul>
+        <button class="incl" data-tier="private" type="button">What's included →</button>
+      </div>
+      <div class="tier">
+        <span class="name">Regulated</span>
+        <div class="price">Custom</div>
+        <div class="setup">multi-office / regulated</div>
+        <ul>
+          <li>Everything in Governed + Private AI</li>
+          <li>Compliance pack (NIST / ISO 42001)</li>
+          <li>Vertical workflows</li>
+          <li>Named engineer</li>
+        </ul>
+        <button class="incl" data-tier="regulated" type="button">What's included →</button>
+      </div>
+    </div>
+    <p class="illus">Prices illustrative — the free Readiness Check is the front door; recurring tiers cover keeping you current as regulations change. Set final numbers from your cost + time. Click any plan's "What's included" for the full breakdown.</p>
+
+    <div class="cta">
+      <span class="free">Free</span>
+      <span class="txt"><b>Start with a free AI Readiness Check.</b> See where your AI use stands against what insurers and regulators now expect — and get a starter policy. No obligation.</span>
+      <a class="btn" href="readiness-check.html" style="text-decoration:none;">Get my Readiness Check</a>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="m-name">
+  <div class="modal">
+    <div class="mtop">
+      <div><div class="mname" id="m-name"></div><div class="mprice" id="m-price"></div></div>
+      <button class="close" id="m-close" aria-label="Close">×</button>
+    </div>
+    <div class="prev" id="m-prev"></div>
+    <div id="m-body"></div>
+  </div>
+</div>
+
+<script>
+  var PLANS = {
+    readiness: { name:"Readiness Check", price:"Free · self-serve", prev:"", groups:[
+      {l:"Governance & assessment", items:[
+        "AI Readiness Check — self-serve assessment",
+        "AI inventory — surfaces shadow AI in use",
+        "Starter acceptable-use policy (plain English)",
+        "Data-classification map",
+        "“Insurance-ready?” gap report you can hand to your broker"
+      ]}
+    ]},
+    governed: { name:"Governed", price:"$299/mo + one-time setup", prev:"Everything in Readiness Check — made real and ongoing — plus:", groups:[
+      {l:"Governed", items:[
+        "Customized acceptable-use policy",
+        "Ongoing AI inventory (tracked, not one-time)",
+        "Data classification implemented for your data",
+        "Plain-English audit trail",
+        "Insurance-ready documentation package"
+      ]},
+      {l:"Secure", items:[
+        "Zero-trust secure access to the AI you already use"
+      ]},
+      {l:"Kept current", items:[
+        "Policy + guardrail updates as regulations change",
+        "Email support"
+      ]},
+      {l:"One-time", items:["Onboarding & setup"]}
+    ]},
+    private: { name:"Governed + Private AI", price:"$799/mo + appliance & setup", prev:"Everything in Governed — plus:", groups:[
+      {l:"Private", items:[
+        "Private AI running on your hardware (nothing to the cloud)",
+        "Chat with your documents — local memory (RAG)"
+      ]},
+      {l:"Secure", items:[
+        "Full zero-trust access — phone + whole team, no open ports"
+      ]},
+      {l:"Managed", items:[
+        "Managed monitoring",
+        "Quarterly tune & governance review",
+        "Priority support"
+      ]},
+      {l:"One-time", items:["Appliance & setup"]}
+    ]},
+    regulated: { name:"Regulated", price:"Custom · multi-office / regulated", prev:"Everything in Governed + Private AI — plus:", groups:[
+      {l:"Compliance", items:[
+        "Compliance reporting pack (NIST AI RMF / ISO 42001 aligned)"
+      ]},
+      {l:"Vertical", items:[
+        "Vertical workflows (legal / healthcare / finance)",
+        "Secure business-tool integration (MCP)",
+        "Multi-office / multi-site rollout"
+      ]},
+      {l:"Service", items:["Named engineer"]}
+    ]}
+  };
+  var backdrop=document.getElementById('backdrop');
+  var mName=document.getElementById('m-name'), mPrice=document.getElementById('m-price'),
+      mPrev=document.getElementById('m-prev'), mBody=document.getElementById('m-body');
+  var lastFocus=null;
+  function openPlan(key){
+    var p=PLANS[key]; if(!p) return;
+    mName.textContent=p.name; mPrice.textContent=p.price;
+    mPrev.textContent=p.prev||''; mPrev.style.display=p.prev?'block':'none';
+    mBody.innerHTML=p.groups.map(function(g){
+      return '<div class="grp"><div class="gl">'+g.l+'</div><ul>'+
+        g.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';
+    }).join('');
+    backdrop.classList.add('open');
+    document.getElementById('m-close').focus();
+  }
+  function closeModal(){ backdrop.classList.remove('open'); if(lastFocus)lastFocus.focus(); }
+  Array.prototype.forEach.call(document.querySelectorAll('.incl'), function(b){
+    b.addEventListener('click', function(){ lastFocus=b; openPlan(b.getAttribute('data-tier')); });
+  });
+  document.getElementById('m-close').addEventListener('click', closeModal);
+  backdrop.addEventListener('click', function(e){ if(e.target===backdrop) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && backdrop.classList.contains('open')) closeModal(); });
+</script>
+</body>
+</html>
