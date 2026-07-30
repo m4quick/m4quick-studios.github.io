@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recommended alignment — NIST AI RMF</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13); --gold-line:rgba(154,116,32,.32);
+    --mono-bg:#f4f6f4; --mono-line:rgba(20,97,74,.22);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --gold-line:rgba(203,162,78,.4);
+    --mono-bg:#0c120f; --mono-line:rgba(79,184,148,.3);
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--gold-line:rgba(154,116,32,.32);--mono-bg:#f4f6f4;--mono-line:rgba(20,97,74,.22);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--gold-line:rgba(203,162,78,.4);--mono-bg:#0c120f;--mono-line:rgba(79,184,148,.3);}
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .sheet{max-width:840px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden;}
+  .band{height:5px;background:var(--evergreen);}
+  .pad{padding:34px 40px 40px;}
+  @media (max-width:560px){.pad{padding:26px 22px 30px;}}
+
+  .back{font-size:12px;color:var(--evergreen);text-decoration:none;font-weight:700;}
+  .back:hover{text-decoration:underline;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--evergreen);margin:14px 0 12px;}
+  h1{font-family:var(--serif);font-size:29px;line-height:1.13;font-weight:600;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance;}
+  .lede{font-size:15px;color:var(--ink-2);max-width:64ch;margin:0 0 4px;}
+  .cite{font-size:12px;color:var(--ink-3);margin:8px 0 0;}
+  .cite a{color:var(--evergreen);}
+
+  .note{font-size:12.5px;color:var(--ink-2);margin:20px 0 0;background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:11px 14px;}
+  .note b{color:var(--gold);}
+
+  .progress{display:flex;align-items:center;gap:7px;margin:22px 0 0;font-size:11.5px;color:var(--ink-3);flex-wrap:wrap;}
+  .fpill{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--evergreen);background:var(--evergreen-soft);border:1px solid var(--evergreen-line);border-radius:20px;padding:3px 10px;}
+
+  .rule{border:0;border-top:1px solid var(--hair);margin:28px 0;}
+
+  .fnhead{margin:30px 0 14px;padding-left:13px;border-left:3px solid var(--evergreen);}
+  .fnhead:first-of-type{margin-top:0;}
+  .fnname{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:.01em;margin:0 0 3px;}
+  .fndesc{font-size:12.5px;color:var(--ink-2);max-width:62ch;}
+  .fndesc .fncount{color:var(--ink-3);white-space:nowrap;}
+
+  .tenet{border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:16px;}
+  .tenet .req{background:var(--evergreen-soft);border-bottom:1px solid var(--evergreen-line);padding:15px 17px;}
+  .tenet .req .tt{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:5px;}
+  .tenet .req .tnum{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--evergreen);background:var(--sheet);border:1px solid var(--evergreen-line);border-radius:20px;padding:2px 9px;}
+  .tenet .req .rlbl{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);}
+  .tenet .req .rtext{font-size:14px;color:var(--ink);font-weight:600;line-height:1.4;}
+  .tenet .bd{padding:15px 17px 6px;}
+  .tenet.practice .req{background:var(--gold-soft);border-bottom-color:var(--gold-line);}
+  .tenet.practice .req .tnum{color:var(--gold);border-color:var(--gold-line);}
+  .tenet.practice .block.rec .bl{color:var(--gold);}
+  .block{margin-bottom:15px;}
+  .block .bl{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+  .block.rec .bl{color:var(--evergreen);}
+  .block .btext{font-size:13px;color:var(--ink-2);line-height:1.55;}
+  .block .btext b{color:var(--ink);}
+  pre{margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.55;color:var(--ink);background:var(--mono-bg);border:1px solid var(--mono-line);border-radius:9px;padding:12px 13px;overflow-x:auto;white-space:pre;}
+  pre .c{color:var(--ink-3);}
+  pre .ok{color:var(--evergreen);font-weight:700;}
+  pre .warn{color:var(--gold);font-weight:700;}
+  pre .kw{color:var(--evergreen);}
+  .verify pre{background:transparent;border-style:dashed;}
+
+  .foot{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--ink-3);}
+  .foot a{color:var(--evergreen);font-weight:700;text-decoration:none;}
+  .foot a:hover{text-decoration:underline;}
+  .cta{margin-top:22px;text-align:center;border:1px solid var(--evergreen-line);background:var(--evergreen-soft);border-radius:12px;padding:20px 22px;}
+  .cta h3{font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 5px;}
+  .cta p{font-size:13px;color:var(--ink-2);margin:0 0 14px;max-width:54ch;margin-left:auto;margin-right:auto;}
+  .cta a{display:inline-block;background:var(--evergreen);color:#fff;font-weight:700;font-size:13.5px;text-decoration:none;border-radius:8px;padding:11px 20px;}
+  @media (prefers-color-scheme:dark){.cta a{color:#0b0a08;}}
+  .cta a:hover{filter:brightness(1.06);}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="band"></div>
+  <div class="pad">
+    <a class="back" href="standards-alignment.html">← Standards alignment</a>
+    <p class="eyebrow">Recommended alignment · NIST AI RMF 1.0 · AI Risk Management Framework</p>
+    <h1>How we recommend aligning your private AI with the NIST AI Risk Management Framework.</h1>
+    <p class="lede">Where 800-207 governs <b>who can connect</b>, the AI RMF governs <b>what the AI may do</b>. Its Core has four functions — Govern, Map, Measure, Manage — and nineteen categories. For each one, here's <b>what it requires</b>, <b>the approach we recommend</b>, <b>the configuration that implements it</b>, and <b>how you confirm it's working</b>. This is a recommended reference — the exact configs are finalized against your deployment.</p>
+    <p class="cite">Source: <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework (AI RMF 1.0) ↗</a> · category structure per the <a href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF/Core_And_Profiles/5-sec-core" target="_blank" rel="noopener">NIST AIRC Core reference ↗</a> · requirements paraphrased; read the original for the authoritative text.</p>
+
+    <div class="note"><b>How to read this.</b> "Requirement" is our plain-language reading of the category — not a quote. "Configuration" is the recommended recipe on an OpenZiti + local-model appliance; yours may differ. <b>Four categories are marked "organizational practice"</b> — they are human commitments no configuration can honestly claim, so we say what the deployment gives you to do the work with instead. Nothing here claims certification.</div>
+
+    <div class="progress">
+      <span class="fpill">Govern 6</span><span class="fpill">Map 5</span><span class="fpill">Measure 4</span><span class="fpill">Manage 4</span>
+      <span>All 19 categories · complete</span>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ============ GOVERN ============ -->
+    <div class="fnhead">
+      <p class="fnname">Govern</p>
+      <p class="fndesc">The culture the other three functions run inside — policy, accountability, and the supply chain the AI is built from. <span class="fncount">6 categories</span></p>
+    </div>
+
+    <!-- GOVERN 1 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Govern 1</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Policies and processes for mapping, measuring and managing AI risk are in place, transparent, and actually implemented — not just written down.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Make the policy <b>the same artifact as the enforcement</b>. One policy file drives the guardrails <em>and</em> generates the human-readable AI policy document — so the written policy and the running behaviour cannot drift apart. A policy that lives only in a PDF is the failure mode this category exists to catch.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># The policy file IS the enforcement — the document is generated from it</span>
+policy:
+  version: 1.4
+  owner: "COO"
+  review_cycle: quarterly
+  renders_to: /var/hermes/ai-policy.md   <span class="c"># the readable version</span>
+guardrails:
+  mode: <span class="kw">enforced</span>          <span class="c"># enforced | advisory</span>
+  approvals: sensitive     <span class="c"># every | sensitive | none</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes policy show
+policy v1.4   owner=COO   next review 2026-10-01
+document ..... generated from policy v1.4
+drift ........ <span class="ok">NONE</span>   <span class="c"># written policy == enforced policy</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOVERN 2 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Govern 2</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Accountability structures are in place — roles, responsibilities and lines of authority for AI risk are documented and staffed.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Give <b>every role a named human owner</b> in the config, and let no capability exist without one. Roles are the same objects that scope what the AI may do, so "who is accountable" and "what is permitted" are one list, not two — and an unowned role is a configuration error, not an oversight.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Every role is owned by a person, and scopes what the AI may do</span>
+roles:
+  - name: legal-reader
+    owner: "j.doe@firm.example"     <span class="c"># accountable human</span>
+    may: [read_file, search_docs]
+  - name: ops-editor
+    owner: "m.ruiz@firm.example"
+    may: [read_file, write_file]
+    approvals: <span class="kw">every</span>              <span class="c"># stricter than the default</span>
+require_owner: <span class="kw">true</span>                 <span class="c"># unowned role = refuses to load</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes roles list
+legal-reader  owner=j.doe    may=read_file,search_docs
+ops-editor    owner=m.ruiz   may=read_file,write_file   approvals=every
+<span class="c"># adding a role with no owner:</span>
+ERROR role 'temp-bot' has no owner — <span class="warn">refused to load</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOVERN 3 — practice -->
+    <div class="tenet practice">
+      <div class="req">
+        <div class="tt"><span class="tnum">Govern 3</span><span class="rlbl">Requirement · organizational practice</span></div>
+        <div class="rtext">Workforce diversity, equity, inclusion and accessibility are prioritized in how AI risk is mapped, measured and managed.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend — and what we don't claim</div>
+          <div class="btext">No configuration can deliver this one, and we won't pretend otherwise. It is a <b>human commitment</b>: who sits on the review roster, whose judgement is sought before the AI is trusted with a decision, and whether the people affected can actually use the interface. What the deployment gives you is the <b>raw material</b> — the roster of named reviewers from Govern 2, and an audit trail showing whose judgement was actually applied, so the commitment can be checked rather than asserted.</div>
+        </div>
+        <div class="block verify">
+          <div class="bl">What you can inspect</div>
+<pre>$ hermes audit --decisions --last 30d --group-by reviewer
+j.doe    41 approvals   9 rejections
+m.ruiz   12 approvals   1 rejection
+<span class="c"># evidence of who reviews — the composition of that list is</span>
+<span class="c"># your organization's call, not the appliance's</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOVERN 4 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Govern 4</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Organizational teams are committed to a culture that considers and communicates AI risk — including surfacing problems rather than burying them.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Make the AI's own failures <b>visible to the person in front of it</b>, not just to a log nobody reads. The reality-check compares what the AI <em>claimed</em> it did against what actually happened and raises the warning in the session; flagging it files an incident in one step. A risk culture survives on how cheap it is to report something.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Post-turn verification, surfaced to the user — not silently logged</span>
+guardrails:
+  reality_check: <span class="kw">true</span>
+  surface_warnings: user      <span class="c"># user | log-only</span>
+feedback:
+  flag_action: <span class="kw">enabled</span>          <span class="c"># one keystroke files an incident</span>
+  incidents: /var/hermes/incidents/</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre><span class="warn">REALITY-CHECK WARNING</span>  the assistant reported writing
+  /matters/acme/summary.md — no such write occurred on disk.
+[f] flag this   <span class="c"># → incidents/2026-07-30-0004.md, with the transcript</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOVERN 5 — practice -->
+    <div class="tenet practice">
+      <div class="req">
+        <div class="tt"><span class="tnum">Govern 5</span><span class="rlbl">Requirement · organizational practice</span></div>
+        <div class="rtext">Processes are in place for robust engagement with the people affected by the AI system — users, staff, and outside parties.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend — and what we don't claim</div>
+          <div class="btext">Engagement is a <b>conversation you hold</b>, on a cadence you set; software cannot hold it for you. What we recommend is that the conversation be <b>evidence-led</b> rather than anecdotal: come to it with the incidents filed since the last review and the refusals the AI actually issued, so affected people are responding to what the system did, not to how it was described. The material is on the box already — the practice is putting it in front of the right people.</div>
+        </div>
+        <div class="block verify">
+          <div class="bl">What you can inspect</div>
+<pre>$ hermes incidents --since 2026-04-01
+2026-05-14  reality-check warning   resolved: prompt scope narrowed
+2026-06-02  refused: out-of-scope    resolved: no action needed
+2026-07-30  reality-check warning   open
+<span class="c"># three items to walk through — the walking through is yours</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOVERN 6 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Govern 6</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Policies address the AI risks that arrive through third parties — the software, the data and the models you did not build yourself.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">This is where a private deployment is structurally ahead: <b>there is no third-party inference</b>. The model runs locally, pinned to a specific digest, and egress is denied by default — so your prompts never become someone else's training data, and the supply chain is a list you can actually read to the end. Changing the model is a governed change, not a silent vendor update.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Local model, pinned by digest; no external inference path at all</span>
+model:
+  source: local
+  name: qwen3-35b
+  digest: sha256:9f2c4b…      <span class="c"># pinned — a change needs approval</span>
+network:
+  egress: <span class="kw">deny</span>                  <span class="c"># default-deny, not default-allow</span>
+  allow: []                   <span class="c"># no model API, no telemetry endpoint</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes supply-chain
+model ........ qwen3-35b  sha256:9f2c4b…  <span class="ok">PINNED</span>
+external inference endpoints ............. <span class="ok">0</span>
+$ curl -s https://api.example-llm.com/v1  <span class="c"># from the appliance</span>
+curl: (7) <span class="warn">egress denied by policy</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MAP ============ -->
+    <div class="fnhead">
+      <p class="fnname">Map</p>
+      <p class="fndesc">Knowing what you have actually deployed — its context, its category, its capabilities, and everything it touches. <span class="fncount">5 categories</span></p>
+    </div>
+
+    <!-- MAP 1 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Map 1</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">The context is established and understood — intended purpose, setting, and who the system is for.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Write the <b>purpose into the configuration</b> and let it be enforceable: declare what the deployment is for, and have out-of-scope requests <b>refused and logged</b> rather than quietly attempted. A purpose that only exists in a slide deck cannot constrain anything.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Declared purpose, enforced as scope</span>
+deployment:
+  purpose: "Draft and review internal legal documents"
+  setting: "12-person firm, on-premises, no client PII export"
+  in_scope:     [draft, summarize, search_internal]
+  out_of_scope: [client_advice, external_publishing, hiring_decisions]
+  on_out_of_scope: <span class="kw">refuse_and_log</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>2026-07-30 11:04:12  identity=jdoe  action=draft
+   target=hiring/candidate-rank.md  decision=<span class="warn">REFUSE</span>  policy=out-of-scope
+<span class="c"># the refusal is recorded, so scope is auditable — not just intended</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP 2 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Map 2</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">The AI system is categorized — what task it performs, by what method, and what its knowledge limits are.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Keep a <b>system card on the box</b>, generated from the live configuration rather than typed by hand — task, model, method, knowledge cutoff, and an explicit list of what it <em>cannot</em> do. The limits matter more than the capabilities: most AI incidents start with someone assuming a capability that was never there.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Generated from live config — cannot drift from what is running</span>
+system_card:
+  task: "retrieval-grounded drafting and summarization"
+  method: "local LLM + local document index; no fine-tuning on client data"
+  knowledge_cutoff: "2025-10"
+  cannot: ["access the internet",
+           "act without an approval for file changes",
+           "see documents outside the granted role scope"]</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes system-card
+task ............ retrieval-grounded drafting and summarization
+model ........... qwen3-35b (local)   cutoff 2025-10
+cannot .......... internet · unapproved writes · out-of-role documents
+generated from .. live config (policy v1.4)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP 3 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Map 3</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Capabilities, targeted usage, goals and expected benefits are understood — measured against the costs.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Express capability as an <b>explicit allow-list of tools per role</b>, with the benefit each one is there to deliver written next to it. Anything not on the list is unavailable — so "what can this AI do?" has a short, literal answer you can read off the box instead of inferring from a model's general abilities.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Capability = allow-list. Absent means unavailable, not merely discouraged.</span>
+tools:
+  read_file:   {benefit: "find precedent fast",     roles: [legal-reader, ops-editor]}
+  search_docs: {benefit: "answer from our own files", roles: [legal-reader, ops-editor]}
+  write_file:  {benefit: "produce the first draft",  roles: [ops-editor], approval: <span class="kw">required</span>}
+default: <span class="kw">deny</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes tools --role legal-reader
+read_file      <span class="ok">granted</span>
+search_docs    <span class="ok">granted</span>
+write_file     <span class="warn">not granted</span>   <span class="c"># not "asks first" — unavailable</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP 4 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Map 4</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Risks and benefits are mapped for all components of the AI system — including third-party software and data.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Reuse the Zero Trust work: because every capability is already <b>its own Ziti service</b> (800-207, tenet 1), the service list <em>is</em> the component inventory. Attach a risk note and an owner to each, then have the appliance cross-check the two lists — any service without a mapped risk is reported, so the inventory can't quietly fall behind the deployment.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Every reachable component carries a risk note and an owner</span>
+components:
+  - service: private-ai
+    risk: "generates text that may be wrong or over-confident"
+    control: reality_check + approvals
+    owner: "COO"
+  - service: docs-index
+    risk: "contains client-confidential matter files"
+    control: role scope + Ziti dial policy
+    owner: "Managing Partner"
+  - service: tool-runner
+    risk: "performs actions with side effects"
+    control: approval gate (every)
+    owner: "COO"
+inventory_check: <span class="kw">strict</span>   <span class="c"># unmapped service = reported gap</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes inventory --cross-check
+ziti services ..... 3   mapped components ..... 3
+unmapped .......... <span class="ok">0</span>
+<span class="c"># add a service without a risk note and this reads: unmapped 1 (gap)</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP 5 — practice -->
+    <div class="tenet practice">
+      <div class="req">
+        <div class="tt"><span class="tnum">Map 5</span><span class="rlbl">Requirement · organizational practice</span></div>
+        <div class="rtext">Impacts to individuals, groups, communities, organizations and society are characterized.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend — and what we don't claim</div>
+          <div class="btext">Judging who is affected, and how badly, is <b>human work</b> — it depends on your clients, your sector and your obligations, none of which the appliance knows. What we recommend is anchoring that judgement to two things the deployment does know: <b>which classes of data</b> the AI can reach, and <b>which decisions</b> it actually touched over a real period. That turns an impact assessment from a speculative exercise into a review of the record.</div>
+        </div>
+        <div class="block verify">
+          <div class="bl">What you can inspect</div>
+<pre>$ hermes data-classes --reachable
+client-confidential   reachable by: legal-reader, ops-editor
+internal-general      reachable by: all roles
+regulated-PII         <span class="ok">reachable by: none</span>   <span class="c"># excluded from the index</span>
+<span class="c"># who is affected, and how much it matters, is your assessment</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MEASURE ============ -->
+    <div class="fnhead">
+      <p class="fnname">Measure</p>
+      <p class="fndesc">Numbers you can actually compute on your own box — and evaluation that runs before a change ships, not after it breaks. <span class="fncount">4 categories</span></p>
+    </div>
+
+    <!-- MEASURE 1 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Measure 1</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Appropriate methods and metrics are identified and applied — and the choice of what you measure is itself documented.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Choose metrics that are <b>computable from the audit log you already keep</b> — refusal rate, how often the approval gate fires, how often the reality-check catches a false claim, how often answers are grounded in retrieved documents. No external telemetry, no vendor dashboard: the measurement stays on the appliance with the data.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Metrics computed locally from the audit log — nothing leaves the box</span>
+metrics:
+  - {id: refusal_rate,       source: audit, window: 30d}
+  - {id: approval_hit_rate,  source: audit, window: 30d}
+  - {id: reality_check_rate, source: audit, window: 30d}
+  - {id: grounded_rate,      source: audit, window: 30d}
+report_to: /var/hermes/metrics/   <span class="c"># local file, not a cloud endpoint</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes metrics --last 30d
+refusal_rate ......... 3.1%   (41 of 1,320 requests)
+approval_hit_rate .... 12.4%  (164 pauses for a human yes/no)
+reality_check_rate ... 0.5%   (7 false claims caught)
+grounded_rate ........ 94.2%  (answers citing a retrieved document)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEASURE 2 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Measure 2</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">The system is evaluated for trustworthy characteristics — and re-evaluated when it changes.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Keep a <b>local evaluation set drawn from your own work</b> and make it a <b>gate, not a report</b>: no model swap and no guardrail change ships unless the suite passes the thresholds you set. The point is that a regression is blocked before anyone relies on it, rather than discovered afterwards in an incident.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Evaluation gates the change — it does not merely describe it</span>
+eval:
+  suite: /var/hermes/eval/firm-cases.yaml   <span class="c"># your documents, your tasks</span>
+  run_on: [model_change, guardrail_change, index_rebuild]
+  thresholds:
+    grounded_rate:   ">= 0.90"
+    unsafe_refusal:  ">= 0.98"   <span class="c"># refuses what it should refuse</span>
+    regression_vs_last: "&lt;= 0.02"
+  on_fail: <span class="kw">block_rollout</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes eval run --candidate qwen3-35b-v2
+grounded_rate ....... 0.87  threshold 0.90   <span class="warn">FAIL</span>
+unsafe_refusal ...... 0.99  threshold 0.98   <span class="ok">PASS</span>
+rollout ............. <span class="warn">BLOCKED</span>  <span class="c"># the old model stays in service</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEASURE 3 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Measure 3</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Mechanisms for tracking identified AI risks over time are in place — including risks that emerge after deployment.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Make the <b>risk register a file, with each risk bound to the metric that watches it</b> and a threshold that trips. A register nobody re-reads is the normal outcome; a register wired to a number means a drifting risk announces itself instead of waiting for the annual review.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Each risk names the metric that watches it and the level that trips</span>
+risks:
+  - id: R1
+    desc: "AI states something it did not do"
+    watched_by: reality_check_rate
+    trips_above: 0.01
+    owner: COO
+  - id: R2
+    desc: "answers not grounded in our documents"
+    watched_by: grounded_rate
+    trips_below: 0.90
+    owner: COO
+  - id: R3
+    desc: "scope creep into out-of-scope tasks"
+    watched_by: refusal_rate
+    trips_above: 0.10
+    owner: "Managing Partner"</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes risk status
+R1  reality_check_rate  0.5%  trips >1.0%   <span class="ok">OK</span>    trend ↘
+R2  grounded_rate      94.2%  trips &lt;90%    <span class="ok">OK</span>    trend →
+R3  refusal_rate        3.1%  trips >10%    <span class="ok">OK</span>    trend ↗ <span class="c">(watch)</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEASURE 4 — practice -->
+    <div class="tenet practice">
+      <div class="req">
+        <div class="tt"><span class="tnum">Measure 4</span><span class="rlbl">Requirement · organizational practice</span></div>
+        <div class="rtext">Feedback about the efficacy of the measurement itself is gathered and assessed — are you measuring the right things?</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend — and what we don't claim</div>
+          <div class="btext">A metric cannot audit itself. This category asks whether your numbers still describe reality — and only the people using the system can say. What we recommend is a <b>short scheduled review</b> that puts each metric next to the incidents of the same period and asks the one useful question: <b>did anything go wrong that our numbers did not show?</b> The appliance keeps the history locally so the comparison is possible; drawing the conclusion is yours.</div>
+        </div>
+        <div class="block verify">
+          <div class="bl">What you can inspect</div>
+<pre>$ hermes metrics --history --by-quarter
+                  Q1     Q2     Q3
+reality_check    0.9%   0.7%   0.5%
+incidents filed    4      3      3
+<span class="c"># the metric improved while incidents held flat —</span>
+<span class="c"># exactly the discrepancy this review exists to notice</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MANAGE ============ -->
+    <div class="fnhead">
+      <p class="fnname">Manage</p>
+      <p class="fndesc">Acting on what you measured — prioritized responses, safe failure, governed third-party change, and a record of it all. <span class="fncount">4 categories</span></p>
+    </div>
+
+    <!-- MANAGE 1 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Manage 1</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Risks from mapping and measurement are prioritized, responded to, and managed — the highest first.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Bind each risk to a <b>response that the configuration actually performs</b>, and let severity pick the strength: high-severity risks get an <b>enforced block</b>, medium ones an <b>approval pause</b>, low ones an advisory warning. Priority that isn't expressed in the config is just a ranking in a spreadsheet.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Severity chooses the control strength — high risk gets a hard stop</span>
+responses:
+  - {risk: R1, severity: high,   action: <span class="kw">block</span>}     <span class="c"># refuse to return the turn</span>
+  - {risk: R2, severity: medium, action: <span class="kw">approve</span>}   <span class="c"># pause for a human</span>
+  - {risk: R3, severity: low,    action: <span class="kw">warn</span>}      <span class="c"># advisory only</span>
+unhandled_risk: <span class="kw">block</span>   <span class="c"># a risk with no response fails closed</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>2026-07-30 15:41:02  identity=mruiz  action=write_file
+   target=/matters/acme/summary.md  decision=<span class="warn">BLOCK</span>  policy=R1-high
+<span class="c"># the claim failed the reality-check, so the turn was refused —</span>
+<span class="c"># not returned with a warning attached</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE 2 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Manage 2</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Strategies maximize benefit and minimize negative impact — including fallback, deactivation and decommissioning plans.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Decide <b>which way the system fails</b> before it fails. We recommend <b>fail-closed</b>: if the guardrail config is missing, unreadable or unsigned, the AI refuses to serve rather than running ungoverned — the opposite of the common default. Pair it with a one-command stop and a written decommission path for the data.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Ungoverned operation is not a degraded mode — it is a stopped one</span>
+failure:
+  mode: <span class="kw">closed</span>              <span class="c"># no guardrails => no service</span>
+  on_config_unreadable: refuse_all
+kill_switch:
+  command: "hermes stop --hard"   <span class="c"># drops Ziti bind + unloads model</span>
+decommission:
+  index: wipe
+  audit_log: "retain 7y"
+  model: remove</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ mv /etc/hermes/guardrails.yaml /tmp && hermes doctor
+guardrails ......... <span class="warn">NOT FOUND</span>
+service ............ <span class="warn">REFUSING ALL REQUESTS</span> (fail-closed)
+<span class="c"># it will not answer at all rather than answer ungoverned</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE 3 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Manage 3</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Risks and benefits from third-party entities — models, software, data — are managed on an ongoing basis, not just at selection.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Treat the model like signed software: <b>pinned by digest, unsigned artifacts refused, and any change routed through the approval gate and the evaluation suite</b>. Because inference is local (Govern 6), a third party cannot change your system without you performing an act — which is precisely the ongoing management this category asks for.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># A model change is a governed change — never a silent one</span>
+supply_chain:
+  pin: <span class="kw">strict</span>                <span class="c"># digest must match the manifest</span>
+  allow_unsigned: <span class="kw">false</span>
+  change_requires: [approval, eval_pass]
+  manifest: /etc/hermes/manifest.lock</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes model use ./mistral-new.gguf
+digest sha256:41ab… not in manifest.lock ..... <span class="warn">BLOCKED</span>
+required: approval by an owner + eval suite pass
+<span class="c"># the running model is unchanged</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE 4 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Manage 4</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Risk treatments are documented and monitored regularly, with plans for communicating incidents and responses.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Generate the <b>monitoring report on the appliance, from the audit log</b> — every treatment, whether it fired, and every incident with what changed afterwards. It stays local like everything else, and it is the document you hand an auditor or a client who asks how the AI is governed. Reporting that requires someone to assemble it by hand stops happening by about month four.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Monthly report generated on the box, from the record itself</span>
+reporting:
+  cadence: monthly
+  path: /var/hermes/reports/
+  includes: [metrics, risk_status, incidents, approvals, config_changes]
+  distribute_to: ["COO", "Managing Partner"]   <span class="c"># the comms plan</span>
+audit:
+  enabled: <span class="kw">true</span>
+  path: /var/hermes/audit.log        <span class="c"># stays on the appliance</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes report --month 2026-07
+risks tracked 3 · treatments fired 164 · incidents 3 (2 closed)
+config changes 1 ... policy v1.3 → v1.4  approved by COO  2026-07-11
+written to /var/hermes/reports/2026-07.md    <span class="ok">local only</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <p class="foot">All nineteen categories of the NIST AI RMF Core — Govern, Map, Measure, Manage — each with the requirement, the approach we recommend, the configuration that implements it, and how you confirm it's working. Four are marked as organizational practice, where no configuration can honestly make the claim. This is standard 2 of the alignment set; standard 1 is <a href="align-nist-800-207.html">NIST SP 800-207, Zero Trust</a>.</p>
+
+    <div class="cta">
+      <h3>Want this run against your setup?</h3>
+      <p>The free Readiness Check tells you which of these you already meet and which need work — then the build puts the recommended configuration in place.</p>
+      <a href="readiness-check.html">Start the free Readiness Check →</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
