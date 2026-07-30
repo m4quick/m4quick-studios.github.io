@@ -3,16 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How it's designed / protected</title>
-</head>
-<body>
 <title>How it's designed — Private AI, Managed</title>
 <style>
   :root{
     --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
     --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
     --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
-    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13); --gold-line:rgba(154,116,32,.32);
     --core:rgba(20,97,74,.16);
     --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
@@ -21,10 +18,10 @@
     --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
     --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
     --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
-    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --core:rgba(79,184,148,.20);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --gold-line:rgba(203,162,78,.4); --core:rgba(79,184,148,.20);
   }}
-  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--core:rgba(20,97,74,.16);}
-  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--core:rgba(79,184,148,.20);}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--gold-line:rgba(154,116,32,.32);--core:rgba(20,97,74,.16);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--gold-line:rgba(203,162,78,.4);--core:rgba(79,184,148,.20);}
 
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
@@ -38,20 +35,60 @@
   .lede{font-size:15px;color:var(--ink-2);max-width:62ch;margin:0;}
 
   .rule{border:0;border-top:1px solid var(--hair);margin:30px 0;}
-  .h3{font-family:var(--serif);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink-3);text-transform:uppercase;margin:0 0 18px;}
+  .h3{font-family:var(--serif);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink-3);text-transform:uppercase;margin:0 0 8px;}
+  .h3.sp{margin-bottom:18px;}
+  .seclede{font-size:13px;color:var(--ink-2);margin:0 0 16px;max-width:64ch;}
 
-  /* ---- layers diagram: protection wrapping the data ---- */
+  /* ---- shared hard/soft chip vocabulary ---- */
+  .hs{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 7px;white-space:nowrap;}
+  .hs.hard{background:var(--evergreen-soft);color:var(--evergreen);border:1px solid var(--evergreen-line);}
+  .hs.soft{background:transparent;color:var(--ink-3);border:1px dashed var(--line);}
+  .keylegend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0 0 14px;font-size:12px;color:var(--ink-2);}
+  .keylegend .k{display:inline-flex;align-items:center;gap:7px;}
+
+  /* ---- layers diagram ---- */
   .layers{border:1px solid var(--evergreen-line);border-radius:12px;padding:14px 14px 16px;}
   .layer{border:1px dashed var(--evergreen-line);border-radius:11px;padding:12px 14px;}
   .layer + .layer, .layers > .layer > .layer{margin-top:0;}
-  .layer .cap{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:11px;}
+  .layer .cap{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:11px;}
   .layer .cap .role{font-size:13.5px;font-weight:700;color:var(--ink);}
   .layer .cap .tech{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--evergreen);background:var(--evergreen-soft);border-radius:20px;padding:2px 9px;}
-  .layer .cap .say{font-size:12.5px;color:var(--ink-2);}
-  .core{background:var(--core);border:1px solid var(--evergreen-line);border-radius:9px;border-style:solid;padding:16px 16px;text-align:center;}
+  .layer .cap .say{font-size:12.5px;color:var(--ink-2);flex:1 1 200px;}
+  .layer .cap .chips{display:inline-flex;gap:5px;margin-left:auto;}
+  .core{background:var(--core);border:1px solid var(--evergreen-line);border-radius:9px;padding:16px 16px;text-align:center;}
   .core .k{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .core .v{font-size:12.5px;color:var(--ink-2);margin:0;}
   .wrapline{font-size:11.5px;color:var(--ink-3);text-align:center;margin:12px 0 0;font-style:italic;}
+
+  /* ---- trust breakdown ---- */
+  .trust{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){.trust{grid-template-columns:1fr;}}
+  .tcol{border:1px solid var(--line);border-radius:11px;padding:16px 17px 17px;background:var(--sheet);}
+  .tcol.hard{border-left:3px solid var(--evergreen);}
+  .tcol.soft{border-left:3px dashed var(--ink-3);}
+  .tcol .thd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
+  .tcol .tname{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);}
+  .tcol .tsub{font-size:12px;color:var(--ink-3);margin:0 0 13px;}
+  .tcol ul{margin:0;padding:0;list-style:none;}
+  .tcol li{font-size:12.5px;color:var(--ink-2);padding:7px 0;border-top:1px dashed var(--hair);}
+  .tcol li:first-child{border-top:0;}
+  .tcol li b{color:var(--ink);font-weight:700;}
+  .tcol .rely{margin:13px 0 0;font-size:11.5px;line-height:1.5;color:var(--ink-3);font-style:italic;}
+  .tcol.hard .rely{color:var(--evergreen);font-style:normal;font-weight:600;}
+
+  /* ---- incident replay ---- */
+  .replay{border:1px solid var(--line);border-radius:11px;padding:17px 18px 18px;background:var(--paper);}
+  .replay .rt{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .replay .rs{font-size:12px;color:var(--ink-3);margin:0 0 15px;}
+  .steps{display:flex;flex-wrap:wrap;gap:10px;}
+  .step{flex:1 1 150px;border:1px solid var(--line);border-radius:9px;padding:11px 12px;background:var(--sheet);}
+  .step .sl{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;}
+  .step.slip{border-left:3px solid var(--gold);} .step.slip .sl{color:var(--gold);}
+  .step.catch{border-left:3px solid var(--evergreen);} .step.catch .sl{color:var(--evergreen);}
+  .step.fix{border-left:3px solid var(--ink-3);} .step.fix .sl{color:var(--ink-3);}
+  .step .stx{font-size:12px;color:var(--ink-2);line-height:1.45;}
+  .takeaway{margin:14px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-2);border-top:1px solid var(--hair);padding-top:12px;}
+  .takeaway b{color:var(--ink);}
 
   /* ---- three control cards ---- */
   .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
@@ -61,13 +98,24 @@
   .ctrl p{font-size:12.5px;color:var(--ink-2);margin:0 0 9px;}
   .ctrl .tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--evergreen);}
 
+  /* ---- configuration dials ---- */
+  .dials{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:620px){.dials{grid-template-columns:1fr;}}
+  .dial{border:1px solid var(--line);border-radius:10px;padding:13px 14px 14px;background:var(--sheet);}
+  .dial .dl{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+  .dial .dr{font-size:13px;color:var(--ink);line-height:1.5;}
+  .dial .dr b{color:var(--evergreen);font-weight:700;}
+  .dial .dr .def{font-size:8.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-line);border-radius:4px;padding:1px 5px;margin-left:3px;vertical-align:middle;}
+  .dial .dd{font-size:11.5px;color:var(--ink-3);margin-top:6px;}
+  .pick{display:inline-block;margin-top:14px;font-size:12.5px;font-weight:700;color:var(--evergreen);text-decoration:none;}
+  .pick:hover{text-decoration:underline;}
+
   /* ---- isolation selector ---- */
   .seg{display:flex;gap:6px;background:var(--evergreen-soft);border-radius:10px;padding:5px;flex-wrap:wrap;}
   .seg button{flex:1;min-width:130px;font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--ink-2);background:transparent;border:0;border-radius:7px;padding:9px 10px;cursor:pointer;position:relative;transition:background .15s,color .15s;}
   .seg button .rec{display:block;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);margin-top:2px;}
   .seg button[aria-selected="true"]{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.10);}
   .seg button:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
-
   .detail{border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;padding:18px 20px 20px;margin-top:-1px;}
   .detail .head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
   .detail .head .name{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);}
@@ -77,6 +125,29 @@
   @media (max-width:560px){.spec{grid-template-columns:1fr;}}
   .spec .row .l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px;}
   .spec .row .d{font-size:13px;color:var(--ink);}
+
+  /* ---- framework map ---- */
+  .fwnote{font-size:12.5px;color:var(--ink-2);margin:0 0 15px;max-width:64ch;background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:11px 13px;}
+  .fwnote b{color:var(--gold);}
+  .fwmap{display:flex;flex-direction:column;gap:10px;}
+  .fwrow{border:1px solid var(--line);border-radius:10px;padding:14px 15px;display:grid;grid-template-columns:170px 1fr;gap:8px 18px;align-items:start;background:var(--sheet);}
+  @media (max-width:600px){.fwrow{grid-template-columns:1fr;}}
+  .fwrow .fwlayer{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3;}
+  .fwrow .fwlayer small{display:block;font-weight:500;color:var(--ink-3);font-size:11px;margin-top:2px;}
+  .fwrow .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+  .fwpill{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;border:1px solid var(--evergreen-line);color:var(--evergreen);background:var(--evergreen-soft);white-space:nowrap;}
+  .fwpill.reg{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft);}
+  a.fwpill{text-decoration:none;cursor:pointer;transition:box-shadow .12s,transform .08s;}
+  a.fwpill::after{content:"\2197";font-size:8.5px;margin-left:3px;opacity:.55;vertical-align:top;}
+  a.fwpill:hover{box-shadow:0 1px 6px rgba(20,18,10,.16);transform:translateY(-1px);}
+  a.fwpill:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
+  .fwcite{font-size:11px;color:var(--ink-3);margin:12px 0 0;}
+  .fwrow .look{font-size:12.5px;color:var(--ink-2);line-height:1.5;}
+  .fwleg{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 14px;font-size:11.5px;color:var(--ink-3);}
+  .fwleg .k{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:3px;}
+  .dot.g{background:var(--evergreen-soft);border:1px solid var(--evergreen-line);}
+  .dot.o{background:var(--gold-soft);border:1px solid var(--gold-line);}
 
   /* ---- honest bounds ---- */
   .bounds{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
@@ -102,16 +173,20 @@
     <p class="lede">The security isn't a product you bolt on. It's how the system is put together: your documents sit at the center, and every layer around them decides who can get near, what the AI may do, and leaves a record you can show anyone.</p>
 
     <hr class="rule">
-    <p class="h3">The layers around your documents</p>
+    <p class="h3 sp">The layers around your documents</p>
+    <div class="keylegend">
+      <span class="k"><span class="hs hard">Enforced</span> in code — can't be bypassed</span>
+      <span class="k"><span class="hs soft">Advisory</span> the model is asked to follow it</span>
+    </div>
     <div class="layers">
       <div class="layer">
-        <div class="cap"><span class="role">Your office</span><span class="tech">On-prem · no cloud</span><span class="say">Nothing is sent out. Full audit trail kept locally.</span></div>
+        <div class="cap"><span class="role">Your office</span><span class="tech">On-prem · no cloud</span><span class="say">Nothing is sent out. Full audit trail kept locally.</span><span class="chips"><span class="hs hard">Enforced</span></span></div>
         <div class="layer">
-          <div class="cap"><span class="role">Dark access</span><span class="tech">Zero Trust</span><span class="say">Only devices you enroll can even see it — everything else on your network is blind to it.</span></div>
+          <div class="cap"><span class="role">Dark access</span><span class="tech">Zero Trust</span><span class="say">Only devices you enroll can even see it — everything else on your network is blind to it.</span><span class="chips"><span class="hs hard">Enforced</span></span></div>
           <div class="layer">
-            <div class="cap"><span class="role">Agent guardrails</span><span class="tech">Governed</span><span class="say">The AI only performs the tasks you approve — nothing more.</span></div>
+            <div class="cap"><span class="role">Agent guardrails</span><span class="tech">Governed</span><span class="say">The AI only performs the tasks you approve — nothing more.</span><span class="chips"><span class="hs hard">Enforced</span><span class="hs soft">Advisory</span></span></div>
             <div class="layer">
-              <div class="cap"><span class="role">Local private model</span><span class="tech">Your Mac Studio</span><span class="say">Runs entirely on the appliance in your office — works offline.</span></div>
+              <div class="cap"><span class="role">Local private model</span><span class="tech">Your Mac Studio</span><span class="say">Runs entirely on the appliance in your office — works offline.</span><span class="chips"><span class="hs soft">Advisory</span></span></div>
               <div class="core">
                 <p class="k">Your documents &amp; matters</p>
                 <p class="v">Never leave the building.</p>
@@ -120,7 +195,59 @@
           </div>
         </div>
       </div>
-      <p class="wrapline">Each layer wraps the one inside it — defense in depth, not a single lock.</p>
+      <p class="wrapline">Each layer wraps the one inside it — defense in depth, not a single lock. Where a ring carries both tags, some of its rules are enforced in code and some are asked of the model — the next section separates them.</p>
+    </div>
+
+    <hr class="rule">
+    <p class="h3">What actually stops the AI — and what you can trust</p>
+    <div class="trust">
+      <div class="tcol soft">
+        <div class="thd"><span class="tname">What shapes its behavior</span><span class="hs soft">Advisory</span></div>
+        <p class="tsub">Rules written into the AI's instructions.</p>
+        <ul>
+          <li><b>Refuse &amp; escalate</b> — decline out-of-scope or unsafe asks and hand back to a person.</li>
+          <li><b>Treat data as data</b> — content it reads (a file, a web page) is never treated as new orders.</li>
+          <li><b>Stay in its lane</b> — only the tools and scope the role is meant to use.</li>
+        </ul>
+        <p class="rely">Works most of the time — but instructions can be misread or slipped past. Necessary, not sufficient.</p>
+      </div>
+      <div class="tcol hard">
+        <div class="thd"><span class="tname">What you actually rely on</span><span class="hs hard">Enforced</span></div>
+        <p class="tsub">Checks that run in code, before and after every action.</p>
+        <ul>
+          <li><b>Path safety</b> — refuses to write to protected locations, no matter what it's asked.</li>
+          <li><b>Approval gate</b> — file changes and commands pause for your yes/no.</li>
+          <li><b>Can't disarm itself</b> — the AI can't edit its own settings to turn approvals off.</li>
+          <li><b>Reality-check</b> — after each turn it verifies claims against what actually happened, and flags a warning if the AI says it did something it didn't.</li>
+        </ul>
+        <p class="rely">These don't depend on the model's good intentions. This is the part you trust.</p>
+      </div>
+    </div>
+
+    <hr class="rule">
+    <p class="h3">How the layers catch a mistake — a real example</p>
+    <div class="replay">
+      <p class="rt">When the soft layer slipped, the hard layer caught it.</p>
+      <p class="rs">A real sequence from our own system, in plain terms.</p>
+      <div class="steps">
+        <div class="step slip">
+          <div class="sl">1 · a check over-fired</div>
+          <div class="stx">A safety rule was too broad and wrongly blocked the AI's own helper file — a false alarm.</div>
+        </div>
+        <div class="step slip">
+          <div class="sl">2 · the model slipped</div>
+          <div class="stx">Blocked from checking its work, the AI <em>claimed</em> success it hadn't actually achieved.</div>
+        </div>
+        <div class="step catch">
+          <div class="sl">3 · code caught it</div>
+          <div class="stx">The reality-check compared that claim to what happened on disk and flagged it — before it reached anyone.</div>
+        </div>
+        <div class="step fix">
+          <div class="sl">4 · fixed</div>
+          <div class="stx">The over-broad rule was narrowed. Real system paths stay protected; the false alarm is gone.</div>
+        </div>
+      </div>
+      <p class="takeaway"><b>The takeaway:</b> the advisory layer shaped good behavior, then slipped — and the enforced layer is exactly why the slip was caught instead of shipped. When we extend your system, we invest in the layers that can't be argued with.</p>
     </div>
 
     <hr class="rule">
@@ -144,13 +271,68 @@
     </div>
 
     <hr class="rule">
-    <p class="h3">Choose how locked-down it runs</p>
+    <p class="h3 sp">What you can configure — the dials</p>
+    <p class="seclede">Simple by default, extensible by design. Every deployment ships with sensible defaults; these are the dials you can turn as your needs grow. <span style="color:var(--gold);font-weight:700;">Gold = the default we recommend.</span></p>
+    <div class="dials">
+      <div class="dial"><div class="dl">The appliance</div><div class="dr"><b>Mac mini</b> → Mac Studio M4 Max <span class="def">Default</span> → multi-node</div><div class="dd">Sized to your team and how large a model you want to run.</div></div>
+      <div class="dial"><div class="dl">Who it serves</div><div class="dr">Just you → <b>small team</b> <span class="def">Default</span> → whole firm</div><div class="dd">Each person reaches it from an enrolled device — no shared logins.</div></div>
+      <div class="dial"><div class="dl">The model</div><div class="dr"><b>Fast &amp; light</b> <span class="def">Default</span> → larger, more capable</div><div class="dd">Every option runs entirely on the appliance — nothing calls out.</div></div>
+      <div class="dial"><div class="dl">Memory of your files</div><div class="dr">Off → <b>your documents indexed</b> <span class="def">Default</span></div><div class="dd">Point it at a folder and it can recall from your own material (RAG).</div></div>
+      <div class="dial"><div class="dl">Network posture</div><div class="dr"><b>Dark on LAN</b> <span class="def">Default</span> → Isolated → Air-gapped</div><div class="dd">How locked-down it runs — detailed just below.</div></div>
+      <div class="dial"><div class="dl">Staying current</div><div class="dr"><b>Managed tunnel</b> <span class="def">Default</span> → scheduled → hand-carried media</div><div class="dd">Updates never touch your files; the method scales with your isolation.</div></div>
+      <div class="dial"><div class="dl">Reach from your phone</div><div class="dr"><b>Off</b> <span class="def">Default</span> → enrolled device over Zero Trust</div><div class="dd">If enabled, your phone connects the same dark way a laptop does.</div></div>
+      <div class="dial"><div class="dl">Approvals</div><div class="dr">Ask every time → <b>ask for sensitive actions</b> <span class="def">Default</span></div><div class="dd">You decide which actions pause for a human yes/no.</div></div>
+    </div>
+    <a class="pick" href="build-picker.html">See these as four ready-made builds — pick your build →</a>
+
+    <hr class="rule">
+    <p class="h3">The network-posture dial, up close</p>
     <div class="seg" role="tablist" aria-label="Isolation level">
       <button role="tab" aria-selected="true" id="tab-1" data-k="1">Dark on LAN<span class="rec">Recommended</span></button>
       <button role="tab" aria-selected="false" id="tab-2" data-k="2">Isolated + Scheduled</button>
       <button role="tab" aria-selected="false" id="tab-3" data-k="3">Vault / Air-gapped</button>
     </div>
     <div class="detail" id="detail" role="tabpanel" aria-labelledby="tab-1"></div>
+
+    <hr class="rule">
+    <p class="h3 sp">Where the major frameworks map</p>
+    <p class="fwnote"><b>Not a compliance certificate.</b> This shows where each framework's expectations land in the design — a map you can hand an auditor, client, or insurer to see the design was built with their concerns in mind. It doesn't claim certification; that's assessed against your specific deployment.</p>
+    <div class="fwleg">
+      <span class="k"><span class="dot g"></span> Security &amp; AI-governance frameworks</span>
+      <span class="k"><span class="dot o"></span> Sector &amp; regional rules</span>
+    </div>
+    <div class="fwmap">
+      <div class="fwrow">
+        <div class="fwlayer">Who can connect<small>Dark access + on-prem</small></div>
+        <div class="fwbody">
+          <div class="chips"><a class="fwpill" href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">NIST SP 800-207</a><a class="fwpill" href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">CISA ZT Maturity Model</a><a class="fwpill" href="https://cloudsecurityalliance.org/zt" target="_blank" rel="noopener">CSA Zero Trust</a></div>
+          <div class="look">Every device is verified before it can reach anything — no implicit trust just from being "on the network." This is the Zero Trust core those three define.</div>
+        </div>
+      </div>
+      <div class="fwrow">
+        <div class="fwlayer">What the AI may do<small>Agent guardrails + model</small></div>
+        <div class="fwbody">
+          <div class="chips"><a class="fwpill" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI RMF</a><a class="fwpill" href="https://www.iso.org/standard/42001" target="_blank" rel="noopener">ISO/IEC 42001</a><a class="fwpill reg" href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU AI Act</a><a class="fwpill" href="https://cloudsecurityalliance.org/artificial-intelligence" target="_blank" rel="noopener">CSA AI security</a></div>
+          <div class="look">Governed scope, a human in the loop for sensitive actions, and documented controls — the "manage &amp; oversee the AI" expectations these set out.</div>
+        </div>
+      </div>
+      <div class="fwrow">
+        <div class="fwlayer">Prove what happened<small>Reality-check + audit trail</small></div>
+        <div class="fwbody">
+          <div class="chips"><a class="fwpill" href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener">NIST CSF 2.0</a><a class="fwpill" href="https://www.cisecurity.org/controls/v8" target="_blank" rel="noopener">CIS Controls v8</a><a class="fwpill" href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">CISA ZTMM · Visibility</a></div>
+          <div class="look">Detect when something's off and keep a plain-English record of every access and action — the detect / respond / evidence side.</div>
+        </div>
+      </div>
+      <div class="fwrow">
+        <div class="fwlayer">Where your data lives<small>Documents at the core</small></div>
+        <div class="fwbody">
+          <div class="chips"><a class="fwpill reg" href="https://www.hhs.gov/hipaa/for-professionals/security/index.html" target="_blank" rel="noopener">HIPAA</a><a class="fwpill reg" href="https://www.ftc.gov/business-guidance/privacy-security/gramm-leach-bliley-act" target="_blank" rel="noopener">GLBA</a><a class="fwpill reg" href="https://content.naic.org/insurance-topics/artificial-intelligence" target="_blank" rel="noopener">NAIC AI Bulletin</a><a class="fwpill reg" href="https://www.fbi.gov/services/cjis" target="_blank" rel="noopener">CJIS</a><a class="fwpill" href="https://www.iso.org/standard/27001" target="_blank" rel="noopener">ISO/IEC 27001</a></div>
+          <div class="look">Sensitive data stays on-prem, access is least-privilege and recorded — the residency and handling rules your sector expects.</div>
+        </div>
+      </div>
+    </div>
+    <p class="fwcite">Each framework links to its official source — NIST, CISA, CSA, ISO, the EU Commission, HHS, FTC, FBI CJIS and the NAIC. Which of the sector rules apply depends on your industry.</p>
+    <a class="pick" href="standards-alignment.html">See how the configuration lines up with each standard — control by control →</a>
 
     <hr class="rule">
     <p class="h3">What this does — and doesn't</p>
@@ -169,6 +351,7 @@
         <ul>
           <li>It's protection, not magic — it runs on macOS; a device already compromised is still compromised</li>
           <li>Zero Trust controls who can connect; the guardrails control what the AI does — you need both, and you have both</li>
+          <li>A framework map isn't a certification — it shows alignment, not a signed audit</li>
           <li>Maximum isolation (Vault) trades remote convenience for on-site updates</li>
         </ul>
       </div>

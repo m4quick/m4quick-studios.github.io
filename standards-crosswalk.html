@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Built to standard — the evidence</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13); --gold-line:rgba(154,116,32,.32);
+    --mono-bg:rgba(20,97,74,.06);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --gold-line:rgba(203,162,78,.4); --mono-bg:rgba(79,184,148,.08);
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--gold-line:rgba(154,116,32,.32);--mono-bg:rgba(20,97,74,.06);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--gold-line:rgba(203,162,78,.4);--mono-bg:rgba(79,184,148,.08);}
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .sheet{max-width:860px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden;}
+  .band{height:5px;background:var(--evergreen);}
+  .pad{padding:34px 40px 40px;}
+  @media (max-width:560px){.pad{padding:26px 22px 30px;}}
+
+  .back{font-size:12px;color:var(--evergreen);text-decoration:none;font-weight:700;}
+  .back:hover{text-decoration:underline;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--evergreen);margin:14px 0 12px;}
+  h1{font-family:var(--serif);font-size:30px;line-height:1.12;font-weight:600;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance;}
+  .lede{font-size:15px;color:var(--ink-2);max-width:64ch;margin:0;}
+
+  /* ladder */
+  .ladder{display:flex;gap:8px;margin:22px 0 0;flex-wrap:wrap;}
+  .rung{flex:1 1 150px;border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:var(--sheet);opacity:.55;}
+  .rung.here{opacity:1;border-color:var(--evergreen-line);background:var(--evergreen-soft);}
+  .rung .rn{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px;}
+  .rung.here .rn{color:var(--evergreen);}
+  .rung .rd{font-size:12px;color:var(--ink-2);}
+  .rung.here .rd{color:var(--ink);}
+
+  .rule{border:0;border-top:1px solid var(--hair);margin:30px 0;}
+  .fwnote{font-size:12.5px;color:var(--ink-2);margin:24px 0 0;max-width:66ch;background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:12px 14px;}
+  .fwnote b{color:var(--gold);}
+
+  .concern{margin-top:8px;}
+  .ctitle{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin:0 0 3px;}
+  .csub{font-size:12px;color:var(--ink-3);margin:0 0 14px;}
+
+  .cols{display:none;}
+  .row{border:1px solid var(--line);border-radius:11px;padding:15px 16px 16px;background:var(--sheet);margin-bottom:11px;}
+  .row .rhead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px;}
+  .row .ctrl{font-size:14px;font-weight:700;color:var(--ink);flex:1 1 auto;}
+  .row .body{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;}
+  @media (max-width:560px){.row .body{grid-template-columns:1fr;}}
+  .cell .cl{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;}
+  .cell .cv{font-size:12.5px;color:var(--ink-2);line-height:1.5;}
+  .cell.ev .cv{color:var(--ink);}
+  .cell.ev .cl{color:var(--evergreen);}
+  .cell .cv b{color:var(--ink);font-weight:600;}
+
+  .fwpill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid var(--evergreen-line);color:var(--evergreen);background:var(--evergreen-soft);white-space:nowrap;text-decoration:none;transition:box-shadow .12s,transform .08s;}
+  .fwpill.reg{color:var(--gold);border-color:var(--gold-line);background:var(--gold-soft);}
+  a.fwpill::after{content:"\2197";font-size:8px;margin-left:2px;opacity:.55;vertical-align:top;}
+  a.fwpill:hover{box-shadow:0 1px 6px rgba(20,18,10,.16);transform:translateY(-1px);}
+  a.fwpill:focus-visible{outline:2px solid var(--evergreen);outline-offset:2px;}
+  .hs{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 7px;white-space:nowrap;}
+  .hs.hard{background:var(--evergreen-soft);color:var(--evergreen);border:1px solid var(--evergreen-line);}
+  .hs.soft{background:transparent;color:var(--ink-3);border:1px dashed var(--line);}
+
+  /* sample evidence strip */
+  .samples{border:1px solid var(--line);border-radius:11px;padding:16px 17px 6px;background:var(--paper);}
+  .samples .st{font-family:var(--serif);font-size:15px;font-weight:700;margin:0 0 3px;}
+  .samples .ss{font-size:12px;color:var(--ink-3);margin:0 0 14px;}
+  .snip{margin:0 0 12px;}
+  .snip .sh{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px;}
+  .snip pre{margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--ink);background:var(--mono-bg);border:1px solid var(--evergreen-line);border-radius:8px;padding:11px 13px;overflow-x:auto;white-space:pre;}
+  .snip .warn{color:var(--gold);}
+  .snip .ok{color:var(--evergreen);font-weight:700;}
+  .illus{font-size:10.5px;color:var(--ink-3);font-style:italic;margin:2px 0 0;}
+
+  .cta{margin-top:26px;text-align:center;border:1px solid var(--evergreen-line);background:var(--evergreen-soft);border-radius:12px;padding:20px 22px;}
+  .cta h3{font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 5px;}
+  .cta p{font-size:13px;color:var(--ink-2);margin:0 0 14px;max-width:52ch;margin-left:auto;margin-right:auto;}
+  .cta a{display:inline-block;background:var(--evergreen);color:#fff;font-weight:700;font-size:13.5px;text-decoration:none;border-radius:8px;padding:11px 20px;}
+  @media (prefers-color-scheme:dark){.cta a{color:#0b0a08;}}
+  .cta a:hover{filter:brightness(1.06);}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="sheet">
+  <div class="band"></div>
+  <div class="pad">
+    <a class="back" href="standards-alignment.html">← Standards alignment</a>
+    <p class="eyebrow">Standards alignment · control summary</p>
+    <h1>Every control on one page — what the configuration does, and the evidence to inspect.</h1>
+    <p class="lede">Anyone can say "NIST-aligned." This page shows it instead — a walk-through, not a claim. For each control: the specific thing the configuration does, the layer that enforces it, and the evidence you can inspect for yourself. This is the substance an auditor, client, or insurer asks for.</p>
+
+    <div class="ladder">
+      <div class="rung"><div class="rn">Assert</div><div class="rd">"We're NIST-aligned." Everyone says it.</div></div>
+      <div class="rung"><div class="rn">Map</div><div class="rd">Where each control lands in the design.</div></div>
+      <div class="rung here"><div class="rn">Evidence · you are here</div><div class="rd">The mechanism, the enforcement point, and proof you can inspect.</div></div>
+    </div>
+
+    <div class="fwnote"><b>Read this honestly.</b> This is evidence of <em>alignment</em>, with artifacts you can verify — not a certification. Formal certification (ISO&nbsp;42001, SOC&nbsp;2, HITRUST) is a separate third-party audit against your specific deployment. This evidence pack is built to make that audit straightforward — and we prep you for it.</div>
+
+    <hr class="rule">
+
+    <!-- CONCERN 1 -->
+    <div class="concern">
+      <p class="ctitle">Who can connect</p>
+      <p class="csub">The Zero Trust boundary · enforced at the Dark-access layer</p>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">No implicit trust from network location</span>
+          <a class="fwpill" href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">NIST 800-207</a>
+          <a class="fwpill" href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">CISA ZTMM · Networks</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">The appliance has <b>no listening ports on the LAN</b>. It's reachable only through an authenticated Ziti session — every other device on the network is blind to it.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The Ziti service-policy config, plus a <b>port scan of the appliance</b> showing no open ports.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Per-session, least-privilege access</span>
+          <a class="fwpill" href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">NIST 800-207</a>
+          <a class="fwpill" href="https://cloudsecurityalliance.org/zt" target="_blank" rel="noopener">CSA Zero Trust</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">Bind/Dial service-policies grant each identity <b>only the services it needs</b> — nothing is reachable by default.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The policy list mapping each <b>identity → the services it may reach</b>.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Verify device identity before access</span>
+          <a class="fwpill" href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">CISA ZTMM · Identity</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">Every device carries an <b>enrolled cryptographic identity</b>. An unenrolled laptop — even on the same network — cannot see or reach the service.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The enrolled-identity roster and each device's <b>enrollment record</b>.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- CONCERN 2 -->
+    <div class="concern">
+      <p class="ctitle">What the AI may do</p>
+      <p class="csub">AI governance · enforced + advisory at the Guardrails layer</p>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Govern: policy, roles &amp; approvals</span>
+          <a class="fwpill" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI RMF · Govern</a>
+          <a class="fwpill" href="https://www.iso.org/standard/42001" target="_blank" rel="noopener">ISO 42001</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">A written AI policy and per-role scope; sensitive actions <b>pause for a human yes/no</b>, and the AI can't edit its own settings to turn that off.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The <b>generated AI policy document</b> and the approvals setting in config.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Map: document each role's tools &amp; data</span>
+          <a class="fwpill" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI RMF · Map</a>
+          <span class="hs soft">Advisory</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">Each role's <b>allowed tools and data scope</b> are written down before it runs — no open-ended access.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The per-role <b>profile spec</b> listing tools and scope.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Measure: verify claims against reality</span>
+          <a class="fwpill" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI RMF · Measure</a>
+          <a class="fwpill" href="https://cloudsecurityalliance.org/artificial-intelligence" target="_blank" rel="noopener">CSA AI</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">After each turn, a deterministic check compares what the AI <em>said</em> it did to what actually happened — and <b>flags a warning</b> when they don't match.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">A <b>turn log</b> where a false claim was caught (see the sample below).</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Manage: human oversight of high-stakes actions</span>
+          <a class="fwpill reg" href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU AI Act · oversight</a>
+          <a class="fwpill" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI RMF · Manage</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">File changes and commands <b>stop for approval</b>; incidents are logged and fixed (a real one is walked through on the design page).</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">An <b>approval-prompt record</b> and the incident's fix history.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- CONCERN 3 -->
+    <div class="concern">
+      <p class="ctitle">Prove what happened</p>
+      <p class="csub">Audit &amp; detection · enforced across layers</p>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Audit-log every access &amp; action</span>
+          <a class="fwpill" href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener">NIST CSF 2.0</a>
+          <a class="fwpill" href="https://www.cisecurity.org/controls/v8" target="_blank" rel="noopener">CIS v8 · Control 8</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">Every access and action is written to a <b>plain-English local log</b> — kept on the appliance, never sent out.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">A <b>sample audit-trail export</b> (see below).</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Inventory of identities &amp; access</span>
+          <a class="fwpill" href="https://www.cisecurity.org/controls/v8" target="_blank" rel="noopener">CIS v8 · Controls 1/5/6</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">The enrolled identities plus their granted services <b>are</b> your access inventory — always current, because access can't happen outside it.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The <b>identity + service inventory</b>, exportable on demand.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Detect drift &amp; protect integrity</span>
+          <a class="fwpill" href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener">CSF 2.0 · Detect</a>
+          <a class="fwpill" href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">CISA ZTMM · Visibility</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">The reality-check catches drift between claim and result, and <b>config self-protection</b> stops the AI disabling its own controls.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The config-guard rule and a <b>flagged-warning log line</b>.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- CONCERN 4 -->
+    <div class="concern">
+      <p class="ctitle">Where your data lives</p>
+      <p class="csub">Data protection · enforced at the on-prem &amp; Dark-access layers</p>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Data residency — nothing leaves the building</span>
+          <a class="fwpill reg" href="https://www.hhs.gov/hipaa/for-professionals/security/index.html" target="_blank" rel="noopener">HIPAA</a>
+          <a class="fwpill reg" href="https://www.ftc.gov/business-guidance/privacy-security/gramm-leach-bliley-act" target="_blank" rel="noopener">GLBA</a>
+          <a class="fwpill reg" href="https://www.fbi.gov/services/cjis" target="_blank" rel="noopener">CJIS</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">The model and your documents run <b>entirely on the appliance</b>; nothing calls out. An air-gapped option removes network egress completely.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">A <b>network-egress capture</b> during use, showing no outbound data.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Least-privilege access to the documents</span>
+          <a class="fwpill reg" href="https://www.hhs.gov/hipaa/for-professionals/security/index.html" target="_blank" rel="noopener">HIPAA</a>
+          <a class="fwpill" href="https://www.iso.org/standard/27001" target="_blank" rel="noopener">ISO 27001</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">Only enrolled, authorized roles reach the documents, and <b>every read is recorded</b>.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The access policy plus the <b>audit trail of who reached what</b>.</div></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="rhead">
+          <span class="ctrl">Encryption in transit</span>
+          <a class="fwpill reg" href="https://www.hhs.gov/hipaa/for-professionals/security/index.html" target="_blank" rel="noopener">HIPAA</a>
+          <a class="fwpill" href="https://www.iso.org/standard/27001" target="_blank" rel="noopener">ISO 27001</a>
+          <span class="hs hard">Enforced</span>
+        </div>
+        <div class="body">
+          <div class="cell"><div class="cl">What our configuration does</div><div class="cv">All access runs over <b>mutually-authenticated TLS</b> through the Ziti overlay — both ends prove who they are.</div></div>
+          <div class="cell ev"><div class="cl">Evidence you can inspect</div><div class="cv">The Ziti <b>mTLS configuration</b> and certificate chain.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- SAMPLE EVIDENCE -->
+    <div class="samples">
+      <p class="st">What the evidence actually looks like</p>
+      <p class="ss">Three examples from the kinds of artifacts above.</p>
+
+      <div class="snip">
+        <div class="sh">The appliance is dark — port scan</div>
+        <pre>$ nmap -Pn appliance.local
+Host is up.
+All 1000 scanned ports on appliance.local are <span class="ok">filtered</span>
+  (no service is reachable without an enrolled Ziti identity)</pre>
+        <p class="illus">Illustrative sample — your report is generated against your own appliance.</p>
+      </div>
+
+      <div class="snip">
+        <div class="sh">Audit trail — one line per access</div>
+        <pre>2026-07-29 14:22:01  role=assistant  action=read
+    file=/matters/acme/contract.pdf  decision=<span class="ok">ALLOW</span>  by=policy:reader
+2026-07-29 14:22:09  role=assistant  action=write
+    target=/matters/acme/summary.md  decision=<span class="warn">PENDING-APPROVAL</span></pre>
+        <p class="illus">Illustrative sample — kept locally, exportable as your access record.</p>
+      </div>
+
+      <div class="snip">
+        <div class="sh">Reality-check — a false claim, caught</div>
+        <pre><span class="warn">&#9888; verifier:</span> model reported "updated summary.md" —
+    no write occurred this turn. Warning appended before the
+    turn was returned. (deterministic post-turn check)</pre>
+        <p class="illus">Illustrative sample — the same check described under "Measure" above.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Want this filled in for your deployment?</h3>
+      <p>Start with the free Readiness Check — it identifies where you stand against these frameworks. The build closes the gaps, and this evidence pack is what you're left holding.</p>
+      <a href="readiness-check.html">Start the free Readiness Check →</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

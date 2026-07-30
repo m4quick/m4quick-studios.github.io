@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recommended alignment — NIST SP 800-207</title>
+<style>
+  :root{
+    --paper:#faf9f6; --sheet:#ffffff; --ink:#1b1b19; --ink-2:#59574f; --ink-3:#8a887f;
+    --line:rgba(0,0,0,.11); --hair:rgba(0,0,0,.07); --shadow:0 18px 50px rgba(20,18,10,.12);
+    --evergreen:#14614a; --evergreen-soft:rgba(20,97,74,.10); --evergreen-line:rgba(20,97,74,.28);
+    --gold:#9a7420; --gold-soft:rgba(154,116,32,.13); --gold-line:rgba(154,116,32,.32);
+    --mono-bg:#f4f6f4; --mono-line:rgba(20,97,74,.22);
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#100f0c; --sheet:#1a1916; --ink:#f3f1ea; --ink-2:#b3b0a4; --ink-3:#7d7b71;
+    --line:rgba(255,255,255,.12); --hair:rgba(255,255,255,.07); --shadow:0 20px 56px rgba(0,0,0,.55);
+    --evergreen:#4fb894; --evergreen-soft:rgba(79,184,148,.14); --evergreen-line:rgba(79,184,148,.34);
+    --gold:#cba24e; --gold-soft:rgba(203,162,78,.15); --gold-line:rgba(203,162,78,.4);
+    --mono-bg:#0c120f; --mono-line:rgba(79,184,148,.3);
+  }}
+  :root[data-theme="light"]{--paper:#faf9f6;--sheet:#fff;--ink:#1b1b19;--ink-2:#59574f;--ink-3:#8a887f;--line:rgba(0,0,0,.11);--hair:rgba(0,0,0,.07);--shadow:0 18px 50px rgba(20,18,10,.12);--evergreen:#14614a;--evergreen-soft:rgba(20,97,74,.10);--evergreen-line:rgba(20,97,74,.28);--gold:#9a7420;--gold-soft:rgba(154,116,32,.13);--gold-line:rgba(154,116,32,.32);--mono-bg:#f4f6f4;--mono-line:rgba(20,97,74,.22);}
+  :root[data-theme="dark"]{--paper:#100f0c;--sheet:#1a1916;--ink:#f3f1ea;--ink-2:#b3b0a4;--ink-3:#7d7b71;--line:rgba(255,255,255,.12);--hair:rgba(255,255,255,.07);--shadow:0 20px 56px rgba(0,0,0,.55);--evergreen:#4fb894;--evergreen-soft:rgba(79,184,148,.14);--evergreen-line:rgba(79,184,148,.34);--gold:#cba24e;--gold-soft:rgba(203,162,78,.15);--gold-line:rgba(203,162,78,.4);--mono-bg:#0c120f;--mono-line:rgba(79,184,148,.3);}
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 18px 46px;line-height:1.5;}
+  .sheet{max-width:840px;margin:0 auto;background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden;}
+  .band{height:5px;background:var(--evergreen);}
+  .pad{padding:34px 40px 40px;}
+  @media (max-width:560px){.pad{padding:26px 22px 30px;}}
+
+  .back{font-size:12px;color:var(--evergreen);text-decoration:none;font-weight:700;}
+  .back:hover{text-decoration:underline;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--evergreen);margin:14px 0 12px;}
+  h1{font-family:var(--serif);font-size:29px;line-height:1.13;font-weight:600;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance;}
+  .lede{font-size:15px;color:var(--ink-2);max-width:64ch;margin:0 0 4px;}
+  .cite{font-size:12px;color:var(--ink-3);margin:8px 0 0;}
+  .cite a{color:var(--evergreen);}
+
+  .note{font-size:12.5px;color:var(--ink-2);margin:20px 0 0;background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:8px;padding:11px 14px;}
+  .note b{color:var(--gold);}
+
+  .progress{display:flex;align-items:center;gap:8px;margin:22px 0 0;font-size:11.5px;color:var(--ink-3);flex-wrap:wrap;}
+  .dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--evergreen-line);}
+  .dot.done{background:var(--evergreen);border-color:var(--evergreen);}
+
+  .rule{border:0;border-top:1px solid var(--hair);margin:28px 0;}
+
+  .tenet{border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:16px;}
+  .tenet .req{background:var(--evergreen-soft);border-bottom:1px solid var(--evergreen-line);padding:15px 17px;}
+  .tenet .req .tt{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:5px;}
+  .tenet .req .tnum{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--evergreen);background:var(--sheet);border:1px solid var(--evergreen-line);border-radius:20px;padding:2px 9px;}
+  .tenet .req .rlbl{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);}
+  .tenet .req .rtext{font-size:14px;color:var(--ink);font-weight:600;line-height:1.4;}
+  .tenet .bd{padding:15px 17px 6px;}
+  .block{margin-bottom:15px;}
+  .block .bl{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+  .block.rec .bl{color:var(--evergreen);}
+  .block .btext{font-size:13px;color:var(--ink-2);line-height:1.55;}
+  .block .btext b{color:var(--ink);}
+  pre{margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.55;color:var(--ink);background:var(--mono-bg);border:1px solid var(--mono-line);border-radius:9px;padding:12px 13px;overflow-x:auto;white-space:pre;}
+  pre .c{color:var(--ink-3);}
+  pre .ok{color:var(--evergreen);font-weight:700;}
+  pre .warn{color:var(--gold);font-weight:700;}
+  pre .kw{color:var(--evergreen);}
+  .verify pre{background:transparent;border-style:dashed;}
+
+  .foot{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--ink-3);}
+  .cta{margin-top:22px;text-align:center;border:1px solid var(--evergreen-line);background:var(--evergreen-soft);border-radius:12px;padding:20px 22px;}
+  .cta h3{font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 5px;}
+  .cta p{font-size:13px;color:var(--ink-2);margin:0 0 14px;max-width:54ch;margin-left:auto;margin-right:auto;}
+  .cta a{display:inline-block;background:var(--evergreen);color:#fff;font-weight:700;font-size:13.5px;text-decoration:none;border-radius:8px;padding:11px 20px;}
+  @media (prefers-color-scheme:dark){.cta a{color:#0b0a08;}}
+  .cta a:hover{filter:brightness(1.06);}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="sheet">
+  <div class="band"></div>
+  <div class="pad">
+    <a class="back" href="standards-alignment.html">← Standards alignment</a>
+    <p class="eyebrow">Recommended alignment · NIST SP 800-207 · Zero Trust Architecture</p>
+    <h1>How we recommend aligning your private AI with NIST SP 800-207.</h1>
+    <p class="lede">The Zero Trust standard sets out seven tenets. For each one, here's <b>what it requires</b>, <b>the approach we recommend</b>, <b>the configuration that implements it</b>, and <b>how you confirm it's working</b>. This is a recommended reference — the exact configs are finalized against your deployment.</p>
+    <p class="cite">Source: <a href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">NIST SP 800-207, Zero Trust Architecture ↗</a> · tenets paraphrased; read the original for the authoritative text.</p>
+
+    <div class="note"><b>How to read this.</b> "Requirement" is our plain-language reading of the tenet — not a quote. "Configuration" is the recommended recipe on an OpenZiti + local-model appliance; yours may differ. Nothing here claims certification.</div>
+
+    <div class="progress">
+      <span class="dot done"></span><span class="dot done"></span><span class="dot done"></span>
+      <span class="dot done"></span><span class="dot done"></span><span class="dot done"></span><span class="dot done"></span>
+      <span>All 7 tenets · complete</span>
+    </div>
+
+    <hr class="rule">
+
+    <!-- Tenet 1 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 1</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">All data sources and computing services are treated as resources — each protected in its own right, not lumped into one trusted zone.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Define <b>each capability as its own Ziti service</b> with its own policy — the model endpoint, each document store, each tool — so every resource is individually addressed and individually governed. There is no flat "inside the network is trusted" zone.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Each capability is a separate governed resource, not one flat zone</span>
+ziti edge create service private-ai   --configs ai-host,ai-intercept
+ziti edge create service docs-index   --configs docs-host,docs-intercept
+ziti edge create service tool-runner  --configs tool-host,tool-intercept</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ ziti edge list services
+private-ai    <span class="c"># the model endpoint</span>
+docs-index    <span class="c"># the document store</span>
+tool-runner   <span class="c"># any tool the AI may call</span>
+<span class="c"># each resource is addressed and policed on its own</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tenet 2 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 2</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">All communication is secured regardless of network location — being "on the LAN" grants no trust.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Publish the AI as a <b>dark service on an OpenZiti overlay</b>: it binds only to localhost, has <b>no listening port on the LAN</b>, and is reached only through a mutually-authenticated (mTLS) Ziti session. Nothing on the office network can see it.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Bind the model to localhost only; expose it as a dark Ziti service</span>
+ziti edge create config ai-host host.v1 \
+  '{"protocol":"tcp","address":"127.0.0.1","port":8899}'
+ziti edge create config ai-intercept intercept.v1 \
+  '{"protocols":["tcp"],"addresses":["private-ai.ziti"],
+    "portRanges":[{"low":80,"high":80}]}'
+ziti edge create service private-ai --configs ai-host,ai-intercept</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ nmap -Pn appliance.local
+All 1000 scanned ports are <span class="ok">filtered</span>   <span class="c"># nothing listens on the LAN</span>
+<span class="c"># reachable only as private-ai.ziti, over mTLS, by an enrolled identity</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tenet 3 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 3</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Access to each resource is granted per session — reaching one resource never implies access to another.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Lean on Ziti's <b>per-session model</b>: every connection is authorized against that resource's own dial policy at connect time. A live session to the model carries <b>no</b> authorization toward the document store — each is granted, and re-checked, on its own.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Each resource has its own dial policy — granting one never grants another</span>
+ziti edge create service-policy docs-dial <span class="kw">Dial</span> \
+  --service-roles '@docs-index' --identity-roles '#staff-legal'
+<span class="c"># a session to 'private-ai' is not a session to 'docs-index'</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ ziti edge list sessions
+identity=jdoe  service=private-ai   <span class="c"># this resource only</span>
+<span class="c"># jdoe reaching docs-index is authorized separately, against docs-dial</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tenet 4 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 4</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Access is decided by dynamic policy — identity, the service, and the requesting device's posture — not a static allow-list.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Attach <b>posture checks</b> to the dial policy — require MFA and a managed, up-to-date OS — so a device gets a route only while it meets the posture, and loses it the moment it doesn't. Being enrolled isn't enough on its own.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Require MFA + a healthy OS before the dial policy grants a route</span>
+ziti edge create posture-check require-mfa <span class="kw">MFA</span>
+ziti edge create posture-check managed-os <span class="kw">OS</span> --os 'macOS:>=14'
+ziti edge update service-policy ai-dial \
+  --posture-check-roles '@require-mfa,@managed-os'</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ ziti edge list posture-checks
+require-mfa  MFA
+managed-os   OS   macOS >= 14
+<span class="c"># a device with no MFA, or on an old OS, gets</span> <span class="warn">no route</span> <span class="c">— even if enrolled</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tenet 5 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 5</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">The integrity and security posture of all assets is monitored and measured — continuously, not just at first connect.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Keep posture checks <b>continuous</b> — Ziti re-evaluates them during a session and drops access if a device falls out of compliance — and protect the appliance's own integrity, so the AI <b>can't disable its own controls</b>.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Posture is re-checked during the session (Ziti drops access on drift).</span>
+<span class="c"># Appliance self-integrity — the agent cannot alter its own controls:</span>
+guardrails:
+  config_self_protection: <span class="kw">true</span>   <span class="c"># its config is read-only to the agent</span>
+  reality_check: <span class="kw">true</span>            <span class="c"># post-turn verification stays on</span></pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ hermes doctor
+posture monitoring ......... <span class="ok">ON</span>   <span class="c"># drops access on MFA/OS drift</span>
+config self-protection ..... <span class="ok">ON</span>
+reality-check .............. <span class="ok">ON</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tenet 6 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 6</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">All authentication and authorization are dynamic and strictly enforced before access is allowed.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Grant access with <b>explicit Bind/Dial service-policies</b> — nothing is reachable by default. Only the appliance identity may <em>serve</em> the model; only enrolled staff devices may <em>reach</em> it, each authenticated per session.</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Who may serve it, and who may reach it — deny-by-default</span>
+ziti edge create service-policy ai-bind <span class="kw">Bind</span> \
+  --service-roles '@private-ai' --identity-roles '@ai-appliance'
+ziti edge create service-policy ai-dial <span class="kw">Dial</span> \
+  --service-roles '@private-ai' --identity-roles '#staff'</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>$ ziti edge list service-policies
+ai-bind  Bind  @private-ai  @ai-appliance
+ai-dial  Dial  @private-ai  #staff
+<span class="c"># a device with no enrolled identity in #staff gets</span> <span class="warn">no route at all</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tenet 7 -->
+    <div class="tenet">
+      <div class="req">
+        <div class="tt"><span class="tnum">Tenet 7</span><span class="rlbl">Requirement</span></div>
+        <div class="rtext">Collect as much information as possible about access and system state, and use it to improve security posture.</div>
+      </div>
+      <div class="bd">
+        <div class="block rec">
+          <div class="bl">What we recommend</div>
+          <div class="btext">Turn on the <b>local audit log</b> so every access and action is recorded in plain English — kept on the appliance, never sent out — giving you the record this tenet expects (and the evidence an auditor asks for).</div>
+        </div>
+        <div class="block">
+          <div class="bl">The configuration</div>
+<pre><span class="c"># Record every access &amp; action to a local, plain-English log</span>
+audit:
+  enabled: <span class="kw">true</span>
+  path: /var/hermes/audit.log        <span class="c"># stays on the appliance</span>
+  fields: [time, identity, action, target, decision, policy]</pre>
+        </div>
+        <div class="block verify">
+          <div class="bl">See it work</div>
+<pre>2026-07-29 14:22:01  identity=jdoe  action=read
+   target=/matters/acme/contract.pdf  decision=<span class="ok">ALLOW</span>  policy=reader</pre>
+        </div>
+      </div>
+    </div>
+
+    <p class="foot">All seven tenets of NIST SP 800-207, each with the requirement, the approach we recommend, the configuration that implements it, and how you confirm it's working. This is standard 1 of the alignment set.</p>
+
+    <div class="cta">
+      <h3>Want this run against your setup?</h3>
+      <p>The free Readiness Check tells you which of these you already meet and which need work — then the build puts the recommended configuration in place.</p>
+      <a href="readiness-check.html">Start the free Readiness Check →</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
