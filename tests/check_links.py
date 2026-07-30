@@ -2,9 +2,9 @@
 """Static buttons-and-links check for the M4Quick Studios site.
 Fails (exit 1) on any dead in-page anchor, missing relative page, or action-less form.
 External URLs are checked separately (lychee). No network needed here."""
-import sys, re, os
+import sys, re, os, glob
 
-HTML_FILES = [f for f in ("index.html", "box.html", "pitch.html") if os.path.exists(f)]
+HTML_FILES = sorted(glob.glob("*.html"))
 ROOT_INDEX = "index.html"
 
 def ids_of(path):
