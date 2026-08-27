@@ -357,6 +357,19 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Serves the public Turnstile site key so the form can configure itself.
+    // The site key is not a secret — it is designed to sit in page markup —
+    // but serving it from here means the widget appears the moment a key is
+    // set, with no HTML edit and no disabled markup checked into the repo.
+    // No key set: returns null, the form renders without a widget and works.
+    if (request.method === 'GET' && url.pathname === '/api/config') {
+      return new Response(JSON.stringify({
+        turnstileSiteKey: env.TURNSTILE_SITE_KEY || null,
+      }), {
+        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
+      });
+    }
+
     // Recover stored submissions. This is what makes the store-first
     // guarantee real: if email and Telegram both failed, every enquiry is
     // still here and readable.

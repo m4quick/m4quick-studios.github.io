@@ -1340,16 +1340,10 @@
             <form id="intake-form" class="intake-form" action="https://m4quickstudios.com/api/intake" method="POST">
                 <input type="text" name="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
                 <input type="hidden" name="form_ts" value="">
-                <!-- Cloudflare Turnstile — verifies a real person without an image CAPTCHA.
-                     To enable: Cloudflare dashboard > Turnstile > Add site (domain
-                     m4quickstudios.com), copy the SITE key, uncomment the two lines
-                     below and paste it in. Then set the SECRET key on the worker:
-                       wrangler secret put TURNSTILE_SECRET
-                     Leave it commented until both are in place — an unconfigured
-                     site key renders a broken challenge box to real visitors.
-                <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-                <div class="cf-turnstile" data-sitekey="PASTE_TURNSTILE_SITE_KEY"></div>
-                -->
+                <!-- Turnstile mounts here when a site key is configured on the worker
+                     (wrangler secret/var TURNSTILE_SITE_KEY). No key set: nothing
+                     renders and the form works exactly as before. -->
+                <div id="turnstile-mount"></div>
                 <div class="intake-grid">
                     <label>Name
                         <input type="text" name="name" required maxlength="200">
@@ -2794,6 +2788,22 @@
 document.addEventListener('DOMContentLoaded', function () {
   var t = String(Date.now());
   document.querySelectorAll('input[name="form_ts"]').forEach(function (el) { el.value = t; });
+
+  // Ask the worker whether a Turnstile site key is configured. If one is, load
+  // the widget and mount it. If not, the form stays exactly as it is — no
+  // broken challenge box, nothing disabled sitting in the markup.
+  var mount = document.getElementById('turnstile-mount');
+  if (!mount) return;
+  fetch('/api/config').then(function (r) { return r.json(); }).then(function (cfg) {
+    if (!cfg || !cfg.turnstileSiteKey) return;
+    var s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async = true; s.defer = true;
+    s.onload = function () {
+      if (window.turnstile) window.turnstile.render(mount, { sitekey: cfg.turnstileSiteKey });
+    };
+    document.head.appendChild(s);
+  }).catch(function () { /* config unreachable: form still submits normally */ });
 });
 </script>
 </body>

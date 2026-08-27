@@ -82,12 +82,18 @@ assumes the form is broken.
 | Screening heuristics | template and gibberish spam | none |
 
 **Turnstile** — Cloudflare dashboard → Turnstile → Add site for
-`m4quickstudios.com`. Put the **site** key in the form markup in `index.html`
-(currently commented out) and the **secret** key on the worker:
+`m4quickstudios.com`, then set both keys on the worker:
 
 ```
-wrangler secret put TURNSTILE_SECRET
+wrangler secret put TURNSTILE_SECRET          # private, verifies submissions
+npx wrangler secret put TURNSTILE_SITE_KEY    # public, served to the form
 ```
+
+No HTML edit is needed. The form asks `GET /api/config` on load and mounts the
+widget only if a site key comes back. With no key set the endpoint returns
+`null`, no widget renders, and the form submits normally — so there is never
+disabled markup sitting in the repo or a broken challenge box shown to a real
+visitor.
 
 `TURNSTILE_MODE` in `wrangler.toml` controls behaviour:
 
