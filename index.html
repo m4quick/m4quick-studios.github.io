@@ -1339,6 +1339,7 @@
             </div>
             <form id="intake-form" class="intake-form" action="https://m4quickstudios.com/api/intake" method="POST">
                 <input type="text" name="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
+                <input type="hidden" name="form_ts" value="">
                 <div class="intake-grid">
                     <label>Name
                         <input type="text" name="name" required maxlength="200">
@@ -1401,6 +1402,7 @@
             </div>
             <form id="newsletter-form" style="margin-top: 20px;" action="https://m4quickstudios.com/api/subscribe" method="POST">
                 <input type="text" name="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
+                <input type="hidden" name="form_ts" value="">
                 <input type="email" name="email" placeholder="Enter your email" required>
                 <br>
                 <button type="submit" class="btn btn-primary" style="width: auto; margin-top: 15px;">Subscribe</button>
@@ -2775,5 +2777,14 @@
             <p>Questions? <a href="mailto:m4quick@gmail.com">m4quick@gmail.com</a></p>
         </div>
     </footer>
+
+<script>
+// Stamp when the form was rendered. The intake worker compares this to the
+// submit time: a post that arrives seconds after load is almost always a bot.
+document.addEventListener('DOMContentLoaded', function () {
+  var t = String(Date.now());
+  document.querySelectorAll('input[name="form_ts"]').forEach(function (el) { el.value = t; });
+});
+</script>
 </body>
 </html>
