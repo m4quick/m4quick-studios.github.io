@@ -46,13 +46,71 @@ names.
 real enquiry costs far more than a spam message you can ignore. Only the
 honeypot hard-blocks, because a human cannot trip it.
 
+
+## Never losing a submission
+
+Every intake is written to Cloudflare KV **before** any notification is
+attempted. Email and Telegram are best-effort delivery on top of a durable
+record — if both fail, the enquiry still exists and is recoverable.
+
+One-time setup:
+
+```
+wrangler kv namespace create SUBMISSIONS
+# paste the returned id into wrangler.toml
+```
+
+Recover stored submissions (newest first):
+
+```
+curl "https://m4quickstudios.com/api/submissions?key=<TEST_KEY>&limit=50"
+```
+
+The visitor is redirected to the success page whenever the record was stored,
+even if mail delivery failed. Showing a raw gateway error over a mail-provider
+hiccup loses the lead twice — once in delivery, and again because the visitor
+assumes the form is broken.
+
+## Verifying people are real
+
+| Layer | What it catches | Cost to a real visitor |
+|---|---|---|
+| Honeypot | naive bots | none (invisible) |
+| `form_ts` timing | scripted posts | none |
+| Turnstile | most automated submissions | usually zero-click |
+| MX / A lookup | typo'd and invented email domains | none |
+| Screening heuristics | template and gibberish spam | none |
+
+**Turnstile** — Cloudflare dashboard → Turnstile → Add site for
+`m4quickstudios.com`. Put the **site** key in the form markup in `index.html`
+(currently commented out) and the **secret** key on the worker:
+
+```
+wrangler secret put TURNSTILE_SECRET
+```
+
+`TURNSTILE_MODE` in `wrangler.toml` controls behaviour:
+
+- `off` — skip entirely
+- `flag` — a failure scores heavily but still stores and notifies (**default**)
+- `block` — a failure is rejected outright, after storing
+
+It ships on `flag` deliberately: a misconfigured key in `block` mode would
+silently reject every genuine enquiry, and you would have no way of knowing.
+Move to `block` once you have watched it pass real traffic.
+
+**MX check** — the email domain is resolved over DNS-over-HTTPS. A syntactically
+valid address at a domain that cannot receive mail is a strong fake signal, and
+it also catches honest typos like `gmial.com`.
+
 ## Secrets
 
 ```
 wrangler secret put MAILGUN_API_KEY      # Mailgun private API key
 wrangler secret put TELEGRAM_BOT_TOKEN   # from @BotFather
 wrangler secret put TELEGRAM_CHAT_ID     # your chat/channel id
-wrangler secret put TEST_KEY             # any random string, guards the test route
+wrangler secret put TEST_KEY             # random string; guards /api/test-telegram and /api/submissions
+wrangler secret put TURNSTILE_SECRET     # Cloudflare Turnstile secret key (optional)
 ```
 
 Telegram is optional — if the two Telegram secrets are absent the worker still

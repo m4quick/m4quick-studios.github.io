@@ -101,6 +101,87 @@ function scoreSubmission({ name, email, company, message, elapsedMs }) {
   return { score, level, reasons };
 }
 
+// ------------------------------------------------- human verification
+
+// Cloudflare Turnstile. Verifies the visitor is a real person without the
+// friction (or the privacy cost) of an image CAPTCHA.
+//
+// Mode is controlled by TURNSTILE_MODE:
+//   off   - skip entirely
+//   flag  - a failure adds heavily to the spam score but still stores/notifies
+//   block - a failure is rejected outright (still stored first)
+// Default is "flag" so a misconfigured key can never silently reject real
+// enquiries. Tighten to "block" once you have watched it work.
+async function verifyTurnstile(env, token, ip) {
+  const mode = (env.TURNSTILE_MODE || 'flag').toLowerCase();
+  if (mode === 'off' || !env.TURNSTILE_SECRET) {
+    return { mode, ran: false, ok: true, reason: 'turnstile not configured' };
+  }
+  if (!token) {
+    return { mode, ran: true, ok: false, reason: 'no Turnstile token submitted' };
+  }
+  try {
+    const body = new FormData();
+    body.append('secret', env.TURNSTILE_SECRET);
+    body.append('response', token);
+    if (ip) body.append('remoteip', ip);
+    const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body,
+    });
+    const j = await r.json();
+    return {
+      mode,
+      ran: true,
+      ok: !!j.success,
+      reason: j.success ? 'passed' : `failed (${(j['error-codes'] || []).join(', ') || 'unknown'})`,
+    };
+  } catch (e) {
+    // Never let an outage at the verifier block a real person.
+    return { mode, ran: true, ok: true, reason: 'verifier unreachable, allowed' };
+  }
+}
+
+// Does the email's domain actually accept mail? Catches typos and invented
+// domains that a syntax check happily passes.
+async function domainAcceptsMail(email) {
+  const domain = (email.split('@')[1] || '').toLowerCase().trim();
+  if (!domain || !domain.includes('.')) return { checked: true, ok: false, reason: 'malformed domain' };
+  try {
+    const r = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=MX`, {
+      headers: { Accept: 'application/dns-json' },
+    });
+    const j = await r.json();
+    const has = Array.isArray(j.Answer) && j.Answer.some((a) => a.type === 15);
+    if (has) return { checked: true, ok: true, reason: 'MX present' };
+    // Some small domains accept mail on the A record with no MX.
+    const r2 = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
+      headers: { Accept: 'application/dns-json' },
+    });
+    const j2 = await r2.json();
+    const hasA = Array.isArray(j2.Answer) && j2.Answer.length > 0;
+    return { checked: true, ok: hasA, reason: hasA ? 'no MX, A record only' : 'no MX and no A record' };
+  } catch (e) {
+    return { checked: false, ok: true, reason: 'DNS check unavailable' };
+  }
+}
+
+// ------------------------------------------------------------- storage
+
+// Write the submission down BEFORE notifying anyone. This is the whole
+// guarantee: if Mailgun and Telegram are both down, the enquiry still exists
+// and can be replayed. Nothing is ever lost to a delivery failure.
+async function storeSubmission(env, record) {
+  if (!env.SUBMISSIONS) return { ok: false, reason: 'KV not bound' };
+  try {
+    const key = `intake:${record.receivedAt}:${crypto.randomUUID()}`;
+    await env.SUBMISSIONS.put(key, JSON.stringify(record));
+    return { ok: true, key };
+  } catch (e) {
+    return { ok: false, reason: String(e) };
+  }
+}
+
 // ------------------------------------------------------------- notifiers
 
 async function sendMail(env, subject, bodyText) {
@@ -158,11 +239,46 @@ async function handleIntake(request, env, url) {
     return new Response('Missing required fields', { status: 400 });
   }
 
+  const ip = request.headers.get('cf-connecting-ip') || '';
+  const country = request.headers.get('cf-ipcountry') || '??';
   const tsRaw = field(data, 'form_ts', 20);
   const elapsedMs = tsRaw && /^\d+$/.test(tsRaw) ? Date.now() - Number(tsRaw) : null;
 
+  // Run the two independent human checks concurrently.
+  const [turnstile, mailDomain] = await Promise.all([
+    verifyTurnstile(env, field(data, 'cf-turnstile-response', 4000), ip),
+    domainAcceptsMail(email),
+  ]);
+
   const spam = scoreSubmission({ name, email, company, message, elapsedMs });
-  const country = request.headers.get('cf-ipcountry') || '??';
+  if (turnstile.ran && !turnstile.ok) {
+    spam.score += 6;
+    spam.reasons.push(`Turnstile ${turnstile.reason}`);
+  }
+  if (mailDomain.checked && !mailDomain.ok) {
+    spam.score += 4;
+    spam.reasons.push(`email domain does not accept mail (${mailDomain.reason})`);
+  }
+  spam.level = spam.score >= 6 ? 'HIGH' : spam.score >= 3 ? 'MEDIUM' : 'LOW';
+
+  const record = {
+    receivedAt: new Date().toISOString(),
+    track, name, email, company, orgSize, timeline, message,
+    ip, country,
+    elapsedMs,
+    turnstile: { ran: turnstile.ran, ok: turnstile.ok, reason: turnstile.reason },
+    mailDomain,
+    screening: { score: spam.score, level: spam.level, reasons: spam.reasons },
+  };
+
+  // Persist FIRST. Everything after this point is best-effort delivery — the
+  // enquiry itself is already safe.
+  const stored = await storeSubmission(env, record);
+
+  // Hard rejection only when explicitly configured, and only after storing.
+  if (turnstile.ran && !turnstile.ok && turnstile.mode === 'block') {
+    return new Response('Verification failed. Please reload the page and try again.', { status: 403 });
+  }
 
   const flag = spam.level === 'HIGH' ? '[LIKELY SPAM] ' : spam.level === 'MEDIUM' ? '[CHECK] ' : '';
 
@@ -174,11 +290,13 @@ async function handleIntake(request, env, url) {
     `Org size: ${orgSize || '(not provided)'}`,
     `Timeline: ${timeline || '(not provided)'}`,
     `Country: ${country}`,
+    '',
     `Screening: ${spam.level} (score ${spam.score})`,
+    `Turnstile: ${turnstile.ran ? turnstile.reason : 'not configured'}`,
+    `Email domain: ${mailDomain.reason}`,
+    `Stored: ${stored.ok ? stored.key : 'NOT STORED — ' + stored.reason}`,
   ];
-  if (spam.reasons.length) {
-    bodyLines.push(...spam.reasons.map((r) => `  - ${r}`));
-  }
+  if (spam.reasons.length) bodyLines.push(...spam.reasons.map((r) => `  - ${r}`));
   bodyLines.push('', 'Message:', message);
 
   const emailResult = await sendMail(env, `${flag}New intake: ${track} — ${name}`, bodyLines.join('\n'));
@@ -195,17 +313,21 @@ async function handleIntake(request, env, url) {
     `<b>Country:</b> ${esc(country)}`,
     '',
     `<b>Screening:</b> ${spam.level} (score ${spam.score})`,
+    `<b>Human check:</b> ${esc(turnstile.ran ? turnstile.reason : 'Turnstile off')}`,
+    `<b>Mail domain:</b> ${esc(mailDomain.reason)}`,
   ];
-  if (spam.reasons.length) {
-    tgLines.push(...spam.reasons.map((r) => `• ${esc(r)}`));
-  }
-  tgLines.push('', `<b>Message:</b>`, `<pre>${esc(message.slice(0, 900))}</pre>`);
+  if (spam.reasons.length) tgLines.push(...spam.reasons.map((r) => `• ${esc(r)}`));
+  if (!stored.ok) tgLines.push(`\u{26A0}\u{FE0F} <b>NOT STORED:</b> ${esc(stored.reason)}`);
+  tgLines.push('', '<b>Message:</b>', `<pre>${esc(message.slice(0, 900))}</pre>`);
 
-  // Telegram must never be able to break the form: notify, but do not fail on it.
   await sendTelegram(env, tgLines.join('\n')).catch(() => {});
 
-  if (!emailResult.ok) {
-    return new Response(`Failed to send. Mailgun status ${emailResult.status}: ${emailResult.text}`, { status: 502 });
+  // The visitor is told it worked because, as far as their enquiry is
+  // concerned, it did — it is stored and recoverable. Showing them a raw
+  // gateway error over a mail-provider hiccup loses the lead twice: once in
+  // delivery, and again because they assume the form is broken.
+  if (!emailResult.ok && !stored.ok) {
+    return new Response('We could not record your message. Please email m4quick@gmail.com directly.', { status: 502 });
   }
   return Response.redirect(`${url.origin}/?submitted=intake#contact`, 303);
 }
@@ -234,6 +356,29 @@ async function handleSubscribe(request, env, url) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // Recover stored submissions. This is what makes the store-first
+    // guarantee real: if email and Telegram both failed, every enquiry is
+    // still here and readable.
+    if (request.method === 'GET' && url.pathname === '/api/submissions') {
+      if (!env.TEST_KEY || url.searchParams.get('key') !== env.TEST_KEY) {
+        return new Response('Not found', { status: 404 });
+      }
+      if (!env.SUBMISSIONS) {
+        return new Response('KV not bound', { status: 500 });
+      }
+      const limit = Math.min(Number(url.searchParams.get('limit') || 50), 200);
+      const list = await env.SUBMISSIONS.list({ prefix: 'intake:', limit });
+      const out = [];
+      for (const k of list.keys) {
+        const v = await env.SUBMISSIONS.get(k.name);
+        if (v) out.push(JSON.parse(v));
+      }
+      out.sort((a, b) => (a.receivedAt < b.receivedAt ? 1 : -1));
+      return new Response(JSON.stringify({ count: out.length, submissions: out }, null, 2), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     // Lets you verify Telegram wiring without submitting the public form.
     if (request.method === 'GET' && url.pathname === '/api/test-telegram') {

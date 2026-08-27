@@ -1340,6 +1340,16 @@
             <form id="intake-form" class="intake-form" action="https://m4quickstudios.com/api/intake" method="POST">
                 <input type="text" name="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
                 <input type="hidden" name="form_ts" value="">
+                <!-- Cloudflare Turnstile — verifies a real person without an image CAPTCHA.
+                     To enable: Cloudflare dashboard > Turnstile > Add site (domain
+                     m4quickstudios.com), copy the SITE key, uncomment the two lines
+                     below and paste it in. Then set the SECRET key on the worker:
+                       wrangler secret put TURNSTILE_SECRET
+                     Leave it commented until both are in place — an unconfigured
+                     site key renders a broken challenge box to real visitors.
+                <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+                <div class="cf-turnstile" data-sitekey="PASTE_TURNSTILE_SITE_KEY"></div>
+                -->
                 <div class="intake-grid">
                     <label>Name
                         <input type="text" name="name" required maxlength="200">

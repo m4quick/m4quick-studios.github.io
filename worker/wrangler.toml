@@ -5,3 +5,17 @@ compatibility_date = "2026-07-01"
 # No routes here on purpose — bind the route via the Cloudflare dashboard
 # (Workers & Pages > m4quick-intake > Settings > Triggers > Routes) so this
 # stays a simple `wrangler deploy` without touching zone config from the CLI.
+
+# Durable store for submissions. Every intake is written here BEFORE any
+# notification is attempted, so a Mailgun or Telegram outage can never lose
+# an enquiry. Create it once with:
+#   wrangler kv namespace create SUBMISSIONS
+# then paste the returned id below.
+[[kv_namespaces]]
+binding = "SUBMISSIONS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+# off | flag | block  — how to treat a failed/absent Turnstile check.
+# Starts on "flag" so a misconfiguration can never silently reject real people.
+TURNSTILE_MODE = "flag"
