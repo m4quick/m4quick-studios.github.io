@@ -320,7 +320,19 @@ async function handleIntake(request, env, url) {
   if (!stored.ok) tgLines.push(`\u{26A0}\u{FE0F} <b>NOT STORED:</b> ${esc(stored.reason)}`);
   tgLines.push('', '<b>Message:</b>', `<pre>${esc(message.slice(0, 900))}</pre>`);
 
-  await sendTelegram(env, tgLines.join('\n')).catch(() => {});
+  const tgResult = await sendTelegram(env, tgLines.join('\n')).catch((e) => ({ ok: false, status: 0, text: String(e) }));
+
+  // Record what actually happened to each notification channel. Without this a
+  // silent delivery failure is invisible: the visitor sees success, the record
+  // is stored, and nothing anywhere says the email never went out.
+  const delivery = {
+    email: { ok: emailResult.ok, status: emailResult.status, detail: String(emailResult.text || '').slice(0, 400) },
+    telegram: { ok: tgResult.ok, status: tgResult.status, detail: String(tgResult.text || '').slice(0, 200) },
+  };
+  console.log('intake delivery', JSON.stringify(delivery));
+  if (stored.ok && env.SUBMISSIONS) {
+    await env.SUBMISSIONS.put(stored.key, JSON.stringify({ ...record, delivery })).catch(() => {});
+  }
 
   // The visitor is told it worked because, as far as their enquiry is
   // concerned, it did — it is stored and recoverable. Showing them a raw
