@@ -1,5 +1,9 @@
 name: Sync to GitHub
 
+# This file is mirrored to a PUBLIC GitHub repo, so nothing in it may name
+# internal hosts, usernames or addresses. The staging target lives in the
+# HOST1_TARGET secret (format: user@host) rather than inline.
+
 on:
   push:
     branches:
@@ -23,12 +27,18 @@ jobs:
 
       - name: Deploy to host1 staging
         run: |
+          if [ -z "$HOST1_TARGET" ]; then
+            echo "HOST1_TARGET is not set — add it as a Gitea secret in the form user@host."
+            echo "Skipping staging deploy; the GitHub sync above already succeeded."
+            exit 0
+          fi
           apt-get update -qq && apt-get install -y -qq openssh-client rsync > /dev/null
           mkdir -p ~/.ssh
           echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          rsync -a --delete --exclude='.git' --exclude='.gitea' \
+          rsync -a --delete --exclude='.git' --exclude='.gitea' --exclude='.github' \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            ./ anu-sir@10.0.0.254:
+            ./ "${HOST1_TARGET}:"
         env:
           DEPLOY_KEY: ${{ secrets.HOST1_DEPLOY_KEY }}
+          HOST1_TARGET: ${{ secrets.HOST1_TARGET }}
