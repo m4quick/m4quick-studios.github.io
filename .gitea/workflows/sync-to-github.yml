@@ -32,13 +32,30 @@ jobs:
             echo "Skipping staging deploy; the GitHub sync above already succeeded."
             exit 0
           fi
+          if [ -z "$HOST1_KNOWN_HOSTS" ]; then
+            echo "HOST1_KNOWN_HOSTS is not set, so the staging host cannot be verified."
+            echo "Skipping rather than connecting without host-key checking: this step"
+            echo "hands a private deploy key to whatever answers at that address, and"
+            echo "an unverified connection is exactly how that key reaches the wrong host."
+            echo ""
+            echo "Generate the value on a trusted machine, on the same network:"
+            echo "    ssh-keyscan -H <host>"
+            echo "and store the full output as the HOST1_KNOWN_HOSTS Gitea secret."
+            echo ""
+            echo "The GitHub sync above already succeeded; only staging was skipped."
+            exit 0
+          fi
           apt-get update -qq && apt-get install -y -qq openssh-client rsync > /dev/null
           mkdir -p ~/.ssh
-          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$HOST1_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
           rsync -a --delete --exclude='.git' --exclude='.gitea' --exclude='.github' \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes -o BatchMode=yes" \
             ./ "${HOST1_TARGET}:"
         env:
           DEPLOY_KEY: ${{ secrets.HOST1_DEPLOY_KEY }}
           HOST1_TARGET: ${{ secrets.HOST1_TARGET }}
+          HOST1_KNOWN_HOSTS: ${{ secrets.HOST1_KNOWN_HOSTS }}
