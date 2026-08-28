@@ -136,6 +136,32 @@ break the form.
 
 ## Deploy
 
+**Normally you do not.** `.github/workflows/deploy-worker.yml` deploys the
+worker on any push that touches `worker/`, so it ships through the same
+Gitea → GitHub path as the rest of the site:
+
+```
+git push  ->  Gitea  ->  GitHub  ->  Action  ->  wrangler deploy
+```
+
+The site itself publishes to GitHub Pages; only `/api/*` is this worker.
+Because the path filter is scoped to `worker/**`, editing a page does not
+redeploy the backend that receives intake forms.
+
+Two repo secrets are required on the GitHub side
+(Settings → Secrets and variables → Actions):
+
+| Secret | Scope |
+|---|---|
+| `CLOUDFLARE_API_TOKEN` | Workers Scripts: Edit |
+| `CLOUDFLARE_ACCOUNT_ID` | — |
+
+The workflow refuses to deploy if `wrangler.toml` still holds the KV
+placeholder, or if `worker.js` reverts to a Mailgun sandbox domain — the two
+failures that have already cost real intake requests.
+
+### Manual deploy, if you need it
+
 ```
 cd worker
 wrangler login

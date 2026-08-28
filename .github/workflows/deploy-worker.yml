@@ -1,0 +1,84 @@
+name: Deploy intake worker
+
+# The static site publishes to GitHub Pages on push. The Cloudflare Worker
+# behind /api/* does NOT — it has always been deployed by hand, which is how
+# a sandbox Mailgun domain stayed live in production unnoticed. This closes
+# that gap: the worker now ships from the same push as everything else.
+#
+# Prod source lives in Gitea and mirrors to GitHub; this runs on the GitHub
+# side. Actions must be enabled on the mirrored repo for it to fire.
+#
+# Required repo secrets (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   scoped to "Workers Scripts: Edit"
+#   CLOUDFLARE_ACCOUNT_ID
+
+on:
+  push:
+    branches: [main, master]
+    # Only when the worker itself changes — editing a page should not
+    # redeploy the backend that receives intake forms.
+    paths:
+      - 'worker/**'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check worker parses
+        run: node --check worker/worker.js
+
+      - name: Refuse to deploy with an unset KV namespace
+        run: |
+          if grep -q 'REPLACE_WITH_KV_NAMESPACE_ID' worker/wrangler.toml; then
+            echo "::error::wrangler.toml still contains the KV placeholder."
+            echo "Every intake is written to KV before any notification is sent."
+            echo "Deploying without it would silently drop that guarantee."
+            echo ""
+            echo "Fix: wrangler kv namespace create SUBMISSIONS"
+            echo "     then paste the returned id into worker/wrangler.toml"
+            exit 1
+          fi
+          echo "KV namespace configured"
+
+      - name: Warn if the sandbox sending domain came back
+        run: |
+          if grep -q 'sandbox[0-9a-f]*\.mailgun\.org' worker/worker.js; then
+            echo "::error::worker.js is sending from a Mailgun sandbox domain."
+            echo "Sandbox domains deliver to a handful of pre-authorised"
+            echo "recipients and bypass this domain's SPF/DKIM/DMARC, so Gmail"
+            echo "flags every message as unauthenticated. This was the original"
+            echo "cause of intake forms not arriving."
+            exit 1
+          fi
+          echo "Sending domain looks correct"
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+
+      - name: Done
+        run: |
+          echo "Worker deployed."
+          echo "Secrets (MAILGUN_API_KEY, TELEGRAM_*, TEST_KEY, TURNSTILE_*)"
+          echo "are set on the worker itself and are not touched by this job."
