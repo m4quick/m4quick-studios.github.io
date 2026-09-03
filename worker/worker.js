@@ -1,16 +1,20 @@
 // Intake + newsletter backend for m4quickstudios.com
 //
-// Sends each submission to email (Mailgun) and to Telegram.
+// Sends each submission to email (Microsoft Graph) and to Telegram.
 //
-// IMPORTANT (was the cause of "forms not arriving in Gmail"):
-// this previously sent From a Mailgun *sandbox* domain. Sandbox domains are
-// test-only — they deliver to at most a handful of pre-authorised recipients
-// and are unrelated to m4quickstudios.com's SPF/DKIM/DMARC, so Gmail flagged
-// every message as unauthenticated. Sending From the real domain uses the
-// SPF/DKIM/DMARC records already published for it.
-const MAILGUN_DOMAIN = 'm4quickstudios.com';
+// Mailgun is gone. It returned 401 Forbidden on every send this account ever
+// made — verified across five stored submissions spanning weeks — so no
+// enquiry notification ever reached the inbox. Only the store-first design
+// and the Telegram leg kept those enquiries from vanishing.
+//
+// Mail now goes out through the intake@m4quickstudios.com mailbox in the
+// tenant that owns the domain, so SPF, 2048-bit DKIM and DMARC all align by
+// construction rather than by configuration. One fewer service, one fewer
+// credential, one fewer SPF include.
 const TO_EMAIL = 'm4quick@gmail.com';
-const FROM_EMAIL = `M4Quick Studios <intake@${MAILGUN_DOMAIN}>`;
+const SEND_AS = 'intake@m4quickstudios.com';
+const GRAPH = 'https://graph.microsoft.com/v1.0';
+const LOGIN = 'https://login.microsoftonline.com';
 
 const TELEGRAM_API = 'https://api.telegram.org';
 
@@ -169,7 +173,7 @@ async function domainAcceptsMail(email) {
 // ------------------------------------------------------------- storage
 
 // Write the submission down BEFORE notifying anyone. This is the whole
-// guarantee: if Mailgun and Telegram are both down, the enquiry still exists
+// guarantee: if Graph and Telegram are both down, the enquiry still exists
 // and can be replayed. Nothing is ever lost to a delivery failure.
 async function storeSubmission(env, record) {
   if (!env.SUBMISSIONS) return { ok: false, reason: 'KV not bound' };
@@ -184,20 +188,56 @@ async function storeSubmission(env, record) {
 
 // ------------------------------------------------------------- notifiers
 
-async function sendMail(env, subject, bodyText) {
-  const form = new FormData();
-  form.append('from', FROM_EMAIL);
-  form.append('to', TO_EMAIL);
-  form.append('subject', subject);
-  form.append('text', bodyText);
-  form.append('h:Reply-To', TO_EMAIL);
+// Client-credentials token, cached for the life of the isolate. Graph tokens
+// last an hour; we treat one as stale a minute early to avoid racing expiry.
+let cachedToken = null;
 
-  const resp = await fetch(`https://api.mailgun.net/v3/${MAILGUN_DOMAIN}/messages`, {
+async function graphToken(env) {
+  const now = Date.now();
+  if (cachedToken && cachedToken.expiresAt > now + 60000) {
+    return { ok: true, token: cachedToken.value };
+  }
+  if (!env.GRAPH_TENANT_ID || !env.GRAPH_CLIENT_ID || !env.GRAPH_CLIENT_SECRET) {
+    return { ok: false, status: 0, text: 'graph not configured' };
+  }
+  const resp = await fetch(`${LOGIN}/${env.GRAPH_TENANT_ID}/oauth2/v2.0/token`, {
     method: 'POST',
-    headers: { Authorization: 'Basic ' + btoa(`api:${env.MAILGUN_API_KEY}`) },
-    body: form,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: env.GRAPH_CLIENT_ID,
+      client_secret: env.GRAPH_CLIENT_SECRET,
+      scope: 'https://graph.microsoft.com/.default',
+      grant_type: 'client_credentials',
+    }),
   });
-  return { ok: resp.ok, status: resp.status, text: await resp.text() };
+  const text = await resp.text();
+  if (!resp.ok) return { ok: false, status: resp.status, text: text.slice(0, 300) };
+  let parsed;
+  try { parsed = JSON.parse(text); } catch { return { ok: false, status: resp.status, text: 'token response was not JSON' }; }
+  cachedToken = { value: parsed.access_token, expiresAt: now + Number(parsed.expires_in || 3600) * 1000 };
+  return { ok: true, token: parsed.access_token };
+}
+
+async function sendMail(env, subject, bodyText) {
+  const t = await graphToken(env);
+  if (!t.ok) return { ok: false, status: t.status || 0, text: `token: ${t.text}` };
+
+  const resp = await fetch(`${GRAPH}/users/${encodeURIComponent(SEND_AS)}/sendMail`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${t.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: {
+        subject,
+        body: { contentType: 'Text', content: bodyText },
+        toRecipients: [{ emailAddress: { address: TO_EMAIL } }],
+        replyTo: [{ emailAddress: { address: TO_EMAIL } }],
+      },
+      saveToSentItems: true,
+    }),
+  });
+  // Graph answers a successful sendMail with 202 and an empty body.
+  const text = resp.status === 202 ? 'accepted' : (await resp.text()).slice(0, 400);
+  return { ok: resp.ok, status: resp.status, text };
 }
 
 async function sendTelegram(env, html) {
@@ -360,7 +400,7 @@ async function handleSubscribe(request, env, url) {
   await sendTelegram(env, `\u{1F4E7} <b>Newsletter signup</b>\n${esc(email)}`).catch(() => {});
 
   if (!result.ok) {
-    return new Response(`Failed to send. Mailgun status ${result.status}: ${result.text}`, { status: 502 });
+    return new Response(`Failed to send. Graph status ${result.status}: ${result.text}`, { status: 502 });
   }
   return Response.redirect(`${url.origin}/?submitted=newsletter#newsletter`, 303);
 }
