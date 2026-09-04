@@ -11,8 +11,10 @@
 // tenant that owns the domain, so SPF, 2048-bit DKIM and DMARC all align by
 // construction rather than by configuration. One fewer service, one fewer
 // credential, one fewer SPF include.
-const TO_EMAIL = 'm4quick@gmail.com';
 const SEND_AS = 'intake@m4quickstudios.com';
+// Notifications land in the same mailbox that sends them, so an enquiry and
+// any reply to it live in one place.
+const TO_EMAIL = SEND_AS;
 const GRAPH = 'https://graph.microsoft.com/v1.0';
 const LOGIN = 'https://login.microsoftonline.com';
 
@@ -218,9 +220,22 @@ async function graphToken(env) {
   return { ok: true, token: parsed.access_token };
 }
 
-async function sendMail(env, subject, bodyText) {
+// Deliberately conservative. This address comes from a public form, and a
+// malformed one would make Graph reject the whole message — losing the
+// notification to protect a convenience. If it does not look like an address,
+// we simply omit Reply-To and send anyway.
+function usableReplyTo(addr) {
+  if (!addr) return null;
+  const a = String(addr).trim();
+  if (a.length > 254 || /[\s<>,;"]/.test(a)) return null;
+  return /^[^@]+@[^@.]+\.[^@]+$/.test(a) ? a : null;
+}
+
+async function sendMail(env, subject, bodyText, replyToAddr) {
   const t = await graphToken(env);
   if (!t.ok) return { ok: false, status: t.status || 0, text: `token: ${t.text}` };
+
+  const replyTo = usableReplyTo(replyToAddr);
 
   const resp = await fetch(`${GRAPH}/users/${encodeURIComponent(SEND_AS)}/sendMail`, {
     method: 'POST',
@@ -230,7 +245,7 @@ async function sendMail(env, subject, bodyText) {
         subject,
         body: { contentType: 'Text', content: bodyText },
         toRecipients: [{ emailAddress: { address: TO_EMAIL } }],
-        replyTo: [{ emailAddress: { address: TO_EMAIL } }],
+        ...(replyTo ? { replyTo: [{ emailAddress: { address: replyTo } }] } : {}),
       },
       saveToSentItems: true,
     }),
@@ -339,7 +354,7 @@ async function handleIntake(request, env, url) {
   if (spam.reasons.length) bodyLines.push(...spam.reasons.map((r) => `  - ${r}`));
   bodyLines.push('', 'Message:', message);
 
-  const emailResult = await sendMail(env, `${flag}New intake: ${track} — ${name}`, bodyLines.join('\n'));
+  const emailResult = await sendMail(env, `${flag}New intake: ${track} — ${name}`, bodyLines.join('\n'), email);
 
   const icon = spam.level === 'HIGH' ? '\u{1F6A8}' : spam.level === 'MEDIUM' ? '\u{26A0}\u{FE0F}' : '\u{1F4E5}';
   const tgLines = [
@@ -396,7 +411,7 @@ async function handleSubscribe(request, env, url) {
     return new Response('Invalid email', { status: 400 });
   }
 
-  const result = await sendMail(env, 'New newsletter signup', `Email: ${email}`);
+  const result = await sendMail(env, 'New newsletter signup', `Email: ${email}`, email);
   await sendTelegram(env, `\u{1F4E7} <b>Newsletter signup</b>\n${esc(email)}`).catch(() => {});
 
   if (!result.ok) {
