@@ -433,7 +433,21 @@ export default {
         return new Response('KV not bound', { status: 500 });
       }
       const limit = Math.min(Number(url.searchParams.get('limit') || 50), 200);
-      const list = await env.SUBMISSIONS.list({ prefix: 'intake:', limit });
+      // Keys are intake:<ISO timestamp>:<uuid>, so KV returns them oldest
+      // first. Passing `limit` to list() therefore hands back the OLDEST
+      // records, and sorting afterwards only reorders the wrong set — asking
+      // for the latest 2 returned submissions from days earlier, which is
+      // exactly how this misled me while testing the Graph cutover.
+      // Collect every key, sort, then trim.
+      const allKeys = [];
+      let cursor;
+      do {
+        const page = await env.SUBMISSIONS.list({ prefix: 'intake:', cursor });
+        allKeys.push(...page.keys);
+        cursor = page.list_complete ? null : page.cursor;
+      } while (cursor);
+      allKeys.sort((a, b) => (a.name < b.name ? 1 : -1));
+      const list = { keys: allKeys.slice(0, limit) };
       const out = [];
       for (const k of list.keys) {
         const v = await env.SUBMISSIONS.get(k.name);
